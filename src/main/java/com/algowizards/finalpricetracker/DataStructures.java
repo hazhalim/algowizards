@@ -25,8 +25,6 @@ public class DataStructures
     private int rowSize;
     private int columnSize; // Assuming all rows have the same number of columns
     
-    
-    
     // Constructors
     public DataStructures()
     {
@@ -157,7 +155,35 @@ public class DataStructures
         
         List<String> column = new ArrayList<>();
         
-        // ...
+        if ((j >= 0) && (j < getColumnSize()))
+        {
+            
+            for (List<String> row : list2D)
+            {
+                
+                if (j < row.size())
+                {
+                    
+                    column.add(row.get(j));
+                    
+                }
+                
+            }
+            
+        } else {
+            
+            throw new IllegalArgumentException("Method getlist2DColumn(" + j + ") failed: column index " + j + "is out of bounds");
+            
+        }
+        
+        return column;
+        
+    }
+    
+    String getlist2DValue(int i, int j)
+    {
+        
+        return this.list2D.get(i).get(j);
         
     }
     

@@ -100,6 +100,7 @@ public class Main
         String userInput = "DAG"; // A typo in the search query
 
         // Fuzzy search
+        
         List<String> matches = FuzzySearchExample.fuzzySearch(itemsList, userInput);
 
         // Display the matches
