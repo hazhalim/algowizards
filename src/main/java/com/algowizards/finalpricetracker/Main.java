@@ -1,5 +1,7 @@
 package com.algowizards.finalpricetracker;
 
+import com.opencsv.exceptions.CsvException;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -85,8 +87,7 @@ public class Main
 //    }
     
     
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) throws IOException, CsvException {
         
         Outputter outputter = new Outputter();
         
@@ -94,7 +95,7 @@ public class Main
         
         // Reading and storing items into list of list of Strings (2D list of Strings)
         
-        DataStructures lookupItems = new DataStructures("list2D", 2, FileManager.readCSVFileInto2DList("lookup_item.csv"));
+        DataStructures lookupItems = new DataStructures("list2D", 2, FileManager.readCSVFileInto2DList("lookup_premise.csv"));
         List<List<String>> lookupPremise = FileManager.readCSVFileInto2DList("lookup_premise.csv");
         List<List<String>> priceCatcher = FileManager.readCSVFileInto2DList("pricecatcher_2023-08.csv");
         
