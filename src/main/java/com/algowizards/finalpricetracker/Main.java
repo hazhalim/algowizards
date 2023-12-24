@@ -51,36 +51,36 @@ public class Main
 //        
 //    }
     
-    static List<List<String>> readCSVFileInto2DList(String fileName) {
-        String csvFile = fileName;
-        List<List<String>> finalList = new ArrayList<>();
-        String line = "";
-        String regex = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
-        Pattern pattern = Pattern.compile(regex);
-
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-            while ((line = br.readLine()) != null) {
-                Matcher matcher = pattern.matcher(line);
-                List<String> columns = new ArrayList<>();
-
-                while (matcher.find()) {
-                    String column = line.substring(matcher.start(), matcher.end());
-                    columns.add(column.replaceAll("^\"|\"$", ""));
-                }
-
-                // Add the last column (or the only column if there is no comma)
-                String lastColumn = line.substring(matcher.end());
-                columns.add(lastColumn.replaceAll("^\"|\"$", ""));
-
-                finalList.add(columns);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return finalList;
-    }
+//    static List<List<String>> readCSVFileInto2DList(String fileName) {
+//        String csvFile = fileName;
+//        List<List<String>> finalList = new ArrayList<>();
+//        String line = "";
+//        String regex = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
+//        Pattern pattern = Pattern.compile(regex);
+//
+//        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+//            while ((line = br.readLine()) != null) {
+//                Matcher matcher = pattern.matcher(line);
+//                List<String> columns = new ArrayList<>();
+//
+//                while (matcher.find()) {
+//                    String column = line.substring(matcher.start(), matcher.end());
+//                    columns.add(column.replaceAll("^\"|\"$", ""));
+//                }
+//
+//                // Add the last column (or the only column if there is no comma)
+//                String lastColumn = line.substring(matcher.end());
+//                columns.add(lastColumn.replaceAll("^\"|\"$", ""));
+//
+//                finalList.add(columns);
+//            }
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return finalList;
+//    }
     
     
     public static void main(String[] args)
@@ -89,11 +89,24 @@ public class Main
         
         // Reading and storing items into list of list of Strings (2D list of Strings)
         
-        List<List<String>> lookupItem = FileManager.readCSVFileInto2DList("lookup_item.csv");
+        DataStructures lookupItems = new DataStructures("list2D", 2, FileManager.readCSVFileInto2DList("lookup_premise.csv"));
         List<List<String>> lookupPremise = FileManager.readCSVFileInto2DList("lookup_premise.csv");
         List<List<String>> priceCatcher = FileManager.readCSVFileInto2DList("pricecatcher_2023-08.csv");
         
-        Outputter.display2DList(lookupPremise);
+//        Outputter.display2DList(lookupPremise);
+
+        DataStructures itemsList = new DataStructures("list", lookupItems.getlist2DColumn(1));
+
+        String userInput = "DAG"; // A typo in the search query
+
+        // Fuzzy search
+        List<String> matches = FuzzySearchExample.fuzzySearch(itemsList, userInput);
+
+        // Display the matches
+        System.out.println("Possible Matches:");
+        for (String match : matches) {
+            System.out.println(match);
+        }
         
     }
     
