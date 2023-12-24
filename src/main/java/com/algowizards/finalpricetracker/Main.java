@@ -3,8 +3,10 @@ package com.algowizards.finalpricetracker;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -85,23 +87,30 @@ public class Main
     
     public static void main(String[] args)
     {
+        
+        Outputter outputter = new Outputter();
+        
         // Login stuffs... (Tengku)
         
         // Reading and storing items into list of list of Strings (2D list of Strings)
         
-        DataStructures lookupItems = new DataStructures("list2D", 2, FileManager.readCSVFileInto2DList("lookup_premise.csv"));
+        DataStructures lookupItems = new DataStructures("list2D", 2, FileManager.readCSVFileInto2DList("lookup_item.csv"));
         List<List<String>> lookupPremise = FileManager.readCSVFileInto2DList("lookup_premise.csv");
         List<List<String>> priceCatcher = FileManager.readCSVFileInto2DList("pricecatcher_2023-08.csv");
         
-//        Outputter.display2DList(lookupPremise);
+        Outputter.display2DList(lookupItems.getList2D());
+        
+        outputter.clearScreen();
 
-        DataStructures itemsList = new DataStructures("list", lookupItems.getlist2DColumn(1));
+        DataStructures itemsList = new DataStructures("list", lookupItems.getList2DColumn(1));
 
-        String userInput = "DAG"; // A typo in the search query
+        String userInput = "DAGING"; // A typo in the search query
+        
+        System.out.println(userInput + "\n");
 
         // Fuzzy search
         
-        List<String> matches = FuzzySearchExample.fuzzySearch(itemsList, userInput);
+        List<String> matches = FuzzySearchExample.similaritySearch(itemsList.getList(), userInput);
 
         // Display the matches
         System.out.println("Possible Matches:");

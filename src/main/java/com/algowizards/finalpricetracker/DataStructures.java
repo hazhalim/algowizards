@@ -136,21 +136,21 @@ public class DataStructures
         
     }
     
-    List<List<String>> getlist2D()
+    List<List<String>> getList2D()
     {
         
         return this.list2D;
         
     }
     
-    List<String> getlist2DRow(int i)
+    List<String> getList2DRow(int i)
     {
         
         return this.list2D.get(i);
         
     }
     
-    List<String> getlist2DColumn(int j)
+    List<String> getList2DColumn(int j)
     {
         
         List<String> column = new ArrayList<>();
