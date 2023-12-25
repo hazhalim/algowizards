@@ -325,7 +325,7 @@ public class DataStructure<T>
 
         // Getter and setter methods
         // Getter methods
-        V getValuebyKey(K key) // Returns the value mapped to a given key
+        V getValueByKey(K key) // Returns the value mapped to a given key
         {
 
             return this.mapping.get(key);
@@ -606,7 +606,7 @@ public class DataStructure<T>
 //
 //        } else {
 //
-//            throw new IllegalArgumentException("Method getlist2DColumn(" + j + ") failed: column index " + j + "is out of bounds");
+//            throw new IllegalArgumentException("Method getList2DColumn(" + j + ") failed: column index " + j + "is out of bounds");
 //
 //        }
 //
@@ -614,7 +614,7 @@ public class DataStructure<T>
 //
 //    }
 //
-//    String getlist2DStringValue(int i, int j)
+//    String getList2DStringValue(int i, int j)
 //    {
 //
 //        return this.list2DString.get(i).get(j);
