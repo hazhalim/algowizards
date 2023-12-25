@@ -1,5 +1,13 @@
 package com.algowizards.finalpricetracker;
 
+/**
+ *
+ * @author AlgoWizards
+ *
+ * Class Description: This class manages the attributes of a product.
+ *
+ */
+
 public class Product
 {
 

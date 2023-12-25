@@ -1,5 +1,13 @@
 package com.algowizards.finalpricetracker;
 
+/**
+ *
+ * @author AlgoWizards
+ *
+ * Class Description: This class manages the attributes of a premise.
+ *
+ */
+
 public class Premise
 {
 
@@ -17,6 +25,18 @@ public class Premise
     {
 
         throw new IllegalArgumentException("No arguments passed in constructor Premise()");
+
+    }
+
+    public Premise(int premiseCode, String premiseName, String premiseAddress, String premiseType, String premiseState, String premiseDistrict)
+    {
+
+        this.premiseCode = premiseCode;
+        this.premiseName = premiseName;
+        this.premiseAddress = premiseAddress;
+        this.premiseType = premiseType;
+        this.premiseState = premiseState;
+        this.premiseDistrict = premiseDistrict;
 
     }
 

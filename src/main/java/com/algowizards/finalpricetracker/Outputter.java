@@ -9,13 +9,15 @@ import org.jline.reader.*;
 import org.jline.terminal.*;
 import org.jline.utils.Display;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 
 /**
  *
  * @author AlgoWizards
  * 
- * Class Description: This class will contain all methods used to display output to the end user.
+ * Class Description: This class will contain all methods used to display the final output
+ * on the console that appears to the end user.
  * 
  */
 
@@ -79,14 +81,28 @@ public class Outputter
 
                 case 1:
                 {
-                    // Import data by creating 2D lists from the CSV files...
-                    DataStructures lookupItem = new DataStructures("list2D", 2, FileManager.readCSVFileInto2DList("lookup_item.csv"));
-                    DataStructures lookupPremise = new DataStructures("list2D", 2, FileManager.readCSVFileInto2DList("lookup_premise.csv"));
-                    DataStructures priceCatcher = new DataStructures("list2D", 2, FileManager.readCSVFileInto2DList("pricecatcher_2023-08.csv"));
+                    // 1. Import Data
+                    // Import data by creating 2D lists from the CSV files, passing into an object of DataStructure.List2D<String> class...
+                    DataStructure.List2D<String> lookupItem = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList("lookup_item.csv"));
+                    DataStructure.List2D<String> lookupPremise = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList("lookup_premise.csv"));
+                    DataStructure.List2D<String> priceCatcher = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList("pricecatcher_2023-08.csv"));
 
-                    generateListOfProducts();
-                    generateListofPremises();
-                    generateListofPriceCatchers();
+                    // Intitialising product manager, getting list of products and map of products...
+                    ProductManager productManager = new ProductManager();
+
+                    DataStructure.List1D<Product> listOfProducts = DataInitialisation.generateListOfProducts(lookupItem, productManager);
+                    DataStructure.Mapping<Integer, Product> mapOfProducts = DataInitialisation.generateMapOfProducts(lookupItem, productManager);
+
+                    // Intitialising premise manager, getting list of premises and map of premises...
+                    PremiseManager premiseManager = new PremiseManager();
+
+                    DataStructure.List1D<Premise> listOfPremises = DataInitialisation.generateListOfPremises(lookupPremise, premiseManager);
+                    DataStructure.Mapping<Integer, Premise> mapOfPremises = DataInitialisation.generateMapOfPremises(lookupPremise, premiseManager);
+
+                    // Initialising price catcher manager, getting list of price catchers (price points of an item at a premise on a given date)...
+                    PriceCatcherManager priceCatcherManager = new PriceCatcherManager();
+
+                    DataStructure.List1D<PriceCatcher> listOfPriceCatchers = DataInitialisation.generateListOfPriceCatchers(priceCatcher, priceCatcherManager);
 
                     break;
 

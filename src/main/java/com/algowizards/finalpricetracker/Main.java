@@ -12,6 +12,15 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ *
+ * @author AlgoWizards
+ *
+ * Class Description: This class is the main class and will run methods of
+ * the Outputter class to start the program.
+ *
+ */
+
 public class Main
 {
     
@@ -88,8 +97,10 @@ public class Main
     
     
     public static void main(String[] args) throws IOException, CsvException {
-        
+
+        // Object declarations
         Outputter outputter = new Outputter();
+        ProductManager productManager = new ProductManager();
         
         // Login stuffs... (Tengku)
         

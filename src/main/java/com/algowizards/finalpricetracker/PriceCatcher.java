@@ -1,5 +1,14 @@
 package com.algowizards.finalpricetracker;
 
+/**
+ *
+ * @author AlgoWizards
+ *
+ * Class Description: This class manages the attributes of a price catcher (price of an item
+ * sold at a premise at a given date).
+ *
+ */
+
 public class PriceCatcher
 {
 
