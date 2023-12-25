@@ -76,4 +76,24 @@ public class PriceCatcherManager
 
     }
 
+    // Implemented from DataInitialisation class
+    // Generates list of price catchers (price of an item at a premise at a given date)
+    static DataStructure.List1D<PriceCatcher> generateListOfPriceCatchers(DataStructure.List2D<String> priceCtch, PriceCatcherManager priceCatcherManager)
+    {
+
+        for(List<String> row : priceCtch.getList2D())
+        {
+
+            PriceCatcher priceCatcher = new PriceCatcher(row.get(0), Integer.parseInt(row.get(1)), Integer.parseInt(row.get(2)), Double.parseDouble(row.get(3)));
+
+            priceCatcherManager.addPriceCatcherToList(priceCatcher);
+
+        }
+
+        return new DataStructure.List1D<>(priceCatcherManager.getPriceCatcherList());
+
+    }
+
+    // a map for price catcher is actually really needed
+
 }

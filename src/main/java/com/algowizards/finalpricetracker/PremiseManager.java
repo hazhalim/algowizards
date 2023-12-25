@@ -84,5 +84,39 @@ public class PremiseManager
 
     }
 
+    // Transferred from DataInitialisation class
+    // Generates list of premises
+    static DataStructure.List1D<Premise> generateListOfPremises(DataStructure.List2D<String> lookupPremise, PremiseManager premiseManager)
+    {
+
+        for (List<String> row : lookupPremise.getList2D())
+        {
+
+            Premise premise = new Premise(Integer.parseInt(row.get(0)), row.get(1), row.get(2), row.get(3), row.get(4), row.get(5));
+
+            premiseManager.addPremiseToList(premise);
+
+        }
+
+        return new DataStructure.List1D<>(premiseManager.getPremiseList());
+
+    }
+
+    // Generates mapping of premises
+    static DataStructure.Mapping<Integer, Premise> generateMapOfPremises(DataStructure.List2D<String> lookupPremise, PremiseManager premiseManager)
+    {
+
+        for (List<String> row : lookupPremise.getList2D())
+        {
+
+            Premise premise = new Premise(Integer.parseInt(row.get(0)), row.get(1), row.get(2), row.get(3), row.get(4), row.get(5));
+
+            premiseManager.addPremiseToMap(premise);
+
+        }
+
+        return new DataStructure.Mapping<>(premiseManager.getPremiseMap());
+
+    }
 
 }

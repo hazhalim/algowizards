@@ -58,7 +58,6 @@ public class FileManager
 
     }
 
-
 //        String csvFile = fileName; // name of the .csv file
 //        String line = ""; // the line String which will read rows of the CSV data
 //        String delimiter = ","; // When separating a line into columns, use this character to denote when to break off into a new column

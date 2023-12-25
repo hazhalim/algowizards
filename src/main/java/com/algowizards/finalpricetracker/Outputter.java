@@ -81,28 +81,32 @@ public class Outputter
 
                 case 1:
                 {
-                    // 1. Import Data
+                    // 1. Import Data (File -> Program stage)
                     // Import data by creating 2D lists from the CSV files, passing into an object of DataStructure.List2D<String> class...
                     DataStructure.List2D<String> lookupItem = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList("lookup_item.csv"));
                     DataStructure.List2D<String> lookupPremise = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList("lookup_premise.csv"));
                     DataStructure.List2D<String> priceCatcher = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList("pricecatcher_2023-08.csv"));
 
+                    // All data has been loaded into the program, no more csv files are being read
+
                     // Intitialising product manager, getting list of products and map of products...
                     ProductManager productManager = new ProductManager();
 
-                    DataStructure.List1D<Product> listOfProducts = DataInitialisation.generateListOfProducts(lookupItem, productManager);
-                    DataStructure.Mapping<Integer, Product> mapOfProducts = DataInitialisation.generateMapOfProducts(lookupItem, productManager);
+                    DataStructure.List1D<Product> listOfProducts = ProductManager.generateListOfProducts(lookupItem, productManager);
+                    DataStructure.Mapping<Integer, Product> mapOfProducts = ProductManager.generateMapOfProducts(lookupItem, productManager);
 
                     // Intitialising premise manager, getting list of premises and map of premises...
                     PremiseManager premiseManager = new PremiseManager();
 
-                    DataStructure.List1D<Premise> listOfPremises = DataInitialisation.generateListOfPremises(lookupPremise, premiseManager);
-                    DataStructure.Mapping<Integer, Premise> mapOfPremises = DataInitialisation.generateMapOfPremises(lookupPremise, premiseManager);
+                    DataStructure.List1D<Premise> listOfPremises = PremiseManager.generateListOfPremises(lookupPremise, premiseManager);
+                    DataStructure.Mapping<Integer, Premise> mapOfPremises = PremiseManager.generateMapOfPremises(lookupPremise, premiseManager);
 
                     // Initialising price catcher manager, getting list of price catchers (price points of an item at a premise on a given date)...
                     PriceCatcherManager priceCatcherManager = new PriceCatcherManager();
 
-                    DataStructure.List1D<PriceCatcher> listOfPriceCatchers = DataInitialisation.generateListOfPriceCatchers(priceCatcher, priceCatcherManager);
+                    DataStructure.List1D<PriceCatcher> listOfPriceCatchers = PriceCatcherManager.generateListOfPriceCatchers(priceCatcher, priceCatcherManager);
+
+                    System.out.println("All data (products, premises, and price points) has been successfully imported into the program!");
 
                     break;
 
@@ -110,7 +114,7 @@ public class Outputter
 
                 case 2:
                 {
-
+                    // 2. Browse by Categories
 //                    browseByCategories();
                     break;
 

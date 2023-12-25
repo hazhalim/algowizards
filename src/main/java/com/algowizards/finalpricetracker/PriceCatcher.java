@@ -96,11 +96,11 @@ public class PriceCatcher
     void setPriceDate(String[] dateArray)
     {
 
-        this.priceDay = dateArray[0];
+        this.priceDay = dateArray[2];
         this.priceMonth = dateArray[1];
-        this.priceYear = dateArray[2];
+        this.priceYear = dateArray[0];
 
-        this.priceDate = this.priceDate + "/" + this.priceMonth + "/" + this.priceYear;
+        this.priceDate = this.priceYear + "-" + this.priceMonth + "-" + this.priceDay;
 
     }
 
@@ -204,22 +204,22 @@ public class PriceCatcher
     void splitPriceDate()
     {
 
-        String[] dateParts = this.priceDate.split("/");
+        String[] dateParts = this.priceDate.split("-");
 
-        setPriceDay(dateParts[0]);
+        setPriceYear(dateParts[0]);
         setPriceMonth(dateParts[1]);
-        setPriceYear(dateParts[2]);
+        setPriceDay(dateParts[2]);
 
     }
 
     void splitPriceDate(String priceDate) // If this method is given a new date, it will set the date and its parts to this date
     {
 
-        String[] dateParts = priceDate.split("/");
+        String[] dateParts = priceDate.split("-");
 
-        setPriceDay(dateParts[0]);
+        setPriceYear(dateParts[0]);
         setPriceMonth(dateParts[1]);
-        setPriceYear(dateParts[2]);
+        setPriceDay(dateParts[2]);
 
         setPriceDate(dateParts);
 

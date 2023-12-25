@@ -91,6 +91,10 @@ public class DataStructure<T>
                 this.list1D.set(i, list1DValue);
 
 
+            } else {
+
+                throw new IllegalArgumentException("Value to be placed cannot be null");
+
             }
 
         }
@@ -121,7 +125,7 @@ public class DataStructure<T>
 
             this.list2D = list2D;
             this.rowSize = this.list2D.size();
-            this.columnSize = this.list2D.get(0).size();
+            this.columnSize = this.list2D.get(0).size(); // Assuming number of columns is the same on all rows
 
         }
 
@@ -148,8 +152,7 @@ public class DataStructure<T>
 
         }
 
-        List<T> getRow(int i)
-        {
+        List<T> getRow(int i) {
 
             return this.list2D.get(i);
 
@@ -309,6 +312,7 @@ public class DataStructure<T>
             throw new IllegalArgumentException("No arguments passed into constructor");
 
         }
+
         public Mapping(Map<K, V> mapping)
         {
 
