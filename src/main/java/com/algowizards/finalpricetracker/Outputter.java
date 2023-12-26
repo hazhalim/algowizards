@@ -1,5 +1,7 @@
 package com.algowizards.finalpricetracker;
 
+import java.security.Key;
+import java.util.Map;
 import java.util.Scanner;
 
 import java.util.List;
@@ -55,58 +57,107 @@ public class Outputter
     static void mainMenu() throws IOException, CsvException // The method that calls to display the main menu of the program
     {
 
+        // Initialisation of variables and data structures
         int currentMenuChoice = 0;
 
+        // Pre-manager 2D lists of String
+        DataStructure.List2D<String> lookupItem = null;
+        DataStructure.List2D<String> lookupPremise = null;
+        DataStructure.List2D<String> priceCatcher = null;
+
+        // Initialise product manager
+        ProductManager productManager = new ProductManager();
+
+        // List of products and map of products
+        DataStructure.List1D<Product> listOfProducts = null;
+        DataStructure.Mapping<Integer, Product> mapOfProducts = null;
+
+        // Initialise premise manager
+        PremiseManager premiseManager = new PremiseManager();
+
+        // List of premises and map of premises
+        DataStructure.List1D<Premise> listOfPremises = null;
+        DataStructure.Mapping<Integer, Premise> mapOfPremises = null;
+
+        // Initialise price catcher manager
+        PriceCatcherManager priceCatcherManager = new PriceCatcherManager();
+
+        // List of price catchers
+        DataStructure.List1D<PriceCatcher> listOfPriceCatchers = null;
+
+        // Data structures used in browse product by categories
+        // Group data structures
+        DataStructure.List1D<String> productGroupList = null;
+        DataStructure.Mapping<Integer, String> productGroupMapping = null;
+
+        // Category (subgroup) data structures
+        DataStructure.List1D<String> productCategoryList = null;
+        DataStructure.Mapping<Integer, String> productCategoryMapping = null;
+
+        // Categorised product data structures
+        DataStructure.List1D<Product> categorisedProductList = null;
+        DataStructure.Mapping<Integer, Integer> categorisedProductMapping = null;
+
+        // Start of output message to console
         System.out.println("PriceTracker - Track Item Prices\n");
         System.out.println("Welcome to Product Search and Selection!\n");
 
         while (currentMenuChoice != 6)
         {
 
+            System.out.println("-----=Main Menu=-----\n");
             System.out.println("Choose an option from the menu below: \n");
 
             System.out.println("1. Import Data");
-            System.out.println("2. Browse by Categories");
+            System.out.println("2. Browse Product by Categories");
             System.out.println("3. Search for a Product");
             System.out.println("4. View Shopping Cart");
             System.out.println("5. Account Settings");
             System.out.println("6. Exit");
 
-            System.out.print("Enter your choice (1/2/3/4/5/6): ");
+            System.out.print("\n> Enter your choice (1/2/3/4/5/6): ");
 
             currentMenuChoice = keyboard.nextInt();
+
+            System.out.println();
 
             switch(currentMenuChoice)
             {
 
                 case 1:
                 {
-                    // 1. Import Data (File -> Program stage)
+
+                    // 1. Import Data (File ---> Program stage)
+
+                    System.out.println("-----=Import Data=-----\n");
+
+                    System.out.println("0: Hang on tight, PriceTracker is importing data from CSV files and converting them to list of list of Strings...");
+
                     // Import data by creating 2D lists from the CSV files, passing into an object of DataStructure.List2D<String> class...
-                    DataStructure.List2D<String> lookupItem = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList("lookup_item.csv"));
-                    DataStructure.List2D<String> lookupPremise = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList("lookup_premise.csv"));
-                    DataStructure.List2D<String> priceCatcher = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList("pricecatcher_2023-08.csv"));
+                    lookupItem = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList("lookup_item.csv"));
+                    lookupPremise = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList("lookup_premise.csv"));
+                    priceCatcher = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList("pricecatcher_2023-08.csv"));
 
-                    // All data has been loaded into the program, no more csv files are being read
+                    // All data has been loaded into the program, no more .csv files are being read
 
-                    // Intitialising product manager, getting list of products and map of products...
-                    ProductManager productManager = new ProductManager();
+                    System.out.println("1: Populating the list and map of products...");
 
-                    DataStructure.List1D<Product> listOfProducts = ProductManager.generateListOfProducts(lookupItem, productManager);
-                    DataStructure.Mapping<Integer, Product> mapOfProducts = ProductManager.generateMapOfProducts(lookupItem, productManager);
+                    // Populating list of products and map of products...
+                    listOfProducts = ProductManager.generateListOfProducts(lookupItem, productManager);
+                    mapOfProducts = ProductManager.generateMapOfProducts(lookupItem, productManager);
 
-                    // Intitialising premise manager, getting list of premises and map of premises...
-                    PremiseManager premiseManager = new PremiseManager();
+                    System.out.println("2: Populating the list and map of premises...");
 
-                    DataStructure.List1D<Premise> listOfPremises = PremiseManager.generateListOfPremises(lookupPremise, premiseManager);
-                    DataStructure.Mapping<Integer, Premise> mapOfPremises = PremiseManager.generateMapOfPremises(lookupPremise, premiseManager);
+                    // Populating list and map of premises...
+                    listOfPremises = PremiseManager.generateListOfPremises(lookupPremise, premiseManager);
+                    mapOfPremises = PremiseManager.generateMapOfPremises(lookupPremise, premiseManager);
 
-                    // Initialising price catcher manager, getting list of price catchers (price points of an item at a premise on a given date)...
-                    PriceCatcherManager priceCatcherManager = new PriceCatcherManager();
+                    System.out.println("3: Populating the list of price points...");
 
-                    DataStructure.List1D<PriceCatcher> listOfPriceCatchers = PriceCatcherManager.generateListOfPriceCatchers(priceCatcher, priceCatcherManager);
+                    // Populating list of price catchers (price points of an item at a premise on a given date)...
+                    listOfPriceCatchers = PriceCatcherManager.generateListOfPriceCatchers(priceCatcher, priceCatcherManager);
 
-                    System.out.println("All data (products, premises, and price points) has been successfully imported into the program!");
+                    System.out.println("4: Success! All data (products, premises, and price points) has been successfully imported into the program!\n");
 
                     break;
 
@@ -114,8 +165,76 @@ public class Outputter
 
                 case 2:
                 {
-                    // 2. Browse by Categories
-//                    browseByCategories();
+
+                    // 2. Browse Product by Categories
+
+                    int groupNumber = 1;
+
+                    if (productGroupList == null && productGroupMapping == null) // check if the product group list and group mapping are null (never been generated before)
+                    {
+
+                        productGroupList = ProductManager.getProductGroupList(listOfProducts);
+                        productGroupMapping = ProductManager.getProductGroupMapping(productGroupList);
+
+                    }
+
+                    System.out.println("-----=Browse Product by Categories=-----\n");
+                    System.out.println("Choose a category:\n");
+
+                    for (Integer currentKey : productGroupMapping.getKeys())
+                    {
+
+                        System.out.println(currentKey + ". " + productGroupMapping.getValueByKey(currentKey));
+
+                    }
+
+                    System.out.print("\n> Choose a category: ");
+
+                    int chosenGroup = keyboard.nextInt();
+                    String chosenGroupString = productGroupMapping.getValueByKey(chosenGroup);
+
+                    System.out.println("\nYou've chosen: " + chosenGroupString + "\n");
+
+                    productCategoryList = ProductManager.getProductCategoryList(chosenGroupString, listOfProducts);
+                    productCategoryMapping = ProductManager.getProductCategoryMapping(productCategoryList);
+
+                    System.out.println("The subcategories of " + chosenGroupString + " are:\n");
+
+                    for (Integer currentKey : productCategoryMapping.getKeys())
+                    {
+
+                        System.out.println(currentKey + ". " + productCategoryMapping.getValueByKey(currentKey));
+
+                    }
+
+                    System.out.print("\n> Choose a subcategory: ");
+
+                    int chosenCategory = keyboard.nextInt();
+                    String chosenCategoryString = productCategoryMapping.getValueByKey(chosenCategory);
+
+                    System.out.println("\nYou've chosen: " + chosenCategoryString + "\n");
+
+                    categorisedProductList = ProductManager.getCategorisedProductList(chosenCategoryString, listOfProducts);
+                    categorisedProductMapping = ProductManager.getCategorisedProductMapping(categorisedProductList);
+
+                    System.out.println("-------------------------------------------");
+                    System.out.println("\n Browse products in " + chosenGroupString + " >> " + chosenCategoryString + ":\n");
+
+                    for (Integer currentKey : categorisedProductMapping.getKeys())
+                    {
+
+                        System.out.println(currentKey + ". " + mapOfProducts.getValueByKey(categorisedProductMapping.getValueByKey(currentKey)).getItemName());
+
+                    }
+
+                    System.out.print("\n> Choose a product: ");
+
+                    int chosenProductNumber = keyboard.nextInt();
+                    Product chosenProduct = mapOfProducts.getValueByKey(categorisedProductMapping.getValueByKey(chosenProductNumber));
+                    String nameOfChosenProduct = chosenProduct.getItemName();
+
+                    System.out.println("\nYou've chosen: " + nameOfChosenProduct + "\n");
+
                     break;
 
                 }

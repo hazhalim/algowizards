@@ -1,9 +1,7 @@
 package com.algowizards.finalpricetracker;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
+import javax.xml.crypto.Data;
+import java.util.*;
 
 /**
  *
@@ -119,8 +117,124 @@ public class ProductManager
 
     }
 
-    // for browse by categories
-//    List<String> getNumberedProductCategories(DataStructure)
+    // Methods for Browse Product by Categories
+    // Method to get the product group list
+    static DataStructure.List1D<String> getProductGroupList(DataStructure.List1D<Product> listOfProducts)
+    {
 
+        Set<String> uniqueGroups = new HashSet<>();
+
+        for (Product product : listOfProducts.getList1D())
+        {
+
+            String group = product.getItemGroup();
+
+            if(!uniqueGroups.contains(group))
+            {
+
+                uniqueGroups.add(group);
+
+            }
+
+        }
+
+        return new DataStructure.List1D<>(new ArrayList<>(uniqueGroups));
+
+    }
+
+    // Method to get the product group mapping
+    static DataStructure.Mapping<Integer, String> getProductGroupMapping(DataStructure.List1D<String> productGroupList)
+    {
+
+        Map<Integer, String> productGroupMapping = new HashMap<>();
+
+        for (int i = 0; i < productGroupList.getList1DSize(); i++)
+        {
+
+            productGroupMapping.put(i + 1, productGroupList.getList1DValue(i));
+
+        }
+
+        return new DataStructure.Mapping<>(productGroupMapping);
+
+    }
+
+    // After obtaining the chosen group, get its list of categories
+    static DataStructure.List1D<String> getProductCategoryList(String chosenGroup, DataStructure.List1D<Product> listOfProducts)
+    {
+
+        Set<String> uniqueCategories = new HashSet<>();
+
+        for (Product product : listOfProducts.getList1D())
+        {
+
+            String category = product.getItemCategory();
+
+            if((product.getItemGroup().equals(chosenGroup)))
+            {
+
+                uniqueCategories.add(category);
+
+            }
+
+        }
+
+        return new DataStructure.List1D<>(new ArrayList<>(uniqueCategories));
+
+    }
+
+    // After obtaining the chosen group, get its mapping of categories
+    static DataStructure.Mapping<Integer, String> getProductCategoryMapping(DataStructure.List1D<String> productCategoryList)
+    {
+
+        Map<Integer, String> productCategoryMapping = new HashMap<>();
+
+        for (int i = 0; i < productCategoryList.getList1DSize(); i++)
+        {
+
+            productCategoryMapping.put(i + 1, productCategoryList.getList1DValue(i));
+
+        }
+
+        return new DataStructure.Mapping<>(productCategoryMapping);
+
+    }
+
+    static DataStructure.List1D<Product> getCategorisedProductList(String chosenCategory, DataStructure.List1D<Product> listOfProducts)
+    {
+
+        List<Product> categorisedProductList = new ArrayList<>();
+
+        for (Product product : listOfProducts.getList1D())
+        {
+
+            if(product.getItemCategory().equals(chosenCategory))
+            {
+
+                categorisedProductList.add(product);
+
+            }
+
+        }
+
+        return new DataStructure.List1D<>(categorisedProductList);
+
+    }
+
+    static DataStructure.Mapping<Integer, Integer> getCategorisedProductMapping(DataStructure.List1D<Product> categorisedProductList)
+    {
+
+        Map<Integer, Integer> categorisedProductMapping = new HashMap<>();
+
+        for (int i = 0; i < categorisedProductList.getList1DSize(); i++)
+        {
+
+            categorisedProductMapping.put(i + 1, categorisedProductList.getList1DValue(i).getItemCode());
+
+        }
+
+        return new DataStructure.Mapping<>(categorisedProductMapping);
+
+    }
 
 }
