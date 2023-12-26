@@ -1,6 +1,5 @@
 package com.algowizards.finalpricetracker;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 
 /**
@@ -16,7 +15,9 @@ public class ProductManager
 
     // Instance variables
     private List<Product> productList;
+    private int productListSize;
     private Map<Integer, Product> productMap;
+    private int productMapSize;
 
     // Constructors
     public ProductManager() // Default constructor
@@ -24,6 +25,8 @@ public class ProductManager
 
         this.productList = new ArrayList<>();
         this.productMap = new HashMap<>();
+        this.productListSize = productList.size();
+        this.productMapSize = productMap.size();
 
     }
 
@@ -43,11 +46,58 @@ public class ProductManager
 
     }
 
+    int getProductListSize()
+    {
+
+        return this.productListSize;
+
+    }
+
+    int getProductMapSize()
+    {
+
+        return this.productMapSize;
+
+    }
+
     // Setter methods
     void setProductList(List<Product> productList)
     {
 
         this.productList = productList;
+        this.productListSize = productList.size();
+
+    }
+
+    void setProductListSize(int listSize)
+    {
+
+        if (listSize >= 0)
+        {
+
+            this.productListSize = listSize;
+
+        } else {
+
+            throw new IllegalArgumentException("List size of productList must be at least 0");
+
+        }
+
+    }
+
+    void setProductListSize(List<Product> productList)
+    {
+
+        if (productList != null)
+        {
+
+            this.productListSize = productList.size();
+
+        } else {
+
+            throw new IllegalArgumentException("productList passed in argument cannot be null");
+
+        }
 
     }
 
@@ -55,6 +105,39 @@ public class ProductManager
     {
 
         this.productMap = productMap;
+        this.productMapSize = productMap.size();
+
+    }
+
+    void setProductMapSize(int mapSize)
+    {
+
+        if (mapSize >= 0)
+        {
+
+            this.productMapSize = mapSize;
+
+        } else {
+
+            throw new IllegalArgumentException("Map size of productMap must be at least 0");
+
+        }
+
+    }
+
+    void setProductMapSize(Map<Integer, Product> productMap)
+    {
+
+        if (productMap != null)
+        {
+
+            this.productMapSize = productMap.size();
+
+        } else {
+
+            throw new IllegalArgumentException("productMap passed in argument cannot be null");
+
+        }
 
     }
 
@@ -64,6 +147,7 @@ public class ProductManager
 
         // Add the product to the list of products
         this.productList.add(product);
+        setProductListSize(this.productList);
 
     }
 
@@ -72,6 +156,7 @@ public class ProductManager
 
         // Add a mapping of (item code, product object) in productMap
         this.productMap.put(product.getItemCode(), product);
+        setProductMapSize(this.productMap);
 
     }
 
@@ -129,12 +214,7 @@ public class ProductManager
 
             String group = product.getItemGroup();
 
-            if(!uniqueGroups.contains(group))
-            {
-
-                uniqueGroups.add(group);
-
-            }
+            uniqueGroups.add(group);
 
         }
 

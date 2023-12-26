@@ -399,8 +399,8 @@ public class DataStructure<T>
                 this.mapping.put(key, value);
 
                 // Regenerate the list for keys and values
-                this.keys = new ArrayList<>(this.mapping.keySet());
-                this.values = new ArrayList<>(this.mapping.values());
+                setKeys();
+                setValues();
 
             } else {
 
@@ -410,7 +410,44 @@ public class DataStructure<T>
 
         }
 
+        void setKeys()
+        {
+
+            this.keys = new ArrayList<>(this.mapping.keySet());
+
+        }
+
+        void setValues()
+        {
+
+            this.values = new ArrayList<>(this.mapping.values());
+
+        }
+
         // Other methods
+        void removeEntry(K keyToBeRemoved)
+        {
+
+            Map<K, V> modifiedMap = getMapping();
+
+            modifiedMap.remove(keyToBeRemoved);
+
+            setMapping(modifiedMap);
+
+        }
+
+        void addEntry(K key, V value)
+        {
+
+            Map<K, V> modifiedMap = getMapping();
+
+            modifiedMap.put(key, value);
+
+            setMapping(modifiedMap);
+            setKeys();
+            setValues();
+
+        }
 
     }
     
