@@ -111,7 +111,7 @@ public class Outputter
             System.out.println("3. Search for a Product");
             System.out.println("4. View Shopping Cart");
             System.out.println("5. Account Settings");
-            System.out.println("6. Exit");
+            System.out.println("6. Sign Out of Account");
 
             System.out.print("\n> Enter your choice (1/2/3/4/5/6): ");
 
@@ -166,6 +166,7 @@ public class Outputter
 
                     System.out.println("\nYou've chosen: " + chosenGroupString + "\n");
 
+                    // subcategory
                     productCategoryList = ProductManager.getProductCategoryList(chosenGroupString, listOfProducts);
                     productCategoryMapping = ProductManager.getProductCategoryMapping(productCategoryList);
 
@@ -185,6 +186,7 @@ public class Outputter
 
                     System.out.println("\nYou've chosen: " + chosenCategoryString + "\n");
 
+                    // getting categorised product
                     categorisedProductList = ProductManager.getCategorisedProductList(chosenCategoryString, listOfProducts);
                     categorisedProductMapping = ProductManager.getCategorisedProductMapping(categorisedProductList);
 
@@ -239,8 +241,8 @@ public class Outputter
                 case 6:
                 {
 
-                    System.out.println("Thank you for using PriceTracker.");
-                    System.out.println("Exiting program...");
+                    System.out.println("Thank you for using PriceWizard!\n");
+                    System.out.println("Signing out of your account...\n");
 
                     break;
 
@@ -263,7 +265,7 @@ public class Outputter
 
         System.out.println("-----= Import Data =-----\n");
 
-        System.out.println("0%: Hang on tight, PriceTracker is importing data from CSV files and converting them to list of list of Strings...");
+        System.out.println("0%: Hang on tight, PriceWizard is importing data from CSV files and converting them to list of list of Strings...");
 
         // Import data by creating 2D lists from the CSV files, passing into an object of DataStructure.List2D<String> class...
         lookupItem = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList("lookup_item.csv"));
@@ -275,21 +277,21 @@ public class Outputter
         System.out.println("25%: Populating the list and map of products...");
 
         // Populating list of products and map of products...
-        listOfProducts = ProductManager.generateListOfProducts(lookupItem, productManager);
-        mapOfProducts = ProductManager.generateMapOfProducts(lookupItem, productManager);
+        ProductManager.generateListOfProducts(lookupItem);
+        ProductManager.generateMapOfProducts(lookupItem);
 
         System.out.println("50%: Populating the list and map of premises...");
 
         // Populating list and map of premises...
-        listOfPremises = PremiseManager.generateListOfPremises(lookupPremise, premiseManager);
-        mapOfPremises = PremiseManager.generateMapOfPremises(lookupPremise, premiseManager);
+        PremiseManager.generateListOfPremises(lookupPremise);
+        PremiseManager.generateMapOfPremises(lookupPremise);
 
         System.out.println("75%: Populating the list of price points...");
 
         // Populating list of price catchers (price points of an item at a premise on a given date)...
-        listOfPriceCatchers = PriceCatcherManager.generateListOfPriceCatchers(priceCatcher, priceCatcherManager);
+        PriceCatcherManager.generateListOfPriceCatchers(priceCatcher);
 
-        System.out.println("100% (Complete): Success! All data (products, premises, and price points) has been successfully imported into the program!\n");
+        System.out.println("100% (Complete): Success! All data (products, premises, and price points) has been successfully imported into PriceWizard!\n");
 
     }
 

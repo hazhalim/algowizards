@@ -14,68 +14,59 @@ public class ProductManager
 {
 
     // Instance variables
-    private List<Product> productList;
-    private int productListSize;
-    private Map<Integer, Product> productMap;
-    private int productMapSize;
+    private static List<Product> productList = new ArrayList<>();
+    private static int productListSize = productList.size();
+    private static Map<Integer, Product> productMap = new HashMap<>();
+    private static int productMapSize = productMap.size();
 
     // Constructors
-    public ProductManager() // Default constructor
-    {
-
-        this.productList = new ArrayList<>();
-        this.productMap = new HashMap<>();
-        this.productListSize = productList.size();
-        this.productMapSize = productMap.size();
-
-    }
 
     // Getter and setter methods
     // Getter methods
-    List<Product> getProductList()
+    static List<Product> getProductList()
     {
 
-        return this.productList;
+        return productList;
 
     }
 
-    Map<Integer, Product> getProductMap()
+    static Map<Integer, Product> getProductMap()
     {
 
-        return this.productMap;
+        return productMap;
 
     }
 
-    int getProductListSize()
+    static int getProductListSize()
     {
 
-        return this.productListSize;
+        return productListSize;
 
     }
 
-    int getProductMapSize()
+    static int getProductMapSize()
     {
 
-        return this.productMapSize;
+        return productMapSize;
 
     }
 
     // Setter methods
-    void setProductList(List<Product> productList)
+    static void setProductList(List<Product> newProductList)
     {
 
-        this.productList = productList;
-        this.productListSize = productList.size();
+        productList = newProductList;
+        productListSize = newProductList.size();
 
     }
 
-    void setProductListSize(int listSize)
+    static void setProductListSize(int newListSize)
     {
 
-        if (listSize >= 0)
+        if (newListSize >= 0)
         {
 
-            this.productListSize = listSize;
+            productListSize = newListSize;
 
         } else {
 
@@ -85,37 +76,37 @@ public class ProductManager
 
     }
 
-    void setProductListSize(List<Product> productList)
+    static void setProductListSize(List<Product> newProductList)
     {
 
-        if (productList != null)
+        if (newProductList != null)
         {
 
-            this.productListSize = productList.size();
+            productListSize = newProductList.size();
 
         } else {
 
-            throw new IllegalArgumentException("productList passed in argument cannot be null");
+            throw new IllegalArgumentException("List of products passed in argument cannot be null");
 
         }
 
     }
 
-    void setProductMap(Map<Integer, Product> productMap)
+    static void setProductMap(Map<Integer, Product> newProductMap)
     {
 
-        this.productMap = productMap;
-        this.productMapSize = productMap.size();
+        productMap = newProductMap;
+        productMapSize = newProductMap.size();
 
     }
 
-    void setProductMapSize(int mapSize)
+    static void setProductMapSize(int newMapSize)
     {
 
-        if (mapSize >= 0)
+        if (newMapSize >= 0)
         {
 
-            this.productMapSize = mapSize;
+            productMapSize = newMapSize;
 
         } else {
 
@@ -125,51 +116,51 @@ public class ProductManager
 
     }
 
-    void setProductMapSize(Map<Integer, Product> productMap)
+    static void setProductMapSize(Map<Integer, Product> newProductMap)
     {
 
-        if (productMap != null)
+        if (newProductMap != null)
         {
 
-            this.productMapSize = productMap.size();
+            productMapSize = newProductMap.size();
 
         } else {
 
-            throw new IllegalArgumentException("productMap passed in argument cannot be null");
+            throw new IllegalArgumentException("Map of products passed in argument cannot be null");
 
         }
 
     }
 
     // Other methods
-    void addProductToList(Product product) // Add a product object to the list of products
+    static void addProductToList(Product product) // Add a product object to the list of products
     {
 
         // Add the product to the list of products
-        this.productList.add(product);
-        setProductListSize(this.productList);
+        productList.add(product);
+        setProductListSize(productList);
 
     }
 
-    void addProductToMap(Product product) // Add a product object to the mapping of products
+    static void addProductToMap(Product product) // Add a product object to the mapping of products
     {
 
         // Add a mapping of (item code, product object) in productMap
-        this.productMap.put(product.getItemCode(), product);
-        setProductMapSize(this.productMap);
+        productMap.put(product.getItemCode(), product);
+        setProductMapSize(productMap);
 
     }
 
-    Product getProductByKey(int itemCode) // Get the product object if itemCode is provided
+    static Product getProductByKey(int itemCode) // Get the product object if itemCode is provided
     {
 
-        return this.productMap.get(itemCode);
+        return productMap.get(itemCode);
 
     }
 
     // Transferred from DataInitialisation class
     // Generates list of products
-    static DataStructure.List1D<Product> generateListOfProducts(DataStructure.List2D<String> lookupItem, ProductManager productManager)
+    static void generateListOfProducts(DataStructure.List2D<String> lookupItem)
     {
 
         for (List<String> row : lookupItem.getList2D())
@@ -177,16 +168,14 @@ public class ProductManager
 
             Product product = new Product(Integer.parseInt(row.get(0)), row.get(1), row.get(2), row.get(3), row.get(4));
 
-            productManager.addProductToList(product);
+            addProductToList(product);
 
         }
-
-        return new DataStructure.List1D<>(productManager.getProductList());
 
     }
 
     // Generates mapping of products
-    static DataStructure.Mapping<Integer, Product> generateMapOfProducts(DataStructure.List2D<String> lookupItem, ProductManager productManager)
+    static void generateMapOfProducts(DataStructure.List2D<String> lookupItem)
     {
 
         for (List<String> row : lookupItem.getList2D())
@@ -194,11 +183,9 @@ public class ProductManager
 
             Product product = new Product(Integer.parseInt(row.get(0)), row.get(1), row.get(2), row.get(3), row.get(4));
 
-            productManager.addProductToMap(product);
+            addProductToMap(product);
 
         }
-
-        return new DataStructure.Mapping<>(productManager.getProductMap());
 
     }
 

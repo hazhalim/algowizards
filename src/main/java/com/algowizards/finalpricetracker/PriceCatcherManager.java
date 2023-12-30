@@ -16,33 +16,27 @@ import java.util.stream.Collectors;
 public class PriceCatcherManager
 {
     // Instance variables
-    private List<PriceCatcher> priceCatcherList;
+    private static List<PriceCatcher> priceCatcherList = new ArrayList<>();
 
     // Constructors
-    public PriceCatcherManager()
-    {
-
-        this.priceCatcherList = new ArrayList<>();
-
-    }
 
     // Getter and setter methods
-    List<PriceCatcher> getPriceCatcherList()
+    static List<PriceCatcher> getPriceCatcherList()
     {
 
-        return this.priceCatcherList;
+        return priceCatcherList;
 
     }
 
-    void setPriceCatcherList(List<PriceCatcher> priceCatcherList)
+    static void setPriceCatcherList(List<PriceCatcher> newPriceCatcherList)
     {
 
-        this.priceCatcherList = priceCatcherList;
+        priceCatcherList = newPriceCatcherList;
 
     }
 
     // Other methods
-    void addPriceCatcherToList(PriceCatcher priceCatcher) // Add a price catcher object to the list of price catchers
+    static void addPriceCatcherToList(PriceCatcher priceCatcher) // Add a price catcher object to the list of price catchers
     {
 
         // Add the price catcher to the list of price catchers
@@ -50,7 +44,7 @@ public class PriceCatcherManager
 
     }
 
-    List<PriceCatcher> sortBy(String type, String sortDirection)
+    static List<PriceCatcher> sortBy(String type, String sortDirection)
     {
 
         if (type.equalsIgnoreCase("price"))
@@ -78,7 +72,7 @@ public class PriceCatcherManager
 
     // Implemented from DataInitialisation class
     // Generates list of price catchers (price of an item at a premise at a given date)
-    static DataStructure.List1D<PriceCatcher> generateListOfPriceCatchers(DataStructure.List2D<String> priceCtch, PriceCatcherManager priceCatcherManager)
+    static void generateListOfPriceCatchers(DataStructure.List2D<String> priceCtch)
     {
 
         for(List<String> row : priceCtch.getList2D())
@@ -86,11 +80,9 @@ public class PriceCatcherManager
 
             PriceCatcher priceCatcher = new PriceCatcher(row.get(0), Integer.parseInt(row.get(1)), Integer.parseInt(row.get(2)), Double.parseDouble(row.get(3)));
 
-            priceCatcherManager.addPriceCatcherToList(priceCatcher);
+            addPriceCatcherToList(priceCatcher);
 
         }
-
-        return new DataStructure.List1D<>(priceCatcherManager.getPriceCatcherList());
 
     }
 

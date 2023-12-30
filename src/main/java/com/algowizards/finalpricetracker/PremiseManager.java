@@ -17,76 +17,70 @@ public class PremiseManager
 {
 
     // Instance variables
-    private List<Premise> premiseList;
-    private Map<Integer, Premise> premiseMap;
+    private static List<Premise> premiseList = new ArrayList<>();
+    private static Map<Integer, Premise> premiseMap = new HashMap<>();
 
     // Constructors
-    public PremiseManager() // Default constructor
-    {
 
-        this.premiseList = new ArrayList<>();
-        this.premiseMap = new HashMap<>();
-
-    }
 
     // Getter and setter methods
     // Getter methods
-    List<Premise> getPremiseList()
+    static List<Premise> getPremiseList()
     {
 
-        return this.premiseList;
+        return premiseList;
 
     }
 
-    Map<Integer, Premise> getPremiseMap()
+    static Map<Integer, Premise> getPremiseMap()
     {
 
-        return this.premiseMap;
+        return premiseMap;
 
     }
 
     // Setter methods
-    void setPremiseList(List<Premise> premiseList)
+    static void setPremiseList(List<Premise> newPremiseList)
     {
 
-        this.premiseList = premiseList;
+        premiseList = newPremiseList;
 
     }
 
-    void setPremiseMap(Map<Integer, Premise> premiseMap)
+    static void setPremiseMap(Map<Integer, Premise> newPremiseMap)
     {
 
-        this.premiseMap = premiseMap;
+        premiseMap = newPremiseMap;
 
     }
 
     // Other methods
-    void addPremiseToList(Premise premise) // Add a premise object to the list of premises
+    static void addPremiseToList(Premise premise) // Add a premise object to the list of premises
     {
 
         // Add the product to the list of products
-        this.premiseList.add(premise);
+        premiseList.add(premise);
 
     }
 
-    void addPremiseToMap(Premise premise) // Add a premise object to the mapping of premises
+    static void addPremiseToMap(Premise premise) // Add a premise object to the mapping of premises
     {
 
         // Add a mapping of (item code, product object) in productMap
-        this.premiseMap.put(premise.getPremiseCode(), premise);
+        premiseMap.put(premise.getPremiseCode(), premise);
 
     }
 
-    Premise getPremiseByKey(int premiseCode) // Get the premise object if premiseCode is provided
+    static Premise getPremiseByKey(int premiseCode) // Get the premise object if premiseCode is provided
     {
 
-        return this.premiseMap.get(premiseCode);
+        return premiseMap.get(premiseCode);
 
     }
 
     // Transferred from DataInitialisation class
     // Generates list of premises
-    static DataStructure.List1D<Premise> generateListOfPremises(DataStructure.List2D<String> lookupPremise, PremiseManager premiseManager)
+    static void generateListOfPremises(DataStructure.List2D<String> lookupPremise)
     {
 
         for (List<String> row : lookupPremise.getList2D())
@@ -94,16 +88,14 @@ public class PremiseManager
 
             Premise premise = new Premise(Integer.parseInt(row.get(0)), row.get(1), row.get(2), row.get(3), row.get(4), row.get(5));
 
-            premiseManager.addPremiseToList(premise);
+            addPremiseToList(premise);
 
         }
-
-        return new DataStructure.List1D<>(premiseManager.getPremiseList());
 
     }
 
     // Generates mapping of premises
-    static DataStructure.Mapping<Integer, Premise> generateMapOfPremises(DataStructure.List2D<String> lookupPremise, PremiseManager premiseManager)
+    static void generateMapOfPremises(DataStructure.List2D<String> lookupPremise)
     {
 
         for (List<String> row : lookupPremise.getList2D())
@@ -111,11 +103,9 @@ public class PremiseManager
 
             Premise premise = new Premise(Integer.parseInt(row.get(0)), row.get(1), row.get(2), row.get(3), row.get(4), row.get(5));
 
-            premiseManager.addPremiseToMap(premise);
+            addPremiseToMap(premise);
 
         }
-
-        return new DataStructure.Mapping<>(premiseManager.getPremiseMap());
 
     }
 
