@@ -9,7 +9,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <exec.mainClass>com.algowizards.finalpricetracker.Main</exec.mainClass>
+        <exec.mainClass>com.algowizards.finalpricetracker.MainLogInSignUp</exec.mainClass>
     </properties>
     <build>
         <plugins>
@@ -21,7 +21,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.algowizards.finalpricetracker.Main</mainClass>
+                            <mainClass>com.algowizards.finalpricetracker.MainLogInSignUp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

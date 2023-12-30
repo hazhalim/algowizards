@@ -95,7 +95,7 @@ public class SignUp
 
         }
 
-        System.out.print("Enter your current address: ");
+        System.out.print("Enter your current home address: ");
         String address = keyboard.nextLine();
 
         if (isBlank("address", address))
@@ -106,7 +106,7 @@ public class SignUp
         }
 
         // Get the home state of the user
-        System.out.println("Enter the state where your address is located:\n");
+        System.out.println("Enter the state where your home address is located in:");
         System.out.println("This will determine the premises most relevant to you.\n");
 
         listOfStates = UserManager.getStateList(new DataStructure.List1D<>(PremiseManager.getPremiseList()));
@@ -124,13 +124,12 @@ public class SignUp
         int chosenState = keyboard.nextInt();
         String chosenStateString = mapOfStates.getValueByKey(chosenState); // <--- the user's home state
 
-        System.out.println("\nYou've chosen the state: " + chosenStateString + "\n");
+        System.out.println("\nYou've chosen the state of: " + chosenStateString + "\n");
 
-        // subcategory
         listOfDistricts = UserManager.getDistrictList(chosenStateString, new DataStructure.List1D<>(PremiseManager.getPremiseList()));
         mapOfDistricts = UserManager.getDistrictMapping(listOfDistricts);
 
-        System.out.println("The districts of the state " + chosenStateString + " are:\n");
+        System.out.println("The districts of the state of " + chosenStateString + " are:\n");
 
         for (Integer currentKey : mapOfDistricts.getKeys())
         {
@@ -139,15 +138,16 @@ public class SignUp
 
         }
 
-        System.out.print("\n> Choose a district: ");
+        System.out.print("\n> Choose your home district: ");
 
         int chosenDistrict = keyboard.nextInt();
-        String chosenDistrictString = mapOfDistricts.getValueByKey(chosenDistrict);
+        String chosenDistrictString = mapOfDistricts.getValueByKey(chosenDistrict); // <--- the user's home district
 
-        System.out.println("\nYou've chosen the district: " + chosenDistrictString + "\n");
-
+        System.out.println("\nYou've chosen the district of: " + chosenDistrictString + ", " + chosenStateString + "\n");
 
         System.out.print("Enter a security question: ");
+        keyboard.nextLine(); // <--- consume the newline character
+
         String securityQuestion = keyboard.nextLine();
 
         if (isBlank("security question", securityQuestion))

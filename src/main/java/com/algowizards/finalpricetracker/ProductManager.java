@@ -191,12 +191,12 @@ public class ProductManager
 
     // Methods for Browse Product by Categories
     // Method to get the product group list
-    static DataStructure.List1D<String> getProductGroupList(DataStructure.List1D<Product> listOfProducts)
+    static DataStructure.List1D<String> getProductGroupList()
     {
 
         Set<String> uniqueGroups = new HashSet<>();
 
-        for (Product product : listOfProducts.getList1D())
+        for (Product product : productList)
         {
 
             String group = product.getItemGroup();
@@ -227,12 +227,12 @@ public class ProductManager
     }
 
     // After obtaining the chosen group, get its list of categories
-    static DataStructure.List1D<String> getProductCategoryList(String chosenGroup, DataStructure.List1D<Product> listOfProducts)
+    static DataStructure.List1D<String> getProductCategoryList(String chosenGroup)
     {
 
         Set<String> uniqueCategories = new HashSet<>();
 
-        for (Product product : listOfProducts.getList1D())
+        for (Product product : productList)
         {
 
             String category = product.getItemCategory();
@@ -267,12 +267,12 @@ public class ProductManager
 
     }
 
-    static DataStructure.List1D<Product> getCategorisedProductList(String chosenCategory, DataStructure.List1D<Product> listOfProducts)
+    static DataStructure.List1D<Product> getCategorisedProductList(String chosenCategory)
     {
 
         List<Product> categorisedProductList = new ArrayList<>();
 
-        for (Product product : listOfProducts.getList1D())
+        for (Product product : productList)
         {
 
             if(product.getItemCategory().equals(chosenCategory))

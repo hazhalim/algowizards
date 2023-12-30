@@ -11,6 +11,8 @@ import org.jline.utils.Display;
 
 import java.io.IOException;
 
+import static com.algowizards.finalpricetracker.ProductManager.getProductGroupList;
+
 /**
  *
  * @author AlgoWizards
@@ -97,7 +99,7 @@ public class Outputter
     {
 
         // Start of output message to console
-        System.out.println("PriceTracker - Track Item Prices\n");
+        System.out.println("PriceWizard - Track Item Prices\n");
         System.out.println("Welcome to Product Search and Selection!\n");
 
         while (mainMenuChoice != 6)
@@ -106,12 +108,12 @@ public class Outputter
             System.out.println("-----=Main Menu=-----\n");
             System.out.println("Choose an option from the menu below: \n");
 
-            System.out.println("1. Import Data");
+            System.out.println("1. Reimport Data into PriceWizard");
             System.out.println("2. Browse Product by Categories");
             System.out.println("3. Search for a Product");
             System.out.println("4. View Shopping Cart");
             System.out.println("5. Account Settings");
-            System.out.println("6. Sign Out of Account");
+            System.out.println("6. Sign Out of PriceWizard Account");
 
             System.out.print("\n> Enter your choice (1/2/3/4/5/6): ");
 
@@ -139,10 +141,10 @@ public class Outputter
 
                     int groupNumber = 1;
 
-                    if ((productGroupList == null && productGroupMapping == null)) // check if the product group list and group mapping are null (never been generated before) or needs an update
+                    if (true) // check if the product group list and group mapping are null (never been generated before) or needs an update
                     {
 
-                        productGroupList = ProductManager.getProductGroupList(listOfProducts);
+                        productGroupList = ProductManager.getProductGroupList();
                         productGroupMapping = ProductManager.getProductGroupMapping(productGroupList);
 
                         needsUpdate = false;
@@ -167,7 +169,7 @@ public class Outputter
                     System.out.println("\nYou've chosen: " + chosenGroupString + "\n");
 
                     // subcategory
-                    productCategoryList = ProductManager.getProductCategoryList(chosenGroupString, listOfProducts);
+                    productCategoryList = ProductManager.getProductCategoryList(chosenGroupString);
                     productCategoryMapping = ProductManager.getProductCategoryMapping(productCategoryList);
 
                     System.out.println("The subcategories of " + chosenGroupString + " are:\n");
@@ -187,7 +189,7 @@ public class Outputter
                     System.out.println("\nYou've chosen: " + chosenCategoryString + "\n");
 
                     // getting categorised product
-                    categorisedProductList = ProductManager.getCategorisedProductList(chosenCategoryString, listOfProducts);
+                    categorisedProductList = ProductManager.getCategorisedProductList(chosenCategoryString);
                     categorisedProductMapping = ProductManager.getCategorisedProductMapping(categorisedProductList);
 
                     System.out.println("-------------------------------------------");
@@ -196,14 +198,14 @@ public class Outputter
                     for (Integer currentKey : categorisedProductMapping.getKeys())
                     {
 
-                        System.out.println(currentKey + ". " + mapOfProducts.getValueByKey(categorisedProductMapping.getValueByKey(currentKey)).getItemName());
+                        System.out.println(currentKey + ". " + ProductManager.getProductByKey(categorisedProductMapping.getValueByKey(currentKey)).getItemName());
 
                     }
 
                     System.out.print("\n> Choose a product: ");
 
                     int chosenProductNumber = keyboard.nextInt();
-                    Product chosenProduct = mapOfProducts.getValueByKey(categorisedProductMapping.getValueByKey(chosenProductNumber));
+                    Product chosenProduct = ProductManager.getProductByKey(categorisedProductMapping.getValueByKey(chosenProductNumber));
                     String nameOfChosenProduct = chosenProduct.getItemName();
 
                     System.out.println("\nYou've chosen: " + nameOfChosenProduct + "\n");
@@ -258,6 +260,8 @@ public class Outputter
             }
 
         }
+
+        mainMenuChoice = 0;
 
     }
 

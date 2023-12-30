@@ -8,7 +8,7 @@ public class UserManager
 
     // Instance variables
     private static final String fileName = "UserInformation.csv";
-    private static List<User> userList;
+    private static List<User> userList = new ArrayList<>();
     private static int userListSize;
 
     private static Map<String, User> userMap;

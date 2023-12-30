@@ -11,28 +11,34 @@ import java.util.Scanner;
  *
  * @author tmhta_
  */
-public class MainLogInSignUp {
 
-    public static void main(String[] args) throws IOException, CsvException {
+public class MainLogInSignUp
+{
 
-        Scanner scn = new Scanner(System.in);
+    public static void main(String[] args) throws IOException, CsvException
+    {
 
-        System.out.println("Welcome to PriceWizard!");
-        System.out.println("-------------------------------------");
+        Scanner keyboard = new Scanner(System.in);
 
-        Outputter.importAndPopulateData();
+        System.out.println("-----= Welcome to PriceWizard! =-----\n");
 
-        while (true) {
+        Outputter.importAndPopulateData(); // We MUST import the data first for the state and district selection in SignUp class to function properly
+
+        while (true)
+        {
+
             System.out.println("1. Log In to PriceWizard Account");
             System.out.println("2. Sign Up for a PriceWizard Account");
             System.out.println("3. Reset PriceWizard Account Password");
             System.out.println("4. Exit PriceWizard\n");
+
             System.out.print("> Enter your choice (1/2/3/4): ");
 
-            int choice = scn.nextInt();
-            scn.nextLine(); // Consume the newline character
+            int choice = keyboard.nextInt();
+            keyboard.nextLine(); // Consume the newline character
 
-            switch (choice) {
+            switch (choice)
+            {
                 case 1:
                     LogIn.main(null);
                     break;
@@ -51,6 +57,9 @@ public class MainLogInSignUp {
                     UserManager.readFromFile();
 
             }
+
         }
+
     }
+
 }
