@@ -13,8 +13,7 @@ public class LogIn
 
         Scanner keyboard = new Scanner(System.in);
 
-        System.out.println("Log In to PriceWizard");
-        System.out.println("------");
+        System.out.println("\n-----= Log In to PriceWizard Account =-----\n");
 
         System.out.print("Enter your username: ");
         String username = keyboard.nextLine();
@@ -31,7 +30,7 @@ public class LogIn
             if ((user.getUsername().equals(username)) && (user.getPassword().equals(password)))
             {
 
-                System.out.println("Your login is successful, welcome!");
+                System.out.println("\nYour login is successful, welcome, " + user.getFirstName() + " " + user.getLastName() + "!");
                 userFound = true;
 
                 break;

@@ -23,7 +23,7 @@ public class SignUp
 
         Scanner keyboard = new Scanner(System.in);
 
-        System.out.println("-----= Sign Up for a PriceWizard Account =-----\n");
+        System.out.println("\n-----= Sign Up for a PriceWizard Account =-----\n");
         System.out.println("New Account Details:\n");
 
         // New account's username
@@ -52,10 +52,10 @@ public class SignUp
         }
 
         // New account's password
-        System.out.print("Enter the account's password: ");
+        System.out.print("Next, enter the account's password: ");
         String password = keyboard.nextLine();
 
-        if (isBlank("password", password))
+        if (isInvalid("password", password))
         {
 
             return;
@@ -63,10 +63,10 @@ public class SignUp
         }
 
         // New account's first name
-        System.out.print("Enter your first name: ");
+        System.out.print("Next, enter your first name: ");
         String firstName = keyboard.nextLine();
 
-        if (isBlank("first name", firstName))
+        if (isInvalid("first name", firstName))
         {
 
             return;
@@ -74,10 +74,10 @@ public class SignUp
         }
 
         // New account's last name
-        System.out.print("Enter your last name: ");
+        System.out.print("Next, enter your last name: ");
         String lastName = keyboard.nextLine();
 
-        if (isBlank("last name", lastName))
+        if (isInvalid("last name", lastName))
         {
 
             return;
@@ -85,28 +85,28 @@ public class SignUp
         }
 
         // New account's contact information
-        System.out.print("Enter your phone number: ");
+        System.out.print("Next, enter your phone number: ");
         String contactInfo = keyboard.nextLine();
 
-        if (isBlank("phone number", contactInfo))
+        if (isInvalid("phone number", contactInfo))
         {
 
             return;
 
         }
 
-        System.out.print("Enter your current home address: ");
+        System.out.print("Next, enter your current home address: ");
         String address = keyboard.nextLine();
 
-        if (isBlank("address", address))
+        if (isInvalid("address", address))
         {
 
             return;
 
         }
 
-        // Get the home state of the user
-        System.out.println("Enter the state where your home address is located in:");
+        // New account's home state
+        System.out.println("Next, enter the state where your home address is located in:");
         System.out.println("This will determine the premises most relevant to you.\n");
 
         listOfStates = UserManager.getStateList(new DataStructure.List1D<>(PremiseManager.getPremiseList()));
@@ -126,6 +126,7 @@ public class SignUp
 
         System.out.println("\nYou've chosen the state of: " + chosenStateString + "\n");
 
+        // New account's home district
         listOfDistricts = UserManager.getDistrictList(chosenStateString, new DataStructure.List1D<>(PremiseManager.getPremiseList()));
         mapOfDistricts = UserManager.getDistrictMapping(listOfDistricts);
 
@@ -145,45 +146,67 @@ public class SignUp
 
         System.out.println("\nYou've chosen the district of: " + chosenDistrictString + ", " + chosenStateString + "\n");
 
-        System.out.print("Enter a security question: ");
-        keyboard.nextLine(); // <--- consume the newline character
+        // New account's security question
+        System.out.println("Next, choose a security question that is easy and memorisable for you:");
+        System.out.println("This question will be helpful if you ever forget your account password.\n");
 
-        String securityQuestion = keyboard.nextLine();
+        UserManager.setSecurityQuestionList();
+        UserManager.setSecurityQuestionMap();
 
-        if (isBlank("security question", securityQuestion))
+        for (Integer currentKey : UserManager.getSecurityQuestionMap().getKeys())
+        {
+
+            System.out.println(currentKey + ". " + UserManager.getSecurityQuestionMap().getValueByKey(currentKey));
+
+        }
+
+        System.out.print("\n> Enter your choice of the security questions presented: ");
+        int chosenSecurityQuestion = keyboard.nextInt();
+        String chosenSecurityQuestionString = UserManager.getSecurityQuestionMap().getValueByKey(chosenSecurityQuestion);
+
+        if (isInvalid("security question", chosenSecurityQuestionString))
         {
 
             return;
 
         }
 
-        System.out.print("Enter the answer to the security question: ");
+        System.out.println("\nNext, enter the answer to the security question you chose previously:");
+        System.out.println("The answer you enter is very important. Do not forget your answer to prevent losing access to your account.\n");
+
+        System.out.println("Your chosen security question: \"" + chosenSecurityQuestionString + "\"\n");
+
+        System.out.print("> Enter your answer to the chosen security question: ");
+        keyboard.nextLine();
+
         String securityAnswer = keyboard.nextLine();
 
-        if (isBlank("security answer", securityAnswer))
+        if (isInvalid("security answer", securityAnswer))
         {
 
             return;
 
         }
 
-        User newUser = new User(username, password, firstName, lastName, contactInfo, address, chosenStateString, chosenDistrictString, securityQuestion, securityAnswer);
+        System.out.println("\nYour answer to the security question is \"" + securityAnswer + "\". Please remember to remember or jot down your answer somewhere safe in a physical location.\n");
+
+        User newUser = new User(username, password, firstName, lastName, contactInfo, address, chosenStateString, chosenDistrictString, chosenSecurityQuestionString, securityAnswer);
 
         UserManager.getUserList().add(newUser);
 
         UserManager.writeToFile();
 
-        System.out.println("Your account is successfully registered!");
+        System.out.println("Your PriceWizard account has been successfully registered!\n");
 
     }
 
-    static boolean isBlank(String description, String value)
+    static boolean isInvalid(String description, String value)
     {
 
-        if (value.isBlank())
+        if (value.isBlank() || value == null)
         {
 
-            System.out.println("The account's " + description + " cannot be left blank. Please try again.\n");
+            System.out.println("The account's " + description + " cannot be left blank or be invalid. Please try again.\n");
 
             return true;
 

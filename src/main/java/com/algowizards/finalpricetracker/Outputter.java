@@ -98,14 +98,10 @@ public class Outputter
     static void mainMenu() throws IOException, CsvException // The method that calls to display the main menu of the program
     {
 
-        // Start of output message to console
-        System.out.println("PriceWizard - Track Item Prices\n");
-        System.out.println("Welcome to Product Search and Selection!\n");
-
         while (mainMenuChoice != 6)
         {
 
-            System.out.println("-----=Main Menu=-----\n");
+            System.out.println("\n-----= Main Menu =-----\n");
             System.out.println("Choose an option from the menu below: \n");
 
             System.out.println("1. Reimport Data into PriceWizard");
@@ -267,9 +263,9 @@ public class Outputter
 
     static void importAndPopulateData() throws IOException, CsvException {
 
-        System.out.println("-----= Import Data =-----\n");
+        System.out.println("-----= Importing Data into PriceWizard =-----\n");
 
-        System.out.println("0%: Hang on tight, PriceWizard is importing data from CSV files and converting them to list of list of Strings...");
+        System.out.println("0%: Hang on tight, PriceWizard is importing data from CSV files into the program...");
 
         // Import data by creating 2D lists from the CSV files, passing into an object of DataStructure.List2D<String> class...
         lookupItem = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList("lookup_item.csv"));

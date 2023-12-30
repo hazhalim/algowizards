@@ -10,7 +10,7 @@ public class ForgotPassword
 
         Scanner keyboard = new Scanner(System.in);
 
-        System.out.println("-----= Reset PriceWizard Account Password =-----\n");
+        System.out.println("\n-----= Reset PriceWizard Account Password =-----\n");
 
         System.out.print("Enter your username: ");
         String username = keyboard.nextLine();

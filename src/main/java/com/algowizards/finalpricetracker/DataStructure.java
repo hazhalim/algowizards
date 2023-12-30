@@ -309,7 +309,7 @@ public class DataStructure<T>
         public Mapping() // Default constructor
         {
 
-            throw new IllegalArgumentException("No arguments passed into constructor");
+            this.mapping = new HashMap<>();
 
         }
 

@@ -1,5 +1,9 @@
 package com.algowizards.finalpricetracker;
 
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.exceptions.CsvException;
+
 import java.io.*;
 import java.util.*;
 
@@ -7,22 +11,25 @@ public class UserManager
 {
 
     // Instance variables
-    private static final String fileName = "UserInformation.csv";
+    private static final String userInformationFileName = "UserInformation.csv";
+    private static final String securityQuestionListFileName = "SecurityQuestionList.csv";
     private static List<User> userList = new ArrayList<>();
     private static int userListSize;
 
     private static Map<String, User> userMap;
     private static int userMapSize;
     private static List<String> usernameList;
+    private static List<String> securityQuestionList = new ArrayList<>();
+    private static DataStructure.Mapping<Integer, String> securityQuestionMap = new DataStructure.Mapping<>();
 
     // Constructors (none needed; all variables are static)
 
     // Getter and setter methods
     // Getter methods
-    static String getFileName()
+    static String getUserInformationFileName()
     {
 
-        return fileName;
+        return userInformationFileName;
 
     }
     static List<User> getUserList()
@@ -57,6 +64,20 @@ public class UserManager
     {
 
         return usernameList;
+
+    }
+
+    static List<String> getSecurityQuestionList()
+    {
+
+        return securityQuestionList;
+
+    }
+
+    static DataStructure.Mapping<Integer, String> getSecurityQuestionMap()
+    {
+
+        return securityQuestionMap;
 
     }
 
@@ -121,6 +142,35 @@ public class UserManager
 
     }
 
+    static void setSecurityQuestionList() throws IOException, CsvException
+    {
+
+        FileReader fileReader = new FileReader(securityQuestionListFileName);
+        CSVReader csvReader = new CSVReaderBuilder(fileReader).build();
+
+        List<String[]> intermediateData = csvReader.readAll();
+
+        for (String[] row : intermediateData)
+        {
+
+            securityQuestionList.add(row[0]);
+
+        }
+
+    }
+
+    static void setSecurityQuestionMap()
+    {
+
+        for (int i = 0; i < securityQuestionList.size(); i++)
+        {
+
+            securityQuestionMap.addEntry(i + 1, securityQuestionList.get(i));
+
+        }
+
+    }
+
     // Other methods
     public static void writeToFile()
     {
@@ -128,7 +178,7 @@ public class UserManager
         try
         {
 
-            FileWriter fw = new FileWriter(fileName);
+            FileWriter fw = new FileWriter(userInformationFileName);
             PrintWriter pw = new PrintWriter(fw);
 
             for (User user : userList)
@@ -154,7 +204,7 @@ public class UserManager
 
         try {
 
-            FileReader fr = new FileReader(fileName);
+            FileReader fr = new FileReader(userInformationFileName);
             BufferedReader br = new BufferedReader(fr);
 
             String line = br.readLine();
