@@ -22,6 +22,8 @@ public class UserManager
     private static List<String> securityQuestionList = new ArrayList<>();
     private static DataStructure.Mapping<Integer, String> securityQuestionMap = new DataStructure.Mapping<>();
 
+    private static User currentUser = null;
+
     // Constructors (none needed; all variables are static)
 
     // Getter and setter methods
@@ -78,6 +80,13 @@ public class UserManager
     {
 
         return securityQuestionMap;
+
+    }
+
+    public static User getCurrentUser()
+    {
+
+        return currentUser;
 
     }
 
@@ -168,6 +177,12 @@ public class UserManager
             securityQuestionMap.addEntry(i + 1, securityQuestionList.get(i));
 
         }
+
+    }
+
+    public static void setCurrentUser(User currentUser)
+    {
+        UserManager.currentUser = currentUser;
 
     }
 

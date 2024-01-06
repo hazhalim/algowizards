@@ -33,6 +33,8 @@ public class LogIn
                 System.out.println("\nYour login is successful, welcome, " + user.getFirstName() + " " + user.getLastName() + "!");
                 userFound = true;
 
+                UserManager.setCurrentUser(user);
+
                 break;
 
             }

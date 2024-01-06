@@ -194,7 +194,7 @@ public class Outputter
                     for (Integer currentKey : categorisedProductMapping.getKeys())
                     {
 
-                        System.out.println(currentKey + ". " + ProductManager.getProductByKey(categorisedProductMapping.getValueByKey(currentKey)).getItemName());
+                        System.out.println(currentKey + ". " + ProductManager.getProductByKey(categorisedProductMapping.getValueByKey(currentKey)).getItemName() + " " + ProductManager.getProductByKey(categorisedProductMapping.getValueByKey(currentKey)).getUnit());
 
                     }
 
@@ -204,7 +204,7 @@ public class Outputter
                     Product chosenProduct = ProductManager.getProductByKey(categorisedProductMapping.getValueByKey(chosenProductNumber));
                     String nameOfChosenProduct = chosenProduct.getItemName();
 
-                    System.out.println("\nYou've chosen: " + nameOfChosenProduct + "\n");
+                    System.out.println("\nYou've chosen: " + nameOfChosenProduct + " " +  chosenProduct.getUnit() + "\n");
 
                     productMenu(chosenProduct);
 
@@ -241,6 +241,8 @@ public class Outputter
 
                     System.out.println("Thank you for using PriceWizard!\n");
                     System.out.println("Signing out of your account...\n");
+
+                    UserManager.setCurrentUser(null);
 
                     break;
 
@@ -290,6 +292,7 @@ public class Outputter
 
         // Populating list of price catchers (price points of an item at a premise on a given date)...
         PriceCatcherManager.generateListOfPriceCatchers(priceCatcher);
+//        PriceCatcherManager.generateListOfAveragePriceCatchers();
 
         System.out.println("100% (Complete): Success! All data (products, premises, and price points) has been successfully imported into PriceWizard!\n");
 
@@ -301,9 +304,9 @@ public class Outputter
         while (productMenuChoice != 6)
         {
 
-            System.out.println("-----= Product: " + chosenProduct.getItemName() + " =-----\n");
+            System.out.println("-----= Product: " + chosenProduct.getItemName() + " " + chosenProduct.getUnit() + " =-----\n");
 
-            System.out.println(chosenProduct.getItemGroup() + " >> " + chosenProduct.getItemCategory() + " >> " + chosenProduct.getItemName() + "\n");
+            System.out.println(chosenProduct.getItemGroup() + " >> " + chosenProduct.getItemCategory() + " >> " + chosenProduct.getItemName() + " " +  chosenProduct.getUnit() + "\n");
             System.out.println("Actions:\n");
 
             System.out.println("1. View this product's details");
@@ -342,7 +345,7 @@ public class Outputter
                 case 3:
                 {
 
-                    // viewTopFiveCheapestSellers(Product chosenProduct);
+                    PriceCatcherManager.viewTopFiveCheapestSellers(chosenProduct);
 
                     break;
 
@@ -368,6 +371,8 @@ public class Outputter
 
                 case 6:
                 {
+
+                    PriceCatcherManager.getTempAveragePriceCatcherList().clear();
 
                     System.out.println("Returning to main menu...\n");
 

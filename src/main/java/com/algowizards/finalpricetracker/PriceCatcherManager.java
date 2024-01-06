@@ -1,8 +1,6 @@
 package com.algowizards.finalpricetracker;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -17,6 +15,8 @@ public class PriceCatcherManager
 {
     // Instance variables
     private static List<PriceCatcher> priceCatcherList = new ArrayList<>();
+    private static List<PriceCatcher> averagePriceCatcherList = new ArrayList<>();
+    private static List<PriceCatcher> tempAveragePriceCatcherList = new ArrayList<>();
 
     // Constructors
 
@@ -28,10 +28,39 @@ public class PriceCatcherManager
 
     }
 
+    static List<PriceCatcher> getAveragePriceCatcherList()
+    {
+
+        return averagePriceCatcherList;
+
+    }
+
+    public static List<PriceCatcher> getTempAveragePriceCatcherList()
+    {
+
+        return tempAveragePriceCatcherList;
+
+    }
+
+    // Setter methods
     static void setPriceCatcherList(List<PriceCatcher> newPriceCatcherList)
     {
 
         priceCatcherList = newPriceCatcherList;
+
+    }
+
+    static void setAveragePriceCatcherList(List<PriceCatcher> newAveragePriceCatcherList)
+    {
+
+        averagePriceCatcherList = newAveragePriceCatcherList;
+
+    }
+
+    public static void setTempAveragePriceCatcherList(List<PriceCatcher> tempAveragePriceCatcherList)
+    {
+
+        PriceCatcherManager.tempAveragePriceCatcherList = tempAveragePriceCatcherList;
 
     }
 
@@ -43,6 +72,7 @@ public class PriceCatcherManager
         priceCatcherList.add(priceCatcher);
 
     }
+
 
     static List<PriceCatcher> sortBy(String type, String sortDirection)
     {
@@ -75,7 +105,7 @@ public class PriceCatcherManager
     static void generateListOfPriceCatchers(DataStructure.List2D<String> priceCtch)
     {
 
-        for(List<String> row : priceCtch.getList2D())
+        for (List<String> row : priceCtch.getList2D())
         {
 
             PriceCatcher priceCatcher = new PriceCatcher(row.get(0), Integer.parseInt(row.get(1)), Integer.parseInt(row.get(2)), Double.parseDouble(row.get(3)));
@@ -85,6 +115,116 @@ public class PriceCatcherManager
         }
 
     }
+
+    static void generateListOfAveragePriceCatchers(DataStructure.List1D<PriceCatcher> priceCatcherList, Set<Integer> setOfPremises, Product product)
+    {
+
+        for (Integer premiseCode : setOfPremises)
+        {
+
+            double totalPrice = 0.0;
+            int count = 0;
+
+            for (PriceCatcher priceCatcher : priceCatcherList.getList1D())
+            {
+
+                if ((priceCatcher.getPremiseCode() == PremiseManager.getPremiseByKey(premiseCode).getPremiseCode()) && (priceCatcher.getItemCode() == product.getItemCode()) && (PremiseManager.getPremiseByKey(premiseCode).getPremiseDistrict().equals(UserManager.getCurrentUser().getDistrict())))
+                {
+
+                    totalPrice += priceCatcher.getItemPrice();
+                    count++;
+
+                }
+
+            }
+
+            if (count > 0)
+            {
+
+                double averagePrice = (totalPrice / (double) count);
+
+                PriceCatcher averagePriceCatcher = new PriceCatcher("2023-08-29", premiseCode, product.getItemCode(), averagePrice);
+
+                tempAveragePriceCatcherList.add(averagePriceCatcher);
+
+            }
+
+        }
+
+    }
+
+    static void viewTopFiveCheapestSellers(Product product)
+    {
+
+        DataStructure.List1D<PriceCatcher> priceCatcherItemOnly = new DataStructure.List1D<>(new ArrayList<>());
+        Set<Integer> setOfPremises = new HashSet<>(new HashSet<>());
+
+        for (PriceCatcher priceCatcher : priceCatcherList)
+        {
+
+            if (priceCatcher.getItemCode() == product.getItemCode())
+            {
+
+                priceCatcherItemOnly.getList1D().add(priceCatcher);
+                setOfPremises.add(priceCatcher.getPremiseCode());
+
+            }
+
+        }
+
+        generateListOfAveragePriceCatchers(priceCatcherItemOnly, setOfPremises, product);
+
+        Comparator<PriceCatcher> priceComparator = Comparator.comparingDouble(PriceCatcher::getItemPrice);
+
+        tempAveragePriceCatcherList.sort(priceComparator);
+
+        System.out.println("-----= Cheapest Sellers of " + product.getItemName() + " " +  product.getUnit() + " =-----\n");
+
+        System.out.println("District: " + UserManager.getCurrentUser().getDistrict() + ", " + UserManager.getCurrentUser().getState() + "\n");
+
+        for (int i = 0; i < Math.min(5, tempAveragePriceCatcherList.size()); i++)
+        {
+
+            System.out.printf("%d. %s\n", (i + 1), PremiseManager.getPremiseByKey(tempAveragePriceCatcherList.get(i).getPremiseCode()).getPremiseName());
+            System.out.printf("Price: RM %.2f\n", tempAveragePriceCatcherList.get(i).getItemPrice());
+            System.out.printf("Address: %s\n\n", PremiseManager.getPremiseByKey(tempAveragePriceCatcherList.get(i).getPremiseCode()).getPremiseAddress());
+
+        }
+
+    }
+
+//    static void viewTopFiveCheapestSellers(Product product) {
+//        List<PriceCatcher> priceCatcherItemOnly = priceCatcherList.stream().filter(pc -> pc.getItemCode() == product.getItemCode()).toList();
+//
+//        // Group PriceCatcher objects by premise code
+//        Map<Integer, List<PriceCatcher>> groupedByPremise = priceCatcherItemOnly.stream().collect(Collectors.groupingBy(PriceCatcher::getPremiseCode));
+//
+//        // Calculate average price for each premise
+//
+//        Map<Integer, Double> averagePricesByPremise = new HashMap<>();
+//
+//        for (Map.Entry<Integer, List<PriceCatcher>> entry : groupedByPremise.entrySet()) {
+//            List<PriceCatcher> premisePriceCatchers = entry.getValue();
+//            double totalPrice = premisePriceCatchers.stream().mapToDouble(PriceCatcher::getItemPrice).sum();
+//            double averagePrice = (totalPrice / premisePriceCatchers.size());
+//            averagePricesByPremise.put(entry.getKey(), averagePrice);
+//        }
+//
+//        // Sort premises by average price in ascending order
+//        List<Integer> sortedPremises = averagePricesByPremise.entrySet().stream()
+//                .sorted(Map.Entry.comparingByValue())
+//                .map(Map.Entry::getKey)
+//                .toList();
+//
+//        // View the top five cheapest sellers
+//        System.out.println("Top Five Cheapest Sellers for " + product.getItemCode());
+//        int topCount = Math.min(5, sortedPremises.size());
+//        for (int i = 0; i < topCount; i++) {
+//            Integer premiseCode = sortedPremises.get(i);
+//            double averagePrice = averagePricesByPremise.get(premiseCode);
+//            System.out.println("Premise: " + PremiseManager.getPremiseByKey(premiseCode).getPremiseName() + ", Average Price: " + averagePrice);
+//        }
+//    }
 
     // a map for price catcher is actually really needed
 
