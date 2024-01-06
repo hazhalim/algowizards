@@ -13,6 +13,8 @@ import java.util.*;
 public class ProductManager
 {
 
+    static Scanner keyboard = new Scanner(System.in);
+
     // Instance variables
     private static List<Product> productList = new ArrayList<>();
     private static int productListSize = productList.size();
@@ -301,6 +303,27 @@ public class ProductManager
         }
 
         return new DataStructure.Mapping<>(categorisedProductMapping);
+
+    }
+
+    static List<Product> searchProduct(String searchKey, String unitKey)
+    {
+
+        List<Product> searchProductList = new ArrayList<>();
+
+        for (Product product: productList)
+        {
+
+            if ((unitKey.isEmpty()) ? (product.getItemName().equalsIgnoreCase(searchKey)) : (product.getItemName().equalsIgnoreCase(searchKey) && product.getUnit().equalsIgnoreCase(unitKey)))
+            {
+
+                searchProductList.add(product);
+
+            }
+
+        }
+
+        return searchProductList;
 
     }
 
