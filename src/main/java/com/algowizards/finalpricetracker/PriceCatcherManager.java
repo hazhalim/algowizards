@@ -1,5 +1,6 @@
 package com.algowizards.finalpricetracker;
 
+import java.sql.SQLOutput;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,8 @@ public class PriceCatcherManager
     // Instance variables
     private static List<PriceCatcher> priceCatcherList = new ArrayList<>();
     private static List<PriceCatcher> averagePriceCatcherList = new ArrayList<>();
-    private static List<PriceCatcher> tempAveragePriceCatcherList = new ArrayList<>();
+    private static List<PriceCatcher> cheapestSellerAveragePriceCatcherList = new ArrayList<>();
+    private static List<PriceCatcher> priceTrendAveragePriceCatcherList = new ArrayList<>();
 
     // Constructors
 
@@ -35,10 +37,17 @@ public class PriceCatcherManager
 
     }
 
-    public static List<PriceCatcher> getTempAveragePriceCatcherList()
+    public static List<PriceCatcher> getCheapestSellerAveragePriceCatcherList()
     {
 
-        return tempAveragePriceCatcherList;
+        return cheapestSellerAveragePriceCatcherList;
+
+    }
+
+    public static List<PriceCatcher> getPriceTrendAveragePriceCatcherList()
+    {
+
+        return priceTrendAveragePriceCatcherList;
 
     }
 
@@ -57,10 +66,17 @@ public class PriceCatcherManager
 
     }
 
-    public static void setTempAveragePriceCatcherList(List<PriceCatcher> tempAveragePriceCatcherList)
+    public static void setCheapestSellerAveragePriceCatcherList(List<PriceCatcher> cheapestSellerAveragePriceCatcherList)
     {
 
-        PriceCatcherManager.tempAveragePriceCatcherList = tempAveragePriceCatcherList;
+        PriceCatcherManager.cheapestSellerAveragePriceCatcherList = cheapestSellerAveragePriceCatcherList;
+
+    }
+
+    public static void setPriceTrendAveragePriceCatcherList(List<PriceCatcher> priceTrendAveragePriceCatcherList)
+    {
+
+        PriceCatcherManager.priceTrendAveragePriceCatcherList = priceTrendAveragePriceCatcherList;
 
     }
 
@@ -116,7 +132,7 @@ public class PriceCatcherManager
 
     }
 
-    static void generateListOfAveragePriceCatchers(DataStructure.List1D<PriceCatcher> priceCatcherList, Set<Integer> setOfPremises, Product product)
+    static void generateListOfCheapestSellerAveragePriceCatchers(DataStructure.List1D<PriceCatcher> priceCatcherList, Set<Integer> setOfPremises, Product product)
     {
 
         for (Integer premiseCode : setOfPremises)
@@ -145,7 +161,7 @@ public class PriceCatcherManager
 
                 PriceCatcher averagePriceCatcher = new PriceCatcher("2023-08-29", premiseCode, product.getItemCode(), averagePrice);
 
-                tempAveragePriceCatcherList.add(averagePriceCatcher);
+                cheapestSellerAveragePriceCatcherList.add(averagePriceCatcher);
 
             }
 
@@ -172,22 +188,119 @@ public class PriceCatcherManager
 
         }
 
-        generateListOfAveragePriceCatchers(priceCatcherItemOnly, setOfPremises, product);
+        generateListOfCheapestSellerAveragePriceCatchers(priceCatcherItemOnly, setOfPremises, product);
 
         Comparator<PriceCatcher> priceComparator = Comparator.comparingDouble(PriceCatcher::getItemPrice);
 
-        tempAveragePriceCatcherList.sort(priceComparator);
+        cheapestSellerAveragePriceCatcherList.sort(priceComparator);
 
         System.out.println("-----= Cheapest Sellers of " + product.getItemName() + " " +  product.getUnit() + " =-----\n");
 
         System.out.println("District: " + UserManager.getCurrentUser().getDistrict() + ", " + UserManager.getCurrentUser().getState() + "\n");
 
-        for (int i = 0; i < Math.min(5, tempAveragePriceCatcherList.size()); i++)
+        for (int i = 0; i < Math.min(5, cheapestSellerAveragePriceCatcherList.size()); i++)
         {
 
-            System.out.printf("%d. %s\n", (i + 1), PremiseManager.getPremiseByKey(tempAveragePriceCatcherList.get(i).getPremiseCode()).getPremiseName());
-            System.out.printf("Price: RM %.2f\n", tempAveragePriceCatcherList.get(i).getItemPrice());
-            System.out.printf("Address: %s\n\n", PremiseManager.getPremiseByKey(tempAveragePriceCatcherList.get(i).getPremiseCode()).getPremiseAddress());
+            System.out.printf("%d. %s\n", (i + 1), PremiseManager.getPremiseByKey(cheapestSellerAveragePriceCatcherList.get(i).getPremiseCode()).getPremiseName());
+            System.out.printf("Price: RM %.2f\n", cheapestSellerAveragePriceCatcherList.get(i).getItemPrice());
+            System.out.printf("Address: %s\n\n", PremiseManager.getPremiseByKey(cheapestSellerAveragePriceCatcherList.get(i).getPremiseCode()).getPremiseAddress());
+
+        }
+
+    }
+
+    static void displayPriceTrendGraph(Product product)
+    {
+
+        DataStructure.List1D<PriceCatcher> priceCatcherItemOnly = new DataStructure.List1D<>(new ArrayList<>());
+        Set<Integer> setOfDays = new HashSet<>(new HashSet<>());
+
+        for (PriceCatcher priceCatcher : priceCatcherList)
+        {
+
+            if (priceCatcher.getItemCode() == product.getItemCode())
+            {
+
+                priceCatcherItemOnly.getList1D().add(priceCatcher);
+                setOfDays.add(Integer.valueOf(priceCatcher.getPriceDay()));
+
+            }
+
+        }
+
+        generateListOfDayAveragePriceCatchers(priceCatcherItemOnly, setOfDays, product);
+
+        Comparator<PriceCatcher> dayComparator = Comparator.comparingInt(priceCatcher -> Integer.parseInt(priceCatcher.getPriceDay()));
+
+        priceTrendAveragePriceCatcherList.sort(dayComparator);
+
+        System.out.println("-----= Price Trend of " + product.getItemName() + " " +  product.getUnit() + " =-----\n");
+
+        System.out.println("District: " + UserManager.getCurrentUser().getDistrict() + ", " + UserManager.getCurrentUser().getState() + "\n");
+
+        System.out.println("Day     | Price (RM)");
+        System.out.println("---------------------------");
+
+        for (PriceCatcher priceCatcher : priceTrendAveragePriceCatcherList)
+        {
+
+            System.out.print(priceCatcher.getPriceDay() + "      | ");
+
+            int characterScale = (int) (priceCatcher.getItemPrice() / 0.10); // 0.10 is the real scale, can modify this accordingly
+
+            for (int i = 0; i < characterScale; i++)
+            {
+
+                System.out.print("*");
+
+            }
+
+            System.out.printf("\t(%.2f)\n", priceCatcher.getItemPrice());
+
+        }
+
+        System.out.println("\n\nScale: ");
+        System.out.println("* = RM 0.10\n");
+
+    }
+
+    static void generateListOfDayAveragePriceCatchers(DataStructure.List1D<PriceCatcher> priceCatcherList, Set<Integer>  setOfDays, Product product)
+    {
+
+        for (Integer day : setOfDays)
+        {
+
+            double totalPrice = 0.0;
+            int count = 0;
+
+            for (PriceCatcher priceCatcher : priceCatcherList.getList1D())
+            {
+
+                Premise currentPremise = PremiseManager.getPremiseByKey(priceCatcher.getPremiseCode());
+
+                if ((Integer.parseInt(priceCatcher.getPriceDay()) == day)
+                        && (priceCatcher.getItemCode() == product.getItemCode())
+                        && (currentPremise.getPremiseDistrict().equals(UserManager.getCurrentUser().getDistrict())))
+                {
+
+                    totalPrice += priceCatcher.getItemPrice();
+                    count++;
+
+                }
+
+            }
+
+            if (count > 0)
+            {
+
+                double dayAveragePrice = (totalPrice / (double) count);
+
+                String date = String.format("2023-08-%02d", day);
+                PriceCatcher dayAveragePriceCatcher = new PriceCatcher(date, 0, product.getItemCode(), dayAveragePrice);
+
+                priceTrendAveragePriceCatcherList.add(dayAveragePriceCatcher);
+
+            }
 
         }
 

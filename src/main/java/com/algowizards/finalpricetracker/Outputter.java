@@ -1,6 +1,5 @@
 package com.algowizards.finalpricetracker;
 
-import java.util.Map;
 import java.util.Scanner;
 
 import java.util.List;
@@ -10,8 +9,6 @@ import org.jline.terminal.*;
 import org.jline.utils.Display;
 
 import java.io.IOException;
-
-import static com.algowizards.finalpricetracker.ProductManager.getProductGroupList;
 
 /**
  *
@@ -354,7 +351,7 @@ public class Outputter
                 case 4:
                 {
 
-                    // viewPriceTrend(Product chosenProduct);
+                    PriceCatcherManager.displayPriceTrendGraph(chosenProduct);
 
                     break;
 
@@ -372,7 +369,8 @@ public class Outputter
                 case 6:
                 {
 
-                    PriceCatcherManager.getTempAveragePriceCatcherList().clear();
+                    PriceCatcherManager.getCheapestSellerAveragePriceCatcherList().clear();
+                    PriceCatcherManager.getPriceTrendAveragePriceCatcherList().clear();
 
                     System.out.println("Returning to main menu...\n");
 
