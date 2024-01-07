@@ -194,7 +194,9 @@ public class SignUp
 
         UserManager.getUserList().add(newUser);
 
-        UserManager.writeToFile();
+        //UserManager.writeToFile(); //before fix
+        UserManager.writeToFile(newUser); // after fix
+        
 
         System.out.println("Your PriceWizard account has been successfully registered!\n");
 
