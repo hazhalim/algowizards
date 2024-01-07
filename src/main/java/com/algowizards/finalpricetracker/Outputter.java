@@ -700,7 +700,7 @@ public class Outputter
                     case 1:
                     {
 
-                        break;
+                        Map<Integer, Product>
 
                     }
 

@@ -311,6 +311,8 @@ public class User {
     void loadShoppingCart() throws IOException, CsvException
     {
 
+        shoppingCartList.clear();
+
         List<List<String>> cartDataList = FileManager.readCSVFileInto2DList(cartPath, true);
 
         if (!cartDataList.isEmpty())
