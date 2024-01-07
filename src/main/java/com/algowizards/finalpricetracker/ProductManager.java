@@ -420,6 +420,5 @@ public class ProductManager
                 };
 
     }
-//    static void
 
 }

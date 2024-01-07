@@ -715,7 +715,9 @@ public class Outputter
 
                 System.out.println((i + 1) + ". " + shoppingCartMapping.get(i + 1).getItemName() + " " + shoppingCartMapping.get(i + 1).getUnit());
                 System.out.println("Quantity: " + shoppingCartMapping.get(i + 1).getQuantity());
-                System.out.println("Cheapest premise selling this product: \n");
+                PriceCatcherManager.topCheapestSeller(shoppingCartMapping.get(i + 1));
+
+                System.out.println();
 
             }
 
@@ -818,6 +820,10 @@ public class Outputter
         }
 
         shoppingCartMapping.clear();
+
+        PriceCatcherManager.getCheapestSellerAveragePriceCatcherList().clear();
+        PriceCatcherManager.getPriceTrendAveragePriceCatcherList().clear();
+
         shoppingCartMenuChoice = 0;
 
     }

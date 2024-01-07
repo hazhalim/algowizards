@@ -1,6 +1,5 @@
 package com.algowizards.finalpricetracker;
 
-import java.sql.SQLOutput;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -301,6 +300,47 @@ public class PriceCatcherManager
                 priceTrendAveragePriceCatcherList.add(dayAveragePriceCatcher);
 
             }
+
+        }
+
+    }
+
+    static void topCheapestSeller(Product product)
+    {
+
+        DataStructure.List1D<PriceCatcher> priceCatcherItemOnly = new DataStructure.List1D<>(new ArrayList<>());
+        Set<Integer> setOfPremises = new HashSet<>(new HashSet<>());
+
+        for (PriceCatcher priceCatcher : priceCatcherList)
+        {
+
+            if (priceCatcher.getItemCode() == product.getItemCode())
+            {
+
+                priceCatcherItemOnly.getList1D().add(priceCatcher);
+                setOfPremises.add(priceCatcher.getPremiseCode());
+
+            }
+
+        }
+
+        generateListOfCheapestSellerAveragePriceCatchers(priceCatcherItemOnly, setOfPremises, product);
+
+        Comparator<PriceCatcher> priceComparator = Comparator.comparingDouble(PriceCatcher::getItemPrice);
+
+        cheapestSellerAveragePriceCatcherList.sort(priceComparator);
+
+        if (cheapestSellerAveragePriceCatcherList.isEmpty())
+        {
+
+            System.out.println("Cheapest premise selling this product: data is not available");
+
+        } else {
+
+            System.out.println("Cheapest premise selling this product: " + PremiseManager.getPremiseByKey(cheapestSellerAveragePriceCatcherList.get(0).getPremiseCode()).getPremiseName());
+            System.out.println("Premise type: " + PremiseManager.getPremiseByKey(cheapestSellerAveragePriceCatcherList.get(0).getPremiseCode()).getPremiseType());
+            System.out.printf("Address: %s\n\n", PremiseManager.getPremiseByKey(cheapestSellerAveragePriceCatcherList.get(0).getPremiseCode()).getPremiseAddress());
+            System.out.printf("Total price of this product at this premise: RM %.2f\n", (cheapestSellerAveragePriceCatcherList.get(0).getItemPrice()) * ((double) product.getQuantity()));
 
         }
 
