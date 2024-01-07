@@ -232,13 +232,22 @@ public class ProductManager
     static void generateListOfCartProducts(DataStructure.List2D<String> cartData)
     {
 
-        for (List<String> row : cartData.getList2D())
+        if (!cartData.getList2D().isEmpty())
         {
 
-            Product product = productMap.get(Integer.parseInt(row.getFirst()));
-            product.setQuantity(Integer.parseInt(row.getLast()));
+            for (List<String> row : cartData.getList2D())
+            {
 
-            addProductToCart(product);
+                Product product = productMap.get(Integer.parseInt(row.get(0)));
+                product.setQuantity(Integer.parseInt(row.get(5)));
+
+                addProductToCart(product);
+
+            }
+
+        } else {
+
+            System.out.println("You currently have no items in your cart...");
 
         }
 
@@ -395,6 +404,22 @@ public class ProductManager
 
     }
 
+    static String[] toArray(Product product)
+    {
+
+        return new String[]
+                {
+
+                        String.valueOf(product.getItemCode()),
+                        product.getItemName(),
+                        product.getUnit(),
+                        product.getItemGroup(),
+                        product.getItemCategory(),
+                        String.valueOf(product.getQuantity())
+
+                };
+
+    }
 //    static void
 
 }

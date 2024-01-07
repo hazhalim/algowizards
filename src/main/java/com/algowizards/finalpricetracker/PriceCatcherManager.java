@@ -306,6 +306,45 @@ public class PriceCatcherManager
 
     }
 
+//    static DataStructure.List1D<PriceCatcher> averagedPriceCatchers(Product product)
+//    {
+//
+//        DataStructure.List1D<PriceCatcher> priceCatcherPremiseOnly = new DataStructure.List1D<>(new ArrayList<>());
+//
+//        for (PriceCatcher priceCatcher : priceCatcherList)
+//        {
+//
+//            if (priceCatcher.getItemCode() == product.getItemCode())
+//            {
+//
+//                priceCatcherItemOnly.getList1D().add(priceCatcher);
+//                setOfPremises.add(priceCatcher.getPremiseCode());
+//
+//            }
+//
+//        }
+//
+//        generateListOfCheapestSellerAveragePriceCatchers(priceCatcherItemOnly, setOfPremises, product);
+//
+//        Comparator<PriceCatcher> priceComparator = Comparator.comparingDouble(PriceCatcher::getItemPrice);
+//
+//        cheapestSellerAveragePriceCatcherList.sort(priceComparator);
+//
+//        System.out.println("-----= Cheapest Sellers of " + product.getItemName() + " " +  product.getUnit() + " =-----\n");
+//
+//        System.out.println("District: " + UserManager.getCurrentUser().getDistrict() + ", " + UserManager.getCurrentUser().getState() + "\n");
+//
+//        for (int i = 0; i < Math.min(5, cheapestSellerAveragePriceCatcherList.size()); i++)
+//        {
+//
+//            System.out.printf("%d. %s\n", (i + 1), PremiseManager.getPremiseByKey(cheapestSellerAveragePriceCatcherList.get(i).getPremiseCode()).getPremiseName());
+//            System.out.printf("Price: RM %.2f\n", cheapestSellerAveragePriceCatcherList.get(i).getItemPrice());
+//            System.out.printf("Address: %s\n\n", PremiseManager.getPremiseByKey(cheapestSellerAveragePriceCatcherList.get(i).getPremiseCode()).getPremiseAddress());
+//
+//        }
+//
+//    }
+
 //    static void viewTopFiveCheapestSellers(Product product) {
 //        List<PriceCatcher> priceCatcherItemOnly = priceCatcherList.stream().filter(pc -> pc.getItemCode() == product.getItemCode()).toList();
 //

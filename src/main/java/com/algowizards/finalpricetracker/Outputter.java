@@ -224,7 +224,7 @@ public class Outputter
                 case 4:
                 {
 
-//                    UserManager.getCurrentUser().viewShoppingCart();
+                    viewShoppingCart();
 
                     break;
 
@@ -244,6 +244,7 @@ public class Outputter
                     System.out.println("Thank you for using PriceWizard!\n");
                     System.out.println("Signing out of your account...\n");
 
+                    UserManager.getCurrentUser().getShoppingCartList().clear();
                     UserManager.setCurrentUser(null);
 
                     break;
@@ -300,7 +301,7 @@ public class Outputter
 
     }
 
-    static void productMenu(Product chosenProduct)
+    static void productMenu(Product chosenProduct) throws IOException
     {
 
         while (productMenuChoice != 6)
@@ -362,9 +363,16 @@ public class Outputter
 
                 }
 
-                case 5: {
+                case 5:
+                {
 
-                    System.out.println("Current Quantities of this Product in Shopping Cart: " + chosenProduct.getQuantity() + "\n");
+                    if (UserManager.getCurrentUser().getShoppingCartList().contains(chosenProduct))
+                    {
+
+                        System.out.println("Current Quantities of this Product in Shopping Cart: " + UserManager.getCurrentUser().getShoppingCartList().get(UserManager.getCurrentUser().getShoppingCartList().indexOf(chosenProduct)).getQuantity() + "\n");
+
+                    }
+
                     System.out.print("> Enter the quantity of this product to be added to the shopping cart (leave blank for 1): ");
 
                     keyboard.nextLine(); // Consume the newline character above
@@ -374,7 +382,19 @@ public class Outputter
                     if (quantityString.isEmpty())
                     {
 
-                        chosenProduct.setQuantity(chosenProduct.getQuantity() + 1);
+                        if (!UserManager.getCurrentUser().getShoppingCartList().contains(chosenProduct))
+                        {
+
+                            UserManager.getCurrentUser().getShoppingCartList().add(chosenProduct);
+                            UserManager.getCurrentUser().getShoppingCartList().get(UserManager.getCurrentUser().getShoppingCartList().indexOf(chosenProduct)).setQuantity(1);
+
+                        } else {
+
+                            UserManager.getCurrentUser().getShoppingCartList().get(UserManager.getCurrentUser().getShoppingCartList().indexOf(chosenProduct)).setQuantity(UserManager.getCurrentUser().getShoppingCartList().get(UserManager.getCurrentUser().getShoppingCartList().indexOf(chosenProduct)).getQuantity() + 1);
+
+                        }
+
+                        UserManager.getCurrentUser().writeToShoppingCart();
 
                         System.out.println("\n1 quantity of " + chosenProduct.getItemName() + " " + chosenProduct.getUnit() + " was just added to your shopping cart!\n");
                         System.out.println("Current Quantities of this Product in Shopping Cart: " + chosenProduct.getQuantity() + "\n");
@@ -385,11 +405,21 @@ public class Outputter
 
                     } else {
 
-                        chosenProduct.setQuantity(chosenProduct.getQuantity() + Integer.parseInt(quantityString));
-                        ProductManager.addProductToShoppingCartList(chosenProduct);
-                        ProductManager.addProductToShoppingCartMapping(chosenProduct);
+                        if (!UserManager.getCurrentUser().getShoppingCartList().contains(chosenProduct))
+                        {
 
-                        System.out.println("\n" + Integer.parseInt(quantityString) + " quantities of " + chosenProduct.getItemName() + " " + chosenProduct.getUnit() + " were just added to your shopping cart!\n");
+                            UserManager.getCurrentUser().getShoppingCartList().add(chosenProduct);
+                            UserManager.getCurrentUser().getShoppingCartList().get(UserManager.getCurrentUser().getShoppingCartList().indexOf(chosenProduct)).setQuantity(Integer.parseInt(quantityString));
+
+                        } else {
+
+                            UserManager.getCurrentUser().getShoppingCartList().get(UserManager.getCurrentUser().getShoppingCartList().indexOf(chosenProduct)).setQuantity(UserManager.getCurrentUser().getShoppingCartList().get(UserManager.getCurrentUser().getShoppingCartList().indexOf(chosenProduct)).getQuantity() + Integer.parseInt(quantityString));
+
+                        }
+
+                        UserManager.getCurrentUser().writeToShoppingCart();
+
+                        System.out.println("\n" + quantityString + " quantities of " + chosenProduct.getItemName() + " " + chosenProduct.getUnit() + " was just added to your shopping cart!\n");
                         System.out.println("Current Quantities of this Product in Shopping Cart: " + chosenProduct.getQuantity() + "\n");
 
                     }
@@ -493,39 +523,37 @@ public class Outputter
         displayProductSummaryChanges(previousProductCategory, product.getItemCategory(), "Product Subcategory");
         displayProductSummaryChanges(Integer.toString(previousProductCode), Integer.toString(product.getItemCode()), "Product Code");
 
-//        int index = -1;
-//
-//        for (int i = 0; i < ProductManager.getProductList().size(); i++)
-//        {
-//
-//            ProductManager.getProductByKey(i).getItemCode()
-//
-//            if (listOfProducts.getList1DValue(i).getItemCode() == previousProductCode)
-//            {
-//
-//                index = i;
-//
-//                listOfProducts.setList1DValue(i, product);
-//
-//                mapOfProducts.removeEntry(previousProductCode);
-//                mapOfProducts.addEntry(product.getItemCode(), product);
-//
-//                needsUpdate = true;
-//
-//                System.out.println("Your modifications to the product details have been successfully saved.\n");
-//
-//                break;
-//
-//            }
-//
-//        }
+        int index = -1;
 
-//        if (index == -1)
-//        {
-//
-//            System.out.println("ERROR: There was an error saving the modified details of the product. Your changes have not been saved.\n");
-//
-//        }
+        for (int i = 0; i < ProductManager.getProductList().size(); i++)
+        {
+
+            if (listOfProducts.getList1DValue(i).getItemCode() == previousProductCode)
+            {
+
+                index = i;
+
+                listOfProducts.setList1DValue(i, product);
+
+                mapOfProducts.removeEntry(previousProductCode);
+                mapOfProducts.addEntry(product.getItemCode(), product);
+
+                needsUpdate = true;
+
+                System.out.println("Your modifications to the product details have been successfully saved.\n");
+
+                break;
+
+            }
+
+        }
+
+        if (index == -1)
+        {
+
+            System.out.println("ERROR: There was an error saving the modified details of the product. Your changes have not been saved.\n");
+
+        }
 
     }
 
@@ -545,7 +573,8 @@ public class Outputter
 
     }
 
-    static void searchMenu() {
+    static void searchMenu() throws IOException
+    {
 
         while (searchMenuChoice != 'N') {
 
@@ -616,6 +645,104 @@ public class Outputter
 
         // Reset the value of searchMenuChoice
         searchMenuChoice = 'Y';
+
+    }
+
+    static void viewShoppingCart() throws IOException, CsvException
+    {
+
+        int shoppingCartMenuChoice = 0;
+
+        Map<Integer, Product> shoppingCartMapping = new HashMap<>();
+        UserManager.getCurrentUser().loadShoppingCart();
+
+        if (UserManager.getCurrentUser().getShoppingCartList().isEmpty())
+        {
+
+            System.out.println("You currently have no products in your shopping cart. Please add a product to your shopping cart first.\n");
+
+        } else {
+
+            for (int i = 0; i < UserManager.getCurrentUser().getShoppingCartList().size(); i++)
+            {
+
+                shoppingCartMapping.put(i + 1, UserManager.getCurrentUser().getShoppingCartList().get(i));
+
+            }
+
+            while (shoppingCartMenuChoice != 4)
+            {
+
+                System.out.println("-----= Shopping Cart =-----\n\n");
+
+                for (int i = 0; i < UserManager.getCurrentUser().getShoppingCartList().size(); i++)
+                {
+
+                    System.out.println((i + 1) + ". " + shoppingCartMapping.get(i + 1).getItemName());
+                    System.out.println("Quantity: " + shoppingCartMapping.get(i + 1).getQuantity());
+                    System.out.println("Cheapest premise selling this product: \n");
+
+                }
+
+                System.out.println("Actions:\n");
+
+                System.out.println("1. Select a product in the shopping cart");
+                System.out.println("2. Remove a product from the shopping cart");
+                System.out.println("3. Determine the best premise to purchase the products in the shopping cart");
+                System.out.println("4. Return to the main menu\n");
+
+                System.out.print("> Choose an action (1/2/3/4): ");
+                shoppingCartMenuChoice = keyboard.nextInt();
+
+                switch (shoppingCartMenuChoice)
+                {
+
+                    case 1:
+                    {
+
+                        break;
+
+                    }
+
+                    case 2:
+                    {
+
+                        break;
+
+                    }
+
+                    case 3:
+                    {
+
+                        break;
+
+                    }
+
+                    case 4:
+                    {
+
+                        System.out.println("Returning to the main menu...");
+
+                        break;
+
+                    }
+
+                    default:
+                    {
+
+                        System.out.println("Sorry, your input was not between 1 to 4. Please try again.");
+
+                        break;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        shoppingCartMenuChoice = 0;
 
     }
     

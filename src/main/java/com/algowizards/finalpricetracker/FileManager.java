@@ -59,14 +59,89 @@ public class FileManager
 
     }
 
-    static void write2DListIntoCSVFile(String fileName, List<List<String>> list) throws IOException
+    static List<List<String>> readCSVFileInto2DList(String fileName, boolean noHeaders) throws FileNotFoundException, IOException, CsvException // fileName is the relative path to a .csv file
+    {
+        if (noHeaders)
+        {
+
+            try {
+
+                FileReader fileReader = new FileReader(fileName);
+                CSVReader csvReader = new CSVReaderBuilder(fileReader).build();
+
+                List<String[]> intermediateData = csvReader.readAll();
+
+                List<List<String>> finalList = new ArrayList<>();
+
+                for (String[] row : intermediateData)
+                {
+
+                    finalList.add(Arrays.asList(row));
+
+                }
+
+                return finalList;
+
+            } catch (FileNotFoundException exception) {
+
+                throw new FileNotFoundException("The file " + fileName + "was not found.");
+
+            } catch (IOException exception) {
+
+                throw new IOException("There was an error reading " + fileName + ".");
+
+            } catch (CsvException exception) {
+
+                throw new CsvException("There was an error in the OpenCSV library.");
+
+            }
+
+        } else {
+
+            try {
+
+                FileReader fileReader = new FileReader(fileName);
+                CSVReader csvReader = new CSVReaderBuilder(fileReader).withSkipLines(1).build();
+
+                List<String[]> intermediateData = csvReader.readAll();
+
+                List<List<String>> finalList = new ArrayList<>();
+
+                for (String[] row : intermediateData)
+                {
+
+                    finalList.add(Arrays.asList(row));
+
+                }
+
+                return finalList;
+
+            } catch (FileNotFoundException exception) {
+
+                throw new FileNotFoundException("The file " + fileName + "was not found.");
+
+            } catch (IOException exception) {
+
+                throw new IOException("There was an error reading " + fileName + ".");
+
+            } catch (CsvException exception) {
+
+                throw new CsvException("There was an error in the OpenCSV library.");
+
+            }
+
+        }
+
+    }
+
+    static void write2DListIntoCSVFile(String fileName, List<String[]> list) throws IOException
     {
 
         try (FileWriter fileWriter = new FileWriter(UserManager.getCurrentUser().getCartPath());
              CSVWriter csvWriter = new CSVWriter(fileWriter))
         {
 
-//            csvWriter.writeAll();
+            csvWriter.writeAll(list);
 
         }
 

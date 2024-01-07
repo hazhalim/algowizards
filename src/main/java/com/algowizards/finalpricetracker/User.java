@@ -31,7 +31,7 @@ public class User {
     private List<Product> shoppingCartList;
     private String cartPath;
 
-    private static final String CART_DIRECTORY = "/carts";
+    private static final String CART_DIRECTORY = "carts/";
 
     // Constructors
     public User() {
@@ -53,23 +53,23 @@ public class User {
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
         this.shoppingCartList = new ArrayList<>();
-//        this.cartPath = CART_DIRECTORY + this.username + "_cart.csv";
+        this.cartPath = CART_DIRECTORY + this.username + "_cart.csv";
 
-//        File cartFile = new File(cartPath);
+        File cartFile = new File(cartPath);
 
-//        if (!cartFile.exists()) {
-//
-//            try {
-//
-//                cartFile.createNewFile();
-//
-//            } catch (IOException exception) {
-//
-//                throw new RuntimeException(exception);
-//
-//            }
-//
-//        }
+        if (!cartFile.exists()) {
+
+            try {
+
+                cartFile.createNewFile();
+
+            } catch (IOException exception) {
+
+                throw new RuntimeException(exception);
+
+            }
+
+        }
 
     }
 
@@ -301,25 +301,42 @@ public class User {
     }
 
     // Other methods
-    String toCsvString() {
+    String toCsvString()
+    {
 
         return String.join(",", username, password, firstName, lastName, contactInfo, address, state, district, securityQuestion, securityAnswer);
 
     }
 
-//    void loadShoppingCart() throws IOException, CsvException
-//    {
-//
-//        DataStructure.List2D<String> cartData = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList(cartPath));
-//
-//        ProductManager.generateListOfCartProducts(cartData);
-//
-//    }
-
-    void writeToShoppingCart(Product product)
+    void loadShoppingCart() throws IOException, CsvException
     {
 
+        List<List<String>> cartDataList = FileManager.readCSVFileInto2DList(cartPath, true);
 
+        if (!cartDataList.isEmpty())
+        {
+
+            DataStructure.List2D<String> cartData = new DataStructure.List2D<>(cartDataList);
+
+            ProductManager.generateListOfCartProducts(cartData);
+
+        }
+
+    }
+
+    void writeToShoppingCart() throws IOException
+    {
+
+        List<String[]> intermediateData = new ArrayList<>();
+
+        for (Product product : shoppingCartList)
+        {
+
+            intermediateData.add(ProductManager.toArray(product));
+
+        }
+
+        FileManager.write2DListIntoCSVFile(cartPath, intermediateData);
 
     }
 
