@@ -43,7 +43,7 @@ public class ForgotPassword
 
                     user.setPassword(password);
 
-                    UserManager.writeToFile();
+                    UserManager.writeToFile(user);
 
                     System.out.println("\nPassword updated successfully!");
 
