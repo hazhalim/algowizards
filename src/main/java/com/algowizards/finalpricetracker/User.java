@@ -4,10 +4,17 @@ package com.algowizards.finalpricetracker;
  * @author tmhta_
  */
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class User
-{
+public class User {
 
     private static List<User> listOfUsers;
 
@@ -21,17 +28,19 @@ public class User
     private String district;
     private String securityQuestion;
     private String securityAnswer;
+    private List<Product> shoppingCartList;
+    private String cartPath;
+
+    private static final String CART_DIRECTORY = "/carts";
 
     // Constructors
-    public User()
-    {
+    public User() {
 
         throw new IllegalArgumentException("No arguments passed into constructor");
 
     }
 
-    public User(String username, String password, String firstName, String lastName, String contactInfo, String address, String state, String district, String securityQuestion, String securityAnswer)
-    {
+    public User(String username, String password, String firstName, String lastName, String contactInfo, String address, String state, String district, String securityQuestion, String securityAnswer) {
 
         this.username = username;
         this.password = password;
@@ -43,87 +52,105 @@ public class User
         this.district = district;
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
+        this.shoppingCartList = new ArrayList<>();
+//        this.cartPath = CART_DIRECTORY + this.username + "_cart.csv";
+
+//        File cartFile = new File(cartPath);
+
+//        if (!cartFile.exists()) {
+//
+//            try {
+//
+//                cartFile.createNewFile();
+//
+//            } catch (IOException exception) {
+//
+//                throw new RuntimeException(exception);
+//
+//            }
+//
+//        }
 
     }
 
     // Getter and setter methods
     // Getter methods
-    String getUsername()
-    {
+    String getUsername() {
 
         return this.username;
 
     }
 
-    String getPassword()
-    {
+    String getPassword() {
 
         return this.password;
 
     }
 
-    String getFirstName()
-    {
+    String getFirstName() {
 
         return this.firstName;
 
     }
 
-    String getLastName()
-    {
+    String getLastName() {
 
         return this.lastName;
 
     }
 
-    String getContactInfo()
-    {
+    String getContactInfo() {
 
         return this.contactInfo;
 
     }
 
-    String getAddress()
-    {
+    String getAddress() {
 
         return this.address;
 
     }
 
-    String getState()
-    {
+    String getState() {
 
         return this.state;
 
     }
 
-    String getDistrict()
-    {
+    String getDistrict() {
 
         return this.district;
 
     }
 
-    String getSecurityQuestion()
-    {
+    String getSecurityQuestion() {
 
         return this.securityQuestion;
 
     }
 
-    String getSecurityAnswer()
-    {
+    String getSecurityAnswer() {
 
         return this.securityAnswer;
 
     }
 
-    // Setter methods
-    void setUsername (String username)
-    {
+    List<Product> getShoppingCartList() {
 
-        if (!username.isEmpty())
-        {
+        return this.shoppingCartList;
+
+    }
+
+    public String getCartPath() {
+
+        return this.cartPath;
+
+    }
+
+    // Setter methods
+    void setUsername(String username) {
+
+        if (!username.isEmpty()) {
 
             this.username = username;
 
@@ -135,11 +162,9 @@ public class User
 
     }
 
-    void setPassword (String password)
-    {
+    void setPassword(String password) {
 
-        if (!password.isEmpty())
-        {
+        if (!password.isEmpty()) {
 
             this.password = password;
 
@@ -151,11 +176,9 @@ public class User
 
     }
 
-    void setFirstName (String firstName)
-    {
+    void setFirstName(String firstName) {
 
-        if (!firstName.isEmpty())
-        {
+        if (!firstName.isEmpty()) {
 
             this.firstName = firstName;
 
@@ -167,11 +190,9 @@ public class User
 
     }
 
-    void setLastName (String lastName)
-    {
+    void setLastName(String lastName) {
 
-        if (!lastName.isEmpty())
-        {
+        if (!lastName.isEmpty()) {
 
             this.lastName = lastName;
 
@@ -183,11 +204,9 @@ public class User
 
     }
 
-    void setContactInfo (String contactInfo)
-    {
+    void setContactInfo(String contactInfo) {
 
-        if (!contactInfo.isEmpty())
-        {
+        if (!contactInfo.isEmpty()) {
 
             this.contactInfo = contactInfo;
 
@@ -199,11 +218,9 @@ public class User
 
     }
 
-    void setAddress(String address)
-    {
+    void setAddress(String address) {
 
-        if (!address.isEmpty())
-        {
+        if (!address.isEmpty()) {
 
             this.address = address;
 
@@ -215,11 +232,9 @@ public class User
 
     }
 
-    void setState(String state)
-    {
+    void setState(String state) {
 
-        if (!state.isEmpty())
-        {
+        if (!state.isEmpty()) {
 
             this.state = state;
 
@@ -231,11 +246,9 @@ public class User
 
     }
 
-    void setDistrict(String district)
-    {
+    void setDistrict(String district) {
 
-        if (!district.isEmpty())
-        {
+        if (!district.isEmpty()) {
 
             this.district = district;
 
@@ -247,11 +260,9 @@ public class User
 
     }
 
-    void setSecurityQuestion(String securityQuestion)
-    {
+    void setSecurityQuestion(String securityQuestion) {
 
-        if (!securityQuestion.isEmpty())
-        {
+        if (!securityQuestion.isEmpty()) {
 
             this.securityQuestion = securityQuestion;
 
@@ -263,11 +274,9 @@ public class User
 
     }
 
-    void setSecurityAnswer(String securityAnswer)
-    {
+    void setSecurityAnswer(String securityAnswer) {
 
-        if (!securityAnswer.isEmpty())
-        {
+        if (!securityAnswer.isEmpty()) {
 
             this.securityAnswer = securityAnswer;
 
@@ -279,11 +288,38 @@ public class User
 
     }
 
+    void setShoppingCartList(List<Product> shoppingCartList) {
+
+        this.shoppingCartList = shoppingCartList;
+
+    }
+
+    public void setCartPath(String cartPath) {
+
+        this.cartPath = cartPath;
+
+    }
+
     // Other methods
-    String toCsvString()
-    {
+    String toCsvString() {
 
         return String.join(",", username, password, firstName, lastName, contactInfo, address, state, district, securityQuestion, securityAnswer);
+
+    }
+
+//    void loadShoppingCart() throws IOException, CsvException
+//    {
+//
+//        DataStructure.List2D<String> cartData = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList(cartPath));
+//
+//        ProductManager.generateListOfCartProducts(cartData);
+//
+//    }
+
+    void writeToShoppingCart(Product product)
+    {
+
+
 
     }
 

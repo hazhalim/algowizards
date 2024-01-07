@@ -35,6 +35,8 @@ public class LogIn
 
                 UserManager.setCurrentUser(user);
 
+//                UserManager.getCurrentUser().loadShoppingCart();
+
                 break;
 
             }

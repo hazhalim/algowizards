@@ -21,6 +21,9 @@ public class ProductManager
     private static Map<Integer, Product> productMap = new HashMap<>();
     private static int productMapSize = productMap.size();
 
+    private static List<Product> shoppingCartList = new ArrayList<>();
+    private static Map<Integer, Product> shoppingCartMapping = new HashMap<>();
+
     // Constructors
 
     // Getter and setter methods
@@ -50,6 +53,20 @@ public class ProductManager
     {
 
         return productMapSize;
+
+    }
+
+    public static List<Product> getShoppingCartList()
+    {
+
+        return shoppingCartList;
+
+    }
+
+    public static Map<Integer, Product> getShoppingCartMapping()
+    {
+
+        return shoppingCartMapping;
 
     }
 
@@ -134,6 +151,20 @@ public class ProductManager
 
     }
 
+    public static void setShoppingCartList(List<Product> shoppingCartList)
+    {
+
+        ProductManager.shoppingCartList = shoppingCartList;
+
+    }
+
+    public static void setShoppingCartMapping(Map<Integer, Product> shoppingCartMapping)
+    {
+
+        ProductManager.shoppingCartMapping = shoppingCartMapping;
+
+    }
+
     // Other methods
     static void addProductToList(Product product) // Add a product object to the list of products
     {
@@ -141,6 +172,28 @@ public class ProductManager
         // Add the product to the list of products
         productList.add(product);
         setProductListSize(productList);
+
+    }
+
+    static void addProductToShoppingCartList(Product product)
+    {
+
+        shoppingCartList.add(product);
+
+    }
+
+    static void addProductToCart(Product product)
+    {
+
+        UserManager.getCurrentUser().getShoppingCartList().add(product);
+
+    }
+
+    static void addProductToShoppingCartMapping(Product product)
+    {
+
+
+        shoppingCartMapping.put(shoppingCartMapping.size() + 1, product);
 
     }
 
@@ -171,6 +224,21 @@ public class ProductManager
             Product product = new Product(Integer.parseInt(row.get(0)), row.get(1), row.get(2), row.get(3), row.get(4));
 
             addProductToList(product);
+
+        }
+
+    }
+
+    static void generateListOfCartProducts(DataStructure.List2D<String> cartData)
+    {
+
+        for (List<String> row : cartData.getList2D())
+        {
+
+            Product product = productMap.get(Integer.parseInt(row.getFirst()));
+            product.setQuantity(Integer.parseInt(row.getLast()));
+
+            addProductToCart(product);
 
         }
 
@@ -326,5 +394,7 @@ public class ProductManager
         return searchProductList;
 
     }
+
+//    static void
 
 }

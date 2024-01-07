@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
+import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
 
 /**
@@ -53,6 +54,19 @@ public class FileManager
         } catch (CsvException exception) {
 
             throw new CsvException("There was an error in the OpenCSV library.");
+
+        }
+
+    }
+
+    static void write2DListIntoCSVFile(String fileName, List<List<String>> list) throws IOException
+    {
+
+        try (FileWriter fileWriter = new FileWriter(UserManager.getCurrentUser().getCartPath());
+             CSVWriter csvWriter = new CSVWriter(fileWriter))
+        {
+
+//            csvWriter.writeAll();
 
         }
 

@@ -17,6 +17,7 @@ public class Product
     private String unit;
     private String itemGroup;
     private String itemCategory;
+    private int quantity = 0;
 
     // Constructors
     public Product() throws IllegalArgumentException // Default constructor
@@ -34,6 +35,18 @@ public class Product
         this.unit = unit;
         this.itemGroup = itemGroup;
         this.itemCategory = itemCategory;
+
+    }
+
+    public Product(int itemCode, String itemName, String unit, String itemGroup, String itemCategory, int quantity)
+    {
+
+        this.itemCode = itemCode;
+        this.itemName = itemName;
+        this.unit = unit;
+        this.itemGroup = itemGroup;
+        this.itemCategory = itemCategory;
+        this.quantity = quantity;
 
     }
 
@@ -73,6 +86,13 @@ public class Product
 
     }
 
+    int getQuantity()
+    {
+
+        return this.quantity;
+
+    }
+
     // Setter methods
     void setItemCode(int itemCode)
     {
@@ -106,6 +126,22 @@ public class Product
     {
 
         this.itemCategory = itemCategory;
+
+    }
+
+    public void setQuantity(int quantity)
+    {
+
+        if (quantity >= 0)
+        {
+
+            this.quantity = quantity;
+
+        } else {
+
+            throw new IllegalArgumentException("Quantity must at least be 0");
+
+        }
 
     }
 

@@ -147,7 +147,7 @@ public class Outputter
 
                     }
 
-                    System.out.println("-----=Browse Product by Categories=-----\n");
+                    System.out.println("-----= Browse Product by Categories =-----\n");
                     System.out.println("Choose a category:\n");
 
                     for (Integer currentKey : productGroupMapping.getKeys())
@@ -224,7 +224,8 @@ public class Outputter
                 case 4:
                 {
 
-//                    viewShoppingCart();
+//                    UserManager.getCurrentUser().viewShoppingCart();
+
                     break;
 
                 }
@@ -361,10 +362,37 @@ public class Outputter
 
                 }
 
-                case 5:
-                {
+                case 5: {
 
-                    // addProductToShoppingCart(Product chosenProduct);
+                    System.out.println("Current Quantities of this Product in Shopping Cart: " + chosenProduct.getQuantity() + "\n");
+                    System.out.print("> Enter the quantity of this product to be added to the shopping cart (leave blank for 1): ");
+
+                    keyboard.nextLine(); // Consume the newline character above
+
+                    String quantityString = keyboard.nextLine();
+
+                    if (quantityString.isEmpty())
+                    {
+
+                        chosenProduct.setQuantity(chosenProduct.getQuantity() + 1);
+
+                        System.out.println("\n1 quantity of " + chosenProduct.getItemName() + " " + chosenProduct.getUnit() + " was just added to your shopping cart!\n");
+                        System.out.println("Current Quantities of this Product in Shopping Cart: " + chosenProduct.getQuantity() + "\n");
+
+                    } else if (Integer.parseInt(quantityString) <= 0) {
+
+                        System.out.println("\nNo quantities of this product were added to the shopping cart.");
+
+                    } else {
+
+                        chosenProduct.setQuantity(chosenProduct.getQuantity() + Integer.parseInt(quantityString));
+                        ProductManager.addProductToShoppingCartList(chosenProduct);
+                        ProductManager.addProductToShoppingCartMapping(chosenProduct);
+
+                        System.out.println("\n" + Integer.parseInt(quantityString) + " quantities of " + chosenProduct.getItemName() + " " + chosenProduct.getUnit() + " were just added to your shopping cart!\n");
+                        System.out.println("Current Quantities of this Product in Shopping Cart: " + chosenProduct.getQuantity() + "\n");
+
+                    }
 
                     break;
 
@@ -376,7 +404,7 @@ public class Outputter
                     PriceCatcherManager.getCheapestSellerAveragePriceCatcherList().clear();
                     PriceCatcherManager.getPriceTrendAveragePriceCatcherList().clear();
 
-                    System.out.println("Returning to main menu...\n");
+                    System.out.println("Returning to the main menu...\n");
 
                     break;
 
@@ -465,37 +493,39 @@ public class Outputter
         displayProductSummaryChanges(previousProductCategory, product.getItemCategory(), "Product Subcategory");
         displayProductSummaryChanges(Integer.toString(previousProductCode), Integer.toString(product.getItemCode()), "Product Code");
 
-        int index = -1;
+//        int index = -1;
+//
+//        for (int i = 0; i < ProductManager.getProductList().size(); i++)
+//        {
+//
+//            ProductManager.getProductByKey(i).getItemCode()
+//
+//            if (listOfProducts.getList1DValue(i).getItemCode() == previousProductCode)
+//            {
+//
+//                index = i;
+//
+//                listOfProducts.setList1DValue(i, product);
+//
+//                mapOfProducts.removeEntry(previousProductCode);
+//                mapOfProducts.addEntry(product.getItemCode(), product);
+//
+//                needsUpdate = true;
+//
+//                System.out.println("Your modifications to the product details have been successfully saved.\n");
+//
+//                break;
+//
+//            }
+//
+//        }
 
-        for (int i = 0; i < listOfProducts.getList1DSize(); i++)
-        {
-
-            if (listOfProducts.getList1DValue(i).getItemCode() == previousProductCode)
-            {
-
-                index = i;
-
-                listOfProducts.setList1DValue(i, product);
-
-                mapOfProducts.removeEntry(previousProductCode);
-                mapOfProducts.addEntry(product.getItemCode(), product);
-
-                needsUpdate = true;
-
-                System.out.println("Your modifications to the product details have been successfully saved.\n");
-
-                break;
-
-            }
-
-        }
-
-        if (index == -1)
-        {
-
-            System.out.println("ERROR: There was an error saving the modified details of the product. Your changes have not been saved.\n");
-
-        }
+//        if (index == -1)
+//        {
+//
+//            System.out.println("ERROR: There was an error saving the modified details of the product. Your changes have not been saved.\n");
+//
+//        }
 
     }
 
