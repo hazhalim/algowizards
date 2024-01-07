@@ -33,6 +33,7 @@ public class Outputter
     static int mainMenuChoice = 0;
     static int productMenuChoice = 0;
     static char searchMenuChoice = 'Y';
+    static int shoppingCartMenuChoice = 0;
     static boolean needsUpdate = false;
 
     // Pre-manager 2D lists of String
@@ -316,7 +317,7 @@ public class Outputter
             System.out.println("2. Modify this product's details");
             System.out.println("3. View the top 5 cheapest sellers of this product");
             System.out.println("4. View the trend of the price of this product");
-            System.out.println("5. Add this product to the shopping cart");
+            System.out.println("5. Add/remove quantities of this product to the shopping cart");
             System.out.println("6. Go back to the main menu");
 
             System.out.print("\n> Select an action: ");
@@ -373,7 +374,7 @@ public class Outputter
 
                     }
 
-                    System.out.print("> Enter the quantity of this product to be added to the shopping cart (leave blank for 1): ");
+                    System.out.print("> Enter the quantity of this product to be added/removed to the shopping cart (leave blank for +1): ");
 
                     keyboard.nextLine(); // Consume the newline character above
 
@@ -399,9 +400,40 @@ public class Outputter
                         System.out.println("\n1 quantity of " + chosenProduct.getItemName() + " " + chosenProduct.getUnit() + " was just added to your shopping cart!\n");
                         System.out.println("Current Quantities of this Product in Shopping Cart: " + chosenProduct.getQuantity() + "\n");
 
-                    } else if (Integer.parseInt(quantityString) <= 0) {
+                    } else if (Integer.parseInt(quantityString) == 0) {
 
                         System.out.println("\nNo quantities of this product were added to the shopping cart.");
+
+                    } else if (Integer.parseInt(quantityString) < 0) {
+
+                        if (UserManager.getCurrentUser().getShoppingCartList().contains(chosenProduct))
+                        {
+
+                            UserManager.getCurrentUser().getShoppingCartList().get(UserManager.getCurrentUser().getShoppingCartList().indexOf(chosenProduct)).setQuantity(Math.max(0, UserManager.getCurrentUser().getShoppingCartList().get(UserManager.getCurrentUser().getShoppingCartList().indexOf(chosenProduct)).getQuantity() + Integer.parseInt(quantityString)));
+
+                        }
+
+                        if (UserManager.getCurrentUser().getShoppingCartList().get(UserManager.getCurrentUser().getShoppingCartList().indexOf(chosenProduct)).getQuantity() == 0)
+                        {
+
+                            System.out.println("\nAll quantities of " + chosenProduct.getItemName() + " " + chosenProduct.getUnit() + " were just removed from your shopping cart.\n");
+                            System.out.println(chosenProduct.getItemName() + " " + chosenProduct.getUnit() + " is no longer in your shopping cart.\n");
+
+                        } else {
+
+                            System.out.println("\n" + -Integer.parseInt(quantityString) + " quantities of " + chosenProduct.getItemName() + " " + chosenProduct.getUnit() + " were just removed from your shopping cart.\n");
+                            System.out.println("Current Quantities of this Product in Shopping Cart: " + chosenProduct.getQuantity() + "\n");
+
+                        }
+
+                        if (UserManager.getCurrentUser().getShoppingCartList().get(UserManager.getCurrentUser().getShoppingCartList().indexOf(chosenProduct)).getQuantity() == 0)
+                        {
+
+                            UserManager.getCurrentUser().getShoppingCartList().remove(chosenProduct);
+
+                        }
+
+                        UserManager.getCurrentUser().writeToShoppingCart();
 
                     } else {
 
@@ -651,90 +683,133 @@ public class Outputter
     static void viewShoppingCart() throws IOException, CsvException
     {
 
-        int shoppingCartMenuChoice = 0;
-
         Map<Integer, Product> shoppingCartMapping = new HashMap<>();
-        UserManager.getCurrentUser().loadShoppingCart();
 
-        if (UserManager.getCurrentUser().getShoppingCartList().isEmpty())
+        while (shoppingCartMenuChoice != 4)
         {
 
-            System.out.println("You currently have no products in your shopping cart. Please add a product to your shopping cart first.\n");
+            UserManager.getCurrentUser().loadShoppingCart();
 
-        } else {
-
-            for (int i = 0; i < UserManager.getCurrentUser().getShoppingCartList().size(); i++)
+            if (UserManager.getCurrentUser().getShoppingCartList().isEmpty())
             {
 
-                shoppingCartMapping.put(i + 1, UserManager.getCurrentUser().getShoppingCartList().get(i));
+                System.out.println("You currently have no products in your shopping cart. Please add a product to your shopping cart first.\n");
 
-            }
+                break;
 
-            while (shoppingCartMenuChoice != 4)
-            {
-
-                System.out.println("-----= Shopping Cart =-----\n\n");
+            } else {
 
                 for (int i = 0; i < UserManager.getCurrentUser().getShoppingCartList().size(); i++)
                 {
 
-                    System.out.println((i + 1) + ". " + shoppingCartMapping.get(i + 1).getItemName());
-                    System.out.println("Quantity: " + shoppingCartMapping.get(i + 1).getQuantity());
-                    System.out.println("Cheapest premise selling this product: \n");
+                    shoppingCartMapping.put(i + 1, UserManager.getCurrentUser().getShoppingCartList().get(i));
 
                 }
 
-                System.out.println("Actions:\n");
+            }
 
-                System.out.println("1. Select a product in the shopping cart");
-                System.out.println("2. Remove a product from the shopping cart");
-                System.out.println("3. Determine the best premise to purchase the products in the shopping cart");
-                System.out.println("4. Return to the main menu\n");
+            System.out.println("-----= Shopping Cart =-----\n\n");
 
-                System.out.print("> Choose an action (1/2/3/4): ");
-                shoppingCartMenuChoice = keyboard.nextInt();
+            for (int i = 0; i < UserManager.getCurrentUser().getShoppingCartList().size(); i++)
+            {
 
-                switch (shoppingCartMenuChoice)
+                System.out.println((i + 1) + ". " + shoppingCartMapping.get(i + 1).getItemName() + " " + shoppingCartMapping.get(i + 1).getUnit());
+                System.out.println("Quantity: " + shoppingCartMapping.get(i + 1).getQuantity());
+                System.out.println("Cheapest premise selling this product: \n");
+
+            }
+
+            System.out.println("Actions:\n");
+
+            System.out.println("1. Select a product in the shopping cart");
+            System.out.println("2. Remove a product from the shopping cart");
+            System.out.println("3. Determine the best premise to purchase the products in the shopping cart");
+            System.out.println("4. Return to the main menu\n");
+
+            System.out.print("> Choose an action (1/2/3/4): ");
+            shoppingCartMenuChoice = keyboard.nextInt();
+
+            switch (shoppingCartMenuChoice)
+            {
+
+                case 1:
                 {
 
-                    case 1:
+                    System.out.println("-----= Select a Product in Shopping Cart =-----\n");
+
+                    for (int i = 0; i < UserManager.getCurrentUser().getShoppingCartList().size(); i++)
                     {
 
-                        Map<Integer, Product>
+                        System.out.println((i + 1) + ". " + shoppingCartMapping.get(i + 1).getItemName() + " " + shoppingCartMapping.get(i + 1).getUnit());
 
                     }
 
-                    case 2:
+                    System.out.print("> Select a product: ");
+
+                    int cartProductChoice = keyboard.nextInt();
+
+                    productMenu(shoppingCartMapping.get(cartProductChoice));
+
+                    break;
+
+                }
+
+                case 2:
+                {
+
+                    System.out.println("-----= Remove a Product from the Shopping Cart =-----\n");
+
+                    for (int i = 0; i < UserManager.getCurrentUser().getShoppingCartList().size(); i++)
                     {
 
-                        break;
+                        System.out.println((i + 1) + ". " + shoppingCartMapping.get(i + 1).getItemName() + " " + shoppingCartMapping.get(i + 1).getUnit());
 
                     }
 
-                    case 3:
+                    System.out.print("> Select a product to remove: ");
+
+                    int cartProductChoice = keyboard.nextInt();
+
+                    System.out.println("Successfully removed " + shoppingCartMapping.get(cartProductChoice).getItemName() + " " + shoppingCartMapping.get(cartProductChoice).getUnit() + " from the shopping cart.\n");
+
+                    UserManager.getCurrentUser().getShoppingCartList().remove(shoppingCartMapping.get(cartProductChoice));
+                    UserManager.getCurrentUser().writeToShoppingCart();
+
+                    for (int i = 0; i < UserManager.getCurrentUser().getShoppingCartList().size(); i++)
                     {
 
-                        break;
+                        shoppingCartMapping.put(i + 1, UserManager.getCurrentUser().getShoppingCartList().get(i));
 
                     }
 
-                    case 4:
-                    {
+                    cartProductChoice = 0;
 
-                        System.out.println("Returning to the main menu...");
+                    break;
 
-                        break;
+                }
 
-                    }
+                case 3:
+                {
 
-                    default:
-                    {
+                    break;
 
-                        System.out.println("Sorry, your input was not between 1 to 4. Please try again.");
+                }
 
-                        break;
+                case 4:
+                {
 
-                    }
+                    System.out.println("Returning to the main menu...");
+
+                    break;
+
+                }
+
+                default:
+                {
+
+                    System.out.println("Sorry, your input was not between 1 to 4. Please try again.");
+
+                    break;
 
                 }
 
@@ -742,6 +817,7 @@ public class Outputter
 
         }
 
+        shoppingCartMapping.clear();
         shoppingCartMenuChoice = 0;
 
     }

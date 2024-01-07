@@ -80,6 +80,9 @@ public class FileManager
 
                 }
 
+                fileReader.close();
+                csvReader.close();
+
                 return finalList;
 
             } catch (FileNotFoundException exception) {
@@ -139,6 +142,7 @@ public class FileManager
 
         try (FileWriter fileWriter = new FileWriter(UserManager.getCurrentUser().getCartPath());
              CSVWriter csvWriter = new CSVWriter(fileWriter))
+
         {
 
             csvWriter.writeAll(list);
@@ -180,7 +184,4 @@ public class FileManager
 //
 //        }
 
-
-
-    
 }
