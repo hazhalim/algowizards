@@ -7,8 +7,7 @@ import com.opencsv.exceptions.CsvException;
 import java.io.*;
 import java.util.*;
 
-public class UserManager
-{
+public class UserManager {
 
     // Instance variables
     private static final String userInformationFileName = "UserInformation.csv";
@@ -25,77 +24,66 @@ public class UserManager
     private static User currentUser = null;
 
     // Constructors (none needed; all variables are static)
-
     // Getter and setter methods
     // Getter methods
-    static String getUserInformationFileName()
-    {
+    static String getUserInformationFileName() {
 
         return userInformationFileName;
 
     }
-    static List<User> getUserList()
-    {
+
+    static List<User> getUserList() {
 
         return userList;
 
     }
 
-    static int getUserListSize()
-    {
+    static int getUserListSize() {
 
         return userListSize;
 
     }
 
-    static Map<String, User> getUserMap()
-    {
+    static Map<String, User> getUserMap() {
 
         return userMap;
 
     }
 
-    static int getUserMapSize()
-    {
+    static int getUserMapSize() {
 
         return userMapSize;
 
     }
 
-    static List<String> getUsernameList()
-    {
+    static List<String> getUsernameList() {
 
         return usernameList;
 
     }
 
-    static List<String> getSecurityQuestionList()
-    {
+    static List<String> getSecurityQuestionList() {
 
         return securityQuestionList;
 
     }
 
-    static DataStructure.Mapping<Integer, String> getSecurityQuestionMap()
-    {
+    static DataStructure.Mapping<Integer, String> getSecurityQuestionMap() {
 
         return securityQuestionMap;
 
     }
 
-    public static User getCurrentUser()
-    {
+    public static User getCurrentUser() {
 
         return currentUser;
 
     }
 
     // Setter methods
-    static void setUserList(List<User> newUserList)
-    {
+    static void setUserList(List<User> newUserList) {
 
-        if (newUserList != null)
-        {
+        if (newUserList != null) {
 
             userList = newUserList;
 
@@ -103,11 +91,9 @@ public class UserManager
 
     }
 
-    static void setUserMap(Map<String, User> newUserMap)
-    {
+    static void setUserMap(Map<String, User> newUserMap) {
 
-        if (newUserMap != null)
-        {
+        if (newUserMap != null) {
 
             userMap = newUserMap;
 
@@ -115,11 +101,9 @@ public class UserManager
 
     }
 
-    static void setUserListSize(int newUserListSize)
-    {
+    static void setUserListSize(int newUserListSize) {
 
-        if (newUserListSize >= 0)
-        {
+        if (newUserListSize >= 0) {
 
             userListSize = newUserListSize;
 
@@ -127,11 +111,9 @@ public class UserManager
 
     }
 
-    static void setUserMapSize(int newUserMapSize)
-    {
+    static void setUserMapSize(int newUserMapSize) {
 
-        if (newUserMapSize >= 0)
-        {
+        if (newUserMapSize >= 0) {
 
             userMapSize = newUserMapSize;
 
@@ -139,11 +121,9 @@ public class UserManager
 
     }
 
-    static void setUsernameList(List<String> newUsernameList)
-    {
+    static void setUsernameList(List<String> newUsernameList) {
 
-        if (newUsernameList != null)
-        {
+        if (newUsernameList != null) {
 
             usernameList = newUsernameList;
 
@@ -151,16 +131,14 @@ public class UserManager
 
     }
 
-    static void setSecurityQuestionList() throws IOException, CsvException
-    {
+    static void setSecurityQuestionList() throws IOException, CsvException {
 
         FileReader fileReader = new FileReader(securityQuestionListFileName);
         CSVReader csvReader = new CSVReaderBuilder(fileReader).build();
 
         List<String[]> intermediateData = csvReader.readAll();
 
-        for (String[] row : intermediateData)
-        {
+        for (String[] row : intermediateData) {
 
             securityQuestionList.add(row[0]);
 
@@ -168,11 +146,9 @@ public class UserManager
 
     }
 
-    static void setSecurityQuestionMap()
-    {
+    static void setSecurityQuestionMap() {
 
-        for (int i = 0; i < securityQuestionList.size(); i++)
-        {
+        for (int i = 0; i < securityQuestionList.size(); i++) {
 
             securityQuestionMap.addEntry(i + 1, securityQuestionList.get(i));
 
@@ -180,29 +156,52 @@ public class UserManager
 
     }
 
-    public static void setCurrentUser(User currentUser)
-    {
+    public static void setCurrentUser(User currentUser) {
         UserManager.currentUser = currentUser;
 
     }
 
     // Other methods
-    public static void writeToFile()
-    {
+    // this method boleh delete kot, but i just leave it here dulu
+//    public static void writeToFile() {
+//
+//        try {
+//
+//            FileWriter fw = new FileWriter(userInformationFileName, true);
+//            PrintWriter pw = new PrintWriter(fw);
+//
+//            for (User user : userList) {
+//
+//                fw.write(user.toCsvString()+"\n");
+//                //pw.println(user.toCsvString());
+//
+//            }
+//
+//            fw.close();
+//            pw.close();
+//
+//        } catch (IOException exception) {
+//
+//            exception.printStackTrace();
+//
+//        }
+//
+//    }
+    // this method is actually copy from above je, but i add the "user object" 
+    //and remove the for loop WHICH WAS THE MAIN CAUSE DIA JADI DUPLICATED, SEBAB U WROTE "for each user, write it to file"
+    //ha centu la lebih kurang
+    public static void writeToFile(User user) {
 
-        try
-        {
+        try {
 
-            FileWriter fw = new FileWriter(userInformationFileName,true);
+            FileWriter fw = new FileWriter(userInformationFileName, true);
             PrintWriter pw = new PrintWriter(fw);
 
-            for (User user : userList)
-            {
+            //for (User user : userList) {
+            fw.write(user.toCsvString() + "\n");
+            //pw.println(user.toCsvString());
 
-                pw.println(user.toCsvString());
-
-            }
-
+            //}
             fw.close();
             pw.close();
 
@@ -214,8 +213,7 @@ public class UserManager
 
     }
 
-    public static void readFromFile()
-    {
+    public static void readFromFile() {
 
         try {
 
@@ -224,16 +222,13 @@ public class UserManager
 
             String line = br.readLine();
 
-            while (line != null)
-            {
+            while (line != null) {
 
-                if (!line.isEmpty())
-                {
+                if (!line.isEmpty()) {
 
                     String[] userInfo = line.split(",");
 
-                    if (userInfo.length >= 10)
-                    {
+                    if (userInfo.length >= 10) {
 
                         userList.add(new User(userInfo[0], userInfo[1], userInfo[2], userInfo[3], userInfo[4], userInfo[5], userInfo[6], userInfo[7], userInfo[8], userInfo[9]));
 
@@ -261,13 +256,11 @@ public class UserManager
     }
 
     // Method to get list of states for the user to choose their state
-    static DataStructure.List1D<String> getStateList(DataStructure.List1D<Premise> listOfPremises)
-    {
+    static DataStructure.List1D<String> getStateList(DataStructure.List1D<Premise> listOfPremises) {
 
         Set<String> uniqueStates = new HashSet<>();
 
-        for (Premise premise : listOfPremises.getList1D())
-        {
+        for (Premise premise : listOfPremises.getList1D()) {
 
             String state = premise.getPremiseState();
 
@@ -280,13 +273,11 @@ public class UserManager
     }
 
     // Method to get the state mapping
-    static DataStructure.Mapping<Integer, String> getStateMapping(DataStructure.List1D<String> stateList)
-    {
+    static DataStructure.Mapping<Integer, String> getStateMapping(DataStructure.List1D<String> stateList) {
 
         Map<Integer, String> stateMapping = new HashMap<>();
 
-        for (int i = 0; i < stateList.getList1DSize(); i++)
-        {
+        for (int i = 0; i < stateList.getList1DSize(); i++) {
 
             stateMapping.put(i + 1, stateList.getList1DValue(i));
 
@@ -297,18 +288,15 @@ public class UserManager
     }
 
     // After obtaining the chosen state, get its list of districts
-    static DataStructure.List1D<String> getDistrictList(String chosenState, DataStructure.List1D<Premise> listOfPremises)
-    {
+    static DataStructure.List1D<String> getDistrictList(String chosenState, DataStructure.List1D<Premise> listOfPremises) {
 
         Set<String> uniqueDistricts = new HashSet<>();
 
-        for (Premise premise : listOfPremises.getList1D())
-        {
+        for (Premise premise : listOfPremises.getList1D()) {
 
             String district = premise.getPremiseDistrict();
 
-            if((premise.getPremiseState().equals(chosenState)))
-            {
+            if ((premise.getPremiseState().equals(chosenState))) {
 
                 uniqueDistricts.add(district);
 
@@ -321,13 +309,11 @@ public class UserManager
     }
 
     // After obtaining the chosen state, get its mapping of districts
-    static DataStructure.Mapping<Integer, String> getDistrictMapping(DataStructure.List1D<String> districtList)
-    {
+    static DataStructure.Mapping<Integer, String> getDistrictMapping(DataStructure.List1D<String> districtList) {
 
         Map<Integer, String> districtMapping = new HashMap<>();
 
-        for (int i = 0; i < districtList.getList1DSize(); i++)
-        {
+        for (int i = 0; i < districtList.getList1DSize(); i++) {
 
             districtMapping.put(i + 1, districtList.getList1DValue(i));
 
