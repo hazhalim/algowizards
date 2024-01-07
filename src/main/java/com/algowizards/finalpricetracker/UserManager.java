@@ -193,7 +193,7 @@ public class UserManager
         try
         {
 
-            FileWriter fw = new FileWriter(userInformationFileName);
+            FileWriter fw = new FileWriter(userInformationFileName,true);
             PrintWriter pw = new PrintWriter(fw);
 
             for (User user : userList)
