@@ -11,7 +11,7 @@ public class UserManager
 {
 
     // Instance variables
-    private static final String userInformationFileName = "UserInformation.csv";
+    private static final String USER_INFORMATION_FILE_NAME = "UserInformation.csv";
     private static final String securityQuestionListFileName = "SecurityQuestionList.csv";
     private static List<User> userList = new ArrayList<>();
     private static int userListSize;
@@ -31,7 +31,7 @@ public class UserManager
     static String getUserInformationFileName()
     {
 
-        return userInformationFileName;
+        return USER_INFORMATION_FILE_NAME;
 
     }
     static List<User> getUserList()
@@ -193,7 +193,7 @@ public class UserManager
         try
         {
 
-            FileWriter fw = new FileWriter(userInformationFileName,true);
+            FileWriter fw = new FileWriter(USER_INFORMATION_FILE_NAME,true);
             PrintWriter pw = new PrintWriter(fw);
 
             for (User user : userList)
@@ -219,7 +219,7 @@ public class UserManager
 
         try {
 
-            FileReader fr = new FileReader(userInformationFileName);
+            FileReader fr = new FileReader(USER_INFORMATION_FILE_NAME);
             BufferedReader br = new BufferedReader(fr);
 
             String line = br.readLine();

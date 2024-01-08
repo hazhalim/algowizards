@@ -151,6 +151,20 @@ public class FileManager
 
     }
 
+    static void writeUserListIntoCSVFile(String fileName, List<String[]> userList) throws IOException
+    {
+
+        try (FileWriter fileWriter = new FileWriter(UserManager.getUserInformationFileName());
+             CSVWriter csvWriter = new CSVWriter(fileWriter))
+
+        {
+
+            csvWriter.writeAll(userList);
+
+        }
+
+    }
+
 //        String csvFile = fileName; // name of the .csv file
 //        String line = ""; // the line String which will read rows of the CSV data
 //        String delimiter = ","; // When separating a line into columns, use this character to denote when to break off into a new column
