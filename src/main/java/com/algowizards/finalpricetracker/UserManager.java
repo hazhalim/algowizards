@@ -187,21 +187,44 @@ public class UserManager
     }
 
     // Other methods
-    public static void writeToFile()
-    {
+//    public static void writeToFile()
+//    {
+//
+//        try
+//        {
+//
+//            FileWriter fw = new FileWriter(USER_INFORMATION_FILE_NAME,true);
+//            PrintWriter pw = new PrintWriter(fw);
+//
+//            for (User user : userList)
+//            {
+//
+//                pw.println(user.toCsvString());
+//
+//            }
+//
+//            fw.close();
+//            pw.close();
+//
+//        } catch (IOException exception) {
+//
+//            exception.printStackTrace();
+//
+//        }
+//
+//    }
+    
+    // this method is actually copy from above je, but i add the "user object" 
+    //and remove the for loop WHICH WAS THE MAIN CAUSE DIA JADI DUPLICATED, SEBAB U WROTE "for each user, write it to file"
+    //ha centu la lebih kurang
+    public static void writeToFile(User user) {
 
-        try
-        {
+        try {
 
             FileWriter fw = new FileWriter(USER_INFORMATION_FILE_NAME,true);
             PrintWriter pw = new PrintWriter(fw);
 
-            for (User user : userList)
-            {
-
-                pw.println(user.toCsvString());
-
-            }
+            pw.println(user.toCsvString());
 
             fw.close();
             pw.close();
