@@ -156,7 +156,6 @@ public class FileManager
 
         try (FileWriter fileWriter = new FileWriter(UserManager.getUserInformationFileName());
              CSVWriter csvWriter = new CSVWriter(fileWriter))
-
         {
 
             csvWriter.writeAll(userList);

@@ -15,13 +15,13 @@ public class LogIn
 
         System.out.println("\n-----= Log In to PriceWizard Account =-----\n");
 
-        System.out.print("Enter your username: ");
+        System.out.print("> Enter your username: ");
         String username = keyboard.nextLine();
 
-        System.out.print("Enter your password: ");
+        System.out.print("> Enter your password: ");
         String password = keyboard.nextLine();
 
-        UserManager.readFromFile();
+        UserManager.readFromUserInformationFile();
         boolean userFound = false;
 
         for (User user : UserManager.getUserList())

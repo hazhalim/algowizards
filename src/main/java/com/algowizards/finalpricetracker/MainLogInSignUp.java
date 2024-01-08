@@ -2,9 +2,7 @@ package com.algowizards.finalpricetracker;
 
 import com.opencsv.exceptions.CsvException;
 
-import java.awt.desktop.OpenURIEvent;
 import java.io.IOException;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -86,7 +84,7 @@ public class MainLogInSignUp
                 {
 
                     System.out.println("The choice entered is invalid. Please try again.\n");
-                    UserManager.readFromFile();
+                    UserManager.readFromUserInformationFile();
 
                     break;
 

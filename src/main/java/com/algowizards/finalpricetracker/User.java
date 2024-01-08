@@ -147,6 +147,13 @@ public class User {
 
     }
 
+    public String getCartDirectory()
+    {
+
+        return CART_DIRECTORY;
+
+    }
+
     // Setter methods
     void setUsername(String username) {
 
@@ -294,7 +301,8 @@ public class User {
 
     }
 
-    public void setCartPath(String cartPath) {
+    void setCartPath(String cartPath)
+    {
 
         this.cartPath = cartPath;
 

@@ -237,49 +237,70 @@ public class UserManager
 
     }
 
-    public static void readFromFile()
+    public static void readFromUserInformationFile()
     {
 
-        try {
+        userList.clear();
 
-            FileReader fr = new FileReader(USER_INFORMATION_FILE_NAME);
-            BufferedReader br = new BufferedReader(fr);
+        try (FileReader fileReader = new FileReader(USER_INFORMATION_FILE_NAME);
+             CSVReader csvReader = new CSVReader(fileReader))
+        {
 
-            String line = br.readLine();
+            List<String[]> intermediateData = csvReader.readAll();
 
-            while (line != null)
+            for (String[] row : intermediateData)
             {
 
-                if (!line.isEmpty())
-                {
-
-                    String[] userInfo = line.split(",");
-
-                    if (userInfo.length >= 10)
-                    {
-
-                        userList.add(new User(userInfo[0], userInfo[1], userInfo[2], userInfo[3], userInfo[4], userInfo[5], userInfo[6], userInfo[7], userInfo[8], userInfo[9]));
-
-                    } else {
-
-                        System.out.println("Invalid data in the file: " + line);
-
-                    }
-
-                }
-
-                line = br.readLine();
+                userList.add(new User(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]));
 
             }
-
-            fr.close();
-            br.close();
 
         } catch (IOException exception) {
 
             exception.printStackTrace();
 
+        } catch (CsvException exception) {
+
+            throw new RuntimeException(exception);
+
         }
+
+    }
+
+    static String[] toArray(User user)
+    {
+
+        return new String[]
+                {
+
+                        user.getUsername(),
+                        user.getPassword(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getContactInfo(),
+                        user.getAddress(),
+                        user.getState(),
+                        user.getDistrict(),
+                        user.getSecurityQuestion(),
+                        user.getSecurityAnswer()
+
+                };
+
+    }
+
+    static void writeToUserInformationFile() throws IOException
+    {
+
+        List<String[]> intermediateData = new ArrayList<>();
+
+        for (User user : userList)
+        {
+
+            intermediateData.add(toArray(user));
+
+        }
+
+        FileManager.writeUserListIntoCSVFile(USER_INFORMATION_FILE_NAME, intermediateData);
 
     }
 

@@ -1,23 +1,24 @@
 package com.algowizards.finalpricetracker;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class ForgotPassword
 {
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException
     {
 
         Scanner keyboard = new Scanner(System.in);
 
         System.out.println("\n-----= Reset PriceWizard Account Password =-----\n");
 
-        System.out.print("Enter your username: ");
+        System.out.print("> Enter the username of your account: ");
         String username = keyboard.nextLine();
 
         boolean userFound = false;
 
-        UserManager.readFromFile();
+        UserManager.readFromUserInformationFile();
 
         for (User user : UserManager.getUserList())
         {
@@ -27,29 +28,30 @@ public class ForgotPassword
 
                 userFound = true;
 
-                System.out.println("Answer the security question correctly to verify your identity:\n");
-                System.out.println(user.getSecurityQuestion() + "\n");
+                System.out.println("\nTo verify your identity, please answer the security question you selected when you first signed up for your PriceWizard account.\n");
+                System.out.println("Question: \"" + user.getSecurityQuestion() + "\"\n");
 
-                System.out.print("Enter your answer to the question: ");
+                System.out.print("> Enter your answer to the question: ");
+
                 String securityAnswer = keyboard.nextLine();
 
                 if (securityAnswer.equals(user.getSecurityAnswer()))
                 {
 
-                    System.out.println("Your answer is correct!\n");
+                    System.out.println("\nYour answer is correct! Your identity has been verified.\n");
 
-                    System.out.print("Enter your new password: ");
+                    System.out.print("> Enter your new account password: ");
                     String password = keyboard.nextLine();
 
                     user.setPassword(password);
 
-                    UserManager.writeToFile();
+                    UserManager.writeToUserInformationFile();
 
-                    System.out.println("\nPassword updated successfully!");
+                    System.out.println("\nYour account password has been updated successfully!\n");
 
                 } else {
 
-                    System.out.println("Sorry, your answer to the question is incorrect. Your identity cannot be verified.");
+                    System.out.println("\nSorry, your answer to the question is incorrect. Your identity cannot be verified.\n");
 
                 }
 
@@ -62,7 +64,7 @@ public class ForgotPassword
         if (!userFound)
         {
 
-            System.out.println("Username not found. Please check your username and try again.");
+            System.out.println("\nUsername not found. Please check your username and try again.\n");
 
         }
 

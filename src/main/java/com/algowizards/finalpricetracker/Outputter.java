@@ -234,7 +234,8 @@ public class Outputter
                 case 5:
                 {
 
-//                    viewAccountSettings();
+                    Settings.main(null);
+
                     break;
 
                 }

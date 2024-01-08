@@ -31,7 +31,7 @@ public class SignUp
         String username = keyboard.nextLine();
 
         // Check if the username already exists
-        UserManager.readFromFile(); // Load the list of users into the program
+        UserManager.readFromUserInformationFile(); // Load the list of users into the program
 
         if (UserManager.getUserList() != null) // AKA if the file is not empty
         {
@@ -190,12 +190,9 @@ public class SignUp
 
         System.out.println("\nYour answer to the security question is \"" + securityAnswer + "\". Please remember to remember or jot down your answer somewhere safe in a physical location.\n");
 
-        User newUser = new User(username, password, firstName, lastName, contactInfo, address, chosenStateString, chosenDistrictString, chosenSecurityQuestionString, securityAnswer);
+        UserManager.getUserList().add(new User(username, password, firstName, lastName, contactInfo, address, chosenStateString, chosenDistrictString, chosenSecurityQuestionString, securityAnswer));
 
-        UserManager.getUserList().add(newUser);
-
-        //UserManager.writeToFile(); //before fix
-        UserManager.writeToFile(); // after fix
+        UserManager.writeToUserInformationFile();
 
         System.out.println("Your PriceWizard account has been successfully registered!\n");
 
