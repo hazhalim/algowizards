@@ -794,6 +794,8 @@ public class Outputter
                 case 3:
                 {
 
+                    PriceCatcherManager.determineBestPremises();
+
                     break;
 
                 }
@@ -801,7 +803,7 @@ public class Outputter
                 case 4:
                 {
 
-                    System.out.println("Returning to the main menu...");
+                    System.out.println("\nReturning to the main menu...\n");
 
                     break;
 

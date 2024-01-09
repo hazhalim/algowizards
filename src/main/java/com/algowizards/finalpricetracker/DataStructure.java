@@ -125,7 +125,7 @@ public class DataStructure<T>
 
             this.list2D = list2D;
             this.rowSize = this.list2D.size();
-            this.columnSize = this.list2D.get(0).size(); // Assuming number of columns is the same on all rows
+            this.columnSize = (this.rowSize > 0) ? (this.list2D.get(0).size()) : 0; // Assuming number of columns is the same on all rows
 
         }
 

@@ -171,6 +171,8 @@ public class PriceCatcherManager
     static void viewTopFiveCheapestSellers(Product product)
     {
 
+        cheapestSellerAveragePriceCatcherList.clear();
+
         DataStructure.List1D<PriceCatcher> priceCatcherItemOnly = new DataStructure.List1D<>(new ArrayList<>());
         Set<Integer> setOfPremises = new HashSet<>(new HashSet<>());
 
@@ -308,6 +310,8 @@ public class PriceCatcherManager
     static void topCheapestSeller(Product product)
     {
 
+        cheapestSellerAveragePriceCatcherList.clear();
+
         DataStructure.List1D<PriceCatcher> priceCatcherItemOnly = new DataStructure.List1D<>(new ArrayList<>());
         Set<Integer> setOfPremises = new HashSet<>(new HashSet<>());
 
@@ -341,6 +345,336 @@ public class PriceCatcherManager
             System.out.println("Premise type: " + PremiseManager.getPremiseByKey(cheapestSellerAveragePriceCatcherList.get(0).getPremiseCode()).getPremiseType());
             System.out.printf("Address: %s\n\n", PremiseManager.getPremiseByKey(cheapestSellerAveragePriceCatcherList.get(0).getPremiseCode()).getPremiseAddress());
             System.out.printf("Total price of this product at this premise: RM %.2f\n", (cheapestSellerAveragePriceCatcherList.get(0).getItemPrice()) * ((double) product.getQuantity()));
+
+        }
+
+    }
+
+    static boolean isSellingProduct(Product product, Premise premise)
+    {
+
+        cheapestSellerAveragePriceCatcherList.clear();
+
+        DataStructure.List1D<PriceCatcher> priceCatcherItemOnly = new DataStructure.List1D<>(new ArrayList<>());
+        Set<Integer> setOfPremises = new HashSet<>(new HashSet<>());
+
+        for (PriceCatcher priceCatcher : priceCatcherList)
+        {
+
+            if (priceCatcher.getItemCode() == product.getItemCode())
+            {
+
+                priceCatcherItemOnly.getList1D().add(priceCatcher);
+                setOfPremises.add(priceCatcher.getPremiseCode());
+
+            }
+
+        }
+
+        generateListOfCheapestSellerAveragePriceCatchers(priceCatcherItemOnly, setOfPremises, product);
+
+        Comparator<PriceCatcher> priceComparator = Comparator.comparingDouble(PriceCatcher::getItemPrice);
+
+        cheapestSellerAveragePriceCatcherList.sort(priceComparator);
+
+        for (PriceCatcher priceCatcher : cheapestSellerAveragePriceCatcherList)
+        {
+
+            if ((priceCatcher.getPremiseCode() == premise.getPremiseCode()) && (priceCatcher.getItemCode() == product.getItemCode()))
+            {
+
+                return true;
+
+            }
+
+        }
+
+        return false;
+
+    }
+
+    static boolean isCheapest(Product product, Premise premise, int topN)
+    {
+
+        cheapestSellerAveragePriceCatcherList.clear();
+
+        DataStructure.List1D<PriceCatcher> priceCatcherItemOnly = new DataStructure.List1D<>(new ArrayList<>());
+        Set<Integer> setOfPremises = new HashSet<>(new HashSet<>());
+
+        for (PriceCatcher priceCatcher : priceCatcherList)
+        {
+
+            if (priceCatcher.getItemCode() == product.getItemCode())
+            {
+
+                priceCatcherItemOnly.getList1D().add(priceCatcher);
+                setOfPremises.add(priceCatcher.getPremiseCode());
+
+            }
+
+        }
+
+        generateListOfCheapestSellerAveragePriceCatchers(priceCatcherItemOnly, setOfPremises, product);
+
+        Comparator<PriceCatcher> priceComparator = Comparator.comparingDouble(PriceCatcher::getItemPrice);
+
+        cheapestSellerAveragePriceCatcherList.sort(priceComparator);
+
+        if (cheapestSellerAveragePriceCatcherList.isEmpty())
+        {
+
+            return false;
+
+        } else {
+
+            // Check if the premise is among the top N cheapest sellers
+            int premiseCode = premise.getPremiseCode();
+
+            for (int i = 0; i < Math.min(topN, cheapestSellerAveragePriceCatcherList.size()); i++)
+            {
+
+                if (cheapestSellerAveragePriceCatcherList.get(i).getPremiseCode() == premiseCode)
+                {
+
+                    return true;
+
+                }
+            }
+
+            return false;
+        }
+
+
+    }
+
+    static Premise getCheapestPremise(Product product)
+    {
+
+        cheapestSellerAveragePriceCatcherList.clear();
+
+        DataStructure.List1D<PriceCatcher> priceCatcherItemOnly = new DataStructure.List1D<>(new ArrayList<>());
+        Set<Integer> setOfPremises = new HashSet<>(new HashSet<>());
+
+        for (PriceCatcher priceCatcher : priceCatcherList)
+        {
+
+            if (priceCatcher.getItemCode() == product.getItemCode())
+            {
+
+                priceCatcherItemOnly.getList1D().add(priceCatcher);
+                setOfPremises.add(priceCatcher.getPremiseCode());
+
+            }
+
+        }
+
+        generateListOfCheapestSellerAveragePriceCatchers(priceCatcherItemOnly, setOfPremises, product);
+
+        Comparator<PriceCatcher> priceComparator = Comparator.comparingDouble(PriceCatcher::getItemPrice);
+
+        cheapestSellerAveragePriceCatcherList.sort(priceComparator);
+
+        return PremiseManager.getPremiseByKey(cheapestSellerAveragePriceCatcherList.get(0).getPremiseCode());
+
+    }
+
+    static List<Premise> getAllPremisesSellingProduct(Product product)
+    {
+
+        Set<Integer> setOfPremiseCodes = new HashSet<>(new HashSet<>());
+
+        String userDistrict = UserManager.getCurrentUser().getDistrict();
+
+        for (PriceCatcher priceCatcher : priceCatcherList)
+        {
+
+            int currentPremiseCode = priceCatcher.getPremiseCode();
+            Premise currentPremise = PremiseManager.getPremiseByKey(currentPremiseCode);
+
+            if (priceCatcher.getItemCode() == product.getItemCode() && (currentPremise.getPremiseDistrict().equals(userDistrict)))
+            {
+
+                setOfPremiseCodes.add(priceCatcher.getPremiseCode());
+
+            }
+
+        }
+
+        List<Premise> listOfPremisesSellingProduct = new ArrayList<>();
+
+        for (Integer premiseCode : setOfPremiseCodes)
+        {
+
+            listOfPremisesSellingProduct.add(PremiseManager.getPremiseByKey(premiseCode));
+
+        }
+
+        return listOfPremisesSellingProduct;
+
+    }
+
+    static void determineBestPremises()
+    {
+
+        System.out.println("\nHang on tight, PriceWizard is starting to calculate details... this may take a while based on the amount of products in the cart.");
+        List<Premise> bestPremises = new ArrayList<>();
+
+        // 1. Initialise temporary, separate copy of user's shopping cart
+        List<Product> temporaryShoppingCart = new ArrayList<>(UserManager.getCurrentUser().getShoppingCartList());
+
+        // 2. Declare set of all possible premises spanning all products in shopping cart
+        Set<Premise> setOfAllPossiblePremises = new HashSet<>();
+
+        while (!temporaryShoppingCart.isEmpty())
+        {
+
+            // 3. Initialise premise scorelist
+            DataStructure.List2D<Integer> premiseScoreList = new DataStructure.List2D<>(new ArrayList<>());
+
+            System.out.println("PriceWizard is getting possibilities of premises...");
+
+            // premiseScoreList's structure: (explaining each column)
+            // Premise Code | # of Products of Cart this Premise Sells | # of Products of Cart this Premise is Cheapest
+            // 4. Get all possible premises that sell that at least one product in the shopping cart
+            for (Product product : temporaryShoppingCart)
+            {
+
+                List<Premise> premiseList = getAllPremisesSellingProduct(product);
+
+                for (Premise premise : premiseList)
+                {
+
+                    if (isSellingProduct(product, premise))
+                    {
+
+                        if (!setOfAllPossiblePremises.contains(premise))
+                        {
+
+                            premiseScoreList.getList2D().add(new ArrayList<>(List.of(premise.getPremiseCode(), 0, 0)));
+
+                            setOfAllPossiblePremises.add(premise);
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            System.out.println("PriceWizard is calculating premise metrics...");
+
+            // 5. Determine the "sells" and "cheapest" values for each premise
+            for (List<Integer> currentPremiseRow : premiseScoreList.getList2D())
+            {
+
+                Premise currentPremise = PremiseManager.getPremiseByKey(currentPremiseRow.get(0));
+
+                for (Product product : temporaryShoppingCart)
+                {
+
+                    if (isSellingProduct(product, currentPremise))
+                    {
+
+                        currentPremiseRow.set(1, currentPremiseRow.get(1) + 1); // the exception noted this line
+
+                        if (isCheapest(product, currentPremise, 5))
+                        {
+
+                            currentPremiseRow.set(2, currentPremiseRow.get(2) + 1);
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            System.out.println("PriceWizard is sorting data...");
+
+            // 6. Sort the premise scorelist by decreasing sells
+            Comparator<List<Integer>> sellsComparator = Comparator.comparingInt(list -> list.get(1));
+
+            premiseScoreList.getList2D().sort(sellsComparator.reversed());
+
+            System.out.println("PriceWizard is processing data...");
+
+            // 7. Create a sublist from premises tying with the highest sells value
+            List<List<Integer>> tyingSellsList = new ArrayList<>();
+
+            for (List<Integer> currentPremiseRow : premiseScoreList.getList2D())
+            {
+
+                if (currentPremiseRow.get(1) == premiseScoreList.getList2D().get(0).get(1))
+                {
+
+                    tyingSellsList.add(currentPremiseRow);
+
+                }
+
+            }
+
+            System.out.println("PriceWizard is sorting data...");
+
+            // 8. Sort the tying sublist by decreasing cheapest
+
+            Comparator<List<Integer>> cheapestComparator = Comparator.comparingInt(list -> list.get(2));
+
+            tyingSellsList.sort(cheapestComparator.reversed());
+
+            System.out.println("PriceWizard is determining premises...");
+            // 9. The first index of the tying sells is now the best shop to buy the products in the cart
+            Premise currentlyBestPremise = PremiseManager.getPremiseByKey(tyingSellsList.get(0).get(0));
+
+            bestPremises.add(currentlyBestPremise);
+
+            // 10. Remove products are sold by this premise
+            Iterator<Product> iterator = temporaryShoppingCart.iterator();
+
+            while (iterator.hasNext())
+            {
+
+                Product product = iterator.next();
+
+                if (isSellingProduct(product, currentlyBestPremise))
+                {
+
+                    iterator.remove();
+
+                }
+
+            }
+
+            // 10. a. Edge case: if there's only one product left after removing the products
+            if (temporaryShoppingCart.size() == 1)
+            {
+
+                System.out.println("PriceWizard is finalising results...");
+
+                bestPremises.add(getCheapestPremise(temporaryShoppingCart.get(0)));
+
+                premiseScoreList.getList2D().clear();
+                temporaryShoppingCart.clear();
+
+                break;
+
+            }
+
+            System.out.println("PriceWizard is preparing to process more calculations...");
+
+            // 11. Clear premiseScoreList for a new loop (this loop will not end until all products have been accounted for)
+            premiseScoreList.getList2D().clear();
+
+        }
+
+        // 12. Display the products from the original shopping cart with the prices from the premise it came from
+        for (int i = 0; i < bestPremises.size(); i++)
+        {
+
+            System.out.println((i + 1) + ". " + bestPremises.get(i).getPremiseName());
+            System.out.println("Premise Type: " + bestPremises.get(i).getPremiseType());
+            System.out.println("Premise Address: " + bestPremises.get(i).getPremiseAddress() + "\n");
 
         }
 
