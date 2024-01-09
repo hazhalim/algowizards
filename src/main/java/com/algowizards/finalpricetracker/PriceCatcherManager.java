@@ -535,6 +535,12 @@ public class PriceCatcherManager
 
             // premiseScoreList's structure: (explaining each column)
             // Premise Code | # of Products of Cart this Premise Sells | # of Products of Cart this Premise is Cheapest
+            // 1011         | 6                                        |      3
+            // 1012         | 6                                        |      6
+            // 10101001     | 5                                        |      2
+            // 1010010
+            // 10101010
+
             // 4. Get all possible premises that sell that at least one product in the shopping cart
             for (Product product : temporaryShoppingCart)
             {
@@ -624,12 +630,13 @@ public class PriceCatcherManager
             tyingSellsList.sort(cheapestComparator.reversed());
 
             System.out.println("PriceWizard is determining premises...");
-            // 9. The first index of the tying sells is now the best shop to buy the products in the cart
+
+            // 9. The first index of the tying sells is now the best premise to buy the products in the cart
             Premise currentlyBestPremise = PremiseManager.getPremiseByKey(tyingSellsList.get(0).get(0));
 
             bestPremises.add(currentlyBestPremise);
 
-            // 10. Remove products are sold by this premise
+            // 10. Remove products that are sold by this premise
             Iterator<Product> iterator = temporaryShoppingCart.iterator();
 
             while (iterator.hasNext())
