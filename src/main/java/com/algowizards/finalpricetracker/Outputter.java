@@ -41,22 +41,13 @@ public class Outputter
     static DataStructure.List2D<String> lookupPremise = null;
     static DataStructure.List2D<String> priceCatcher = null;
 
-    // Initialise product manager
-    static ProductManager productManager = new ProductManager();
-
     // List of products and map of products
     static DataStructure.List1D<Product> listOfProducts = null;
     static DataStructure.Mapping<Integer, Product> mapOfProducts = null;
 
-    // Initialise premise manager
-    static PremiseManager premiseManager = new PremiseManager();
-
     // List of premises and map of premises
     static DataStructure.List1D<Premise> listOfPremises = null;
     static DataStructure.Mapping<Integer, Premise> mapOfPremises = null;
-
-    // Initialise price catcher manager
-    static PriceCatcherManager priceCatcherManager = new PriceCatcherManager();
 
     // List of price catchers
     static DataStructure.List1D<PriceCatcher> listOfPriceCatchers = null;
@@ -94,7 +85,7 @@ public class Outputter
     }
     
     // Getter and setter methods
-    
+
     // Other methods
     static void mainMenu() throws IOException, CsvException // The method that calls to display the main menu of the program
     {
@@ -125,7 +116,7 @@ public class Outputter
                 {
 
                     // 1. Import Data (File ---> Program stage)
-                    importAndPopulateData();
+                    FileManager.importAndPopulateData();
 
                     break;
 
@@ -268,41 +259,6 @@ public class Outputter
 
     }
 
-    static void importAndPopulateData() throws IOException, CsvException {
-
-        System.out.println("-----= Importing Data into PriceWizard =-----\n");
-
-        System.out.println("0%: Hang on tight, PriceWizard is importing data from CSV files into the program...");
-
-        // Import data by creating 2D lists from the CSV files, passing into an object of DataStructure.List2D<String> class...
-        lookupItem = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList("lookup_item.csv"));
-        lookupPremise = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList("lookup_premise.csv"));
-        priceCatcher = new DataStructure.List2D<>(FileManager.readCSVFileInto2DList("pricecatcher_2023-08.csv"));
-
-        // All data has been loaded into the program, no more .csv files are being read
-
-        System.out.println("25%: Populating the list and map of products...");
-
-        // Populating list of products and map of products...
-        ProductManager.generateListOfProducts(lookupItem);
-        ProductManager.generateMapOfProducts(lookupItem);
-
-        System.out.println("50%: Populating the list and map of premises...");
-
-        // Populating list and map of premises...
-        PremiseManager.generateListOfPremises(lookupPremise);
-        PremiseManager.generateMapOfPremises(lookupPremise);
-
-        System.out.println("75%: Populating the list of price points...");
-
-        // Populating list of price catchers (price points of an item at a premise on a given date)...
-        PriceCatcherManager.generateListOfPriceCatchers(priceCatcher);
-//        PriceCatcherManager.generateListOfAveragePriceCatchers();
-
-        System.out.println("100% (Complete): Success! All data (products, premises, and price points) has been successfully imported into PriceWizard!\n");
-
-    }
-
     static void productMenu(Product chosenProduct) throws IOException
     {
 
@@ -319,7 +275,7 @@ public class Outputter
             System.out.println("3. View the top 5 cheapest sellers of this product");
             System.out.println("4. View the trend of the price of this product");
             System.out.println("5. Add/remove quantities of this product to the shopping cart");
-            System.out.println("6. Go back to the main menu");
+            System.out.println("6. Go back to the previous menu");
 
             System.out.print("\n> Select an action: ");
             productMenuChoice = keyboard.nextInt();
@@ -718,7 +674,8 @@ public class Outputter
                 System.out.println("Quantity: " + shoppingCartMapping.get(i + 1).getQuantity());
                 PriceCatcherManager.topCheapestSeller(shoppingCartMapping.get(i + 1));
 
-                System.out.println();
+                System.out.println("Maximum number of premise visits to purchase all products: " + PriceCatcherManager.getWorstCaseScenarioPremisesVisitedSet().size());
+                System.out.printf("Minimum total price of purchasing all products: RM %.2f\n\n", PriceCatcherManager.getWorstCaseScenarioTotalPrice());
 
             }
 
@@ -726,7 +683,7 @@ public class Outputter
 
             System.out.println("1. Select a product in the shopping cart");
             System.out.println("2. Remove a product from the shopping cart");
-            System.out.println("3. Determine the best premise to purchase the products in the shopping cart");
+            System.out.println("3. Determine the best premises to purchase all products in the shopping cart");
             System.out.println("4. Return to the main menu\n");
 
             System.out.print("> Choose an action (1/2/3/4): ");
@@ -740,6 +697,9 @@ public class Outputter
 
                     System.out.println("-----= Select a Product in Shopping Cart =-----\n");
 
+                    PriceCatcherManager.setWorstCaseScenarioTotalPrice(0.0);
+                    PriceCatcherManager.getWorstCaseScenarioPremisesVisitedSet().clear();
+
                     for (int i = 0; i < UserManager.getCurrentUser().getShoppingCartList().size(); i++)
                     {
 
@@ -750,6 +710,8 @@ public class Outputter
                     System.out.print("> Select a product: ");
 
                     int cartProductChoice = keyboard.nextInt();
+
+                    System.out.println();
 
                     productMenu(shoppingCartMapping.get(cartProductChoice));
 
@@ -762,6 +724,9 @@ public class Outputter
 
                     System.out.println("-----= Remove a Product from the Shopping Cart =-----\n");
 
+                    PriceCatcherManager.setWorstCaseScenarioTotalPrice(0.0);
+                    PriceCatcherManager.getWorstCaseScenarioPremisesVisitedSet().clear();
+
                     for (int i = 0; i < UserManager.getCurrentUser().getShoppingCartList().size(); i++)
                     {
 
@@ -773,7 +738,7 @@ public class Outputter
 
                     int cartProductChoice = keyboard.nextInt();
 
-                    System.out.println("Successfully removed " + shoppingCartMapping.get(cartProductChoice).getItemName() + " " + shoppingCartMapping.get(cartProductChoice).getUnit() + " from the shopping cart.\n");
+                    System.out.println("\nSuccessfully removed " + shoppingCartMapping.get(cartProductChoice).getItemName() + " " + shoppingCartMapping.get(cartProductChoice).getUnit() + " from the shopping cart.\n");
 
                     UserManager.getCurrentUser().getShoppingCartList().remove(shoppingCartMapping.get(cartProductChoice));
                     UserManager.getCurrentUser().writeToShoppingCart();
@@ -803,6 +768,9 @@ public class Outputter
                 case 4:
                 {
 
+                    PriceCatcherManager.setWorstCaseScenarioTotalPrice(0.0);
+                    PriceCatcherManager.getWorstCaseScenarioPremisesVisitedSet().clear();
+
                     System.out.println("\nReturning to the main menu...\n");
 
                     break;
@@ -811,6 +779,9 @@ public class Outputter
 
                 default:
                 {
+
+                    PriceCatcherManager.setWorstCaseScenarioTotalPrice(0.0);
+                    PriceCatcherManager.getWorstCaseScenarioPremisesVisitedSet().clear();
 
                     System.out.println("Sorry, your input was not between 1 to 4. Please try again.");
 

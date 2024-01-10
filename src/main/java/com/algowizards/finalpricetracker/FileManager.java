@@ -164,6 +164,41 @@ public class FileManager
 
     }
 
+    static void importAndPopulateData() throws IOException, CsvException
+    {
+
+        System.out.println("-----= Importing Data into PriceWizard =-----\n");
+
+        System.out.println("0%: Hang on tight, PriceWizard is importing data from CSV files into the program...");
+
+        // Import data by creating 2D lists from the CSV files, passing into an object of DataStructure.List2D<String> class...
+        Outputter.lookupItem = new DataStructure.List2D<>(readCSVFileInto2DList("lookup_item.csv"));
+        Outputter.lookupPremise = new DataStructure.List2D<>(readCSVFileInto2DList("lookup_premise.csv"));
+        Outputter.priceCatcher = new DataStructure.List2D<>(readCSVFileInto2DList("pricecatcher_2023-08.csv"));
+
+        // All data has been loaded into the program, no more .csv files are being read
+
+        System.out.println("25%: Populating the list and map of products...");
+
+        // Populating list of products and map of products...
+        ProductManager.generateListOfProducts(Outputter.lookupItem);
+        ProductManager.generateMapOfProducts(Outputter.lookupItem);
+
+        System.out.println("50%: Populating the list and map of premises...");
+
+        // Populating list and map of premises...
+        PremiseManager.generateListOfPremises(Outputter.lookupPremise);
+        PremiseManager.generateMapOfPremises(Outputter.lookupPremise);
+
+        System.out.println("75%: Populating the list of price points...");
+
+        // Populating list of price catchers (price points of an item at a premise on a given date)...
+        PriceCatcherManager.generateListOfPriceCatchers(Outputter.priceCatcher);
+
+        System.out.println("100% (Complete): Success! All data (products, premises, and price points) has been successfully imported into PriceWizard!\n");
+
+    }
+
 //        String csvFile = fileName; // name of the .csv file
 //        String line = ""; // the line String which will read rows of the CSV data
 //        String delimiter = ","; // When separating a line into columns, use this character to denote when to break off into a new column

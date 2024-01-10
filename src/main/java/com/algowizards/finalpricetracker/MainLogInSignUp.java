@@ -24,7 +24,7 @@ public class MainLogInSignUp
         System.out.println("-----= Welcome to PriceWizard! =-----\n");
         System.out.println("Track the prices of your favourite items and necessities with ease!\n");
 
-        Outputter.importAndPopulateData(); // We MUST import the data first for the state and district selection in SignUp class to function properly
+        FileManager.importAndPopulateData(); // We MUST import the data first for the state and district selection in SignUp class to function properly
 
         while (loginMenuChoice != 4)
         {

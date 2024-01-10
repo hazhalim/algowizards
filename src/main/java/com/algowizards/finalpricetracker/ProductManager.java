@@ -21,9 +21,6 @@ public class ProductManager
     private static Map<Integer, Product> productMap = new HashMap<>();
     private static int productMapSize = productMap.size();
 
-    private static List<Product> shoppingCartList = new ArrayList<>();
-    private static Map<Integer, Product> shoppingCartMapping = new HashMap<>();
-
     // Constructors
 
     // Getter and setter methods
@@ -53,20 +50,6 @@ public class ProductManager
     {
 
         return productMapSize;
-
-    }
-
-    public static List<Product> getShoppingCartList()
-    {
-
-        return shoppingCartList;
-
-    }
-
-    public static Map<Integer, Product> getShoppingCartMapping()
-    {
-
-        return shoppingCartMapping;
 
     }
 
@@ -151,20 +134,6 @@ public class ProductManager
 
     }
 
-    public static void setShoppingCartList(List<Product> shoppingCartList)
-    {
-
-        ProductManager.shoppingCartList = shoppingCartList;
-
-    }
-
-    public static void setShoppingCartMapping(Map<Integer, Product> shoppingCartMapping)
-    {
-
-        ProductManager.shoppingCartMapping = shoppingCartMapping;
-
-    }
-
     // Other methods
     static void addProductToList(Product product) // Add a product object to the list of products
     {
@@ -175,25 +144,10 @@ public class ProductManager
 
     }
 
-    static void addProductToShoppingCartList(Product product)
-    {
-
-        shoppingCartList.add(product);
-
-    }
-
     static void addProductToCart(Product product)
     {
 
         UserManager.getCurrentUser().getShoppingCartList().add(product);
-
-    }
-
-    static void addProductToShoppingCartMapping(Product product)
-    {
-
-
-        shoppingCartMapping.put(shoppingCartMapping.size() + 1, product);
 
     }
 
