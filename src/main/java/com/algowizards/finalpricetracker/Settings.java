@@ -1,11 +1,14 @@
 package com.algowizards.finalpricetracker;
 
+import javax.swing.*;
+
 import static com.algowizards.finalpricetracker.SignUp.isInvalid;
 import static com.algowizards.finalpricetracker.SignUp.listOfDistricts;
 import static com.algowizards.finalpricetracker.SignUp.listOfStates;
 import static com.algowizards.finalpricetracker.SignUp.mapOfDistricts;
 import static com.algowizards.finalpricetracker.SignUp.mapOfStates;
 
+import java.awt.*;
 import java.io.File;
 import java.util.Scanner;
 import java.io.IOException;
@@ -17,14 +20,19 @@ import java.io.IOException;
 public class Settings {
 
     static Scanner keyboard = new Scanner(System.in);
+    public static final String ansiReset = "\u001B[0m";
+    public static final String ansiYellow = "\u001B[33m";
 
     static int settingsMenuChoice = 0;
 
     public static void main(String[] args) throws IOException {
 
-        while (settingsMenuChoice != 3) {
+        while (settingsMenuChoice != 5) {
 
-            System.out.println("\n-----= PriceWizard Account Settings =-----\n");
+//            JLabel intro = new Jlabel ("\n-----= PriceWizard Account Settings =-----\n", JLabel.CENTER);
+//            intro.setForeground(Color.CYAN);
+//            System.out.println(intro);
+            System.out.println(ansiYellow + "\n-----= PriceWizard Account Settings =-----\n" + ansiReset);
 
             UserManager.readFromUserInformationFile();
             
@@ -167,7 +175,7 @@ public class Settings {
 
                                 System.out.println("\nYour First Name has been successfully changed from \"" + UserManager.getCurrentUser().getFirstName() + "\" to \"" + newFirstName + "\"!\n");
 
-                                UserManager.getCurrentUser().setPassword(newFirstName);
+                                UserManager.getCurrentUser().setFirstName(newFirstName);
 
                                 UserManager.writeToUserInformationFile();
 
@@ -200,7 +208,7 @@ public class Settings {
 
                                 System.out.println("\nYour Last Name has been successfully changed from \"" + UserManager.getCurrentUser().getPassword() + "\" to \"" + newLastName + "\"!\n");
 
-                                UserManager.getCurrentUser().setPassword(newLastName);
+                                UserManager.getCurrentUser().setLastName(newLastName);
 
                                 UserManager.writeToUserInformationFile();
 
@@ -240,7 +248,7 @@ public class Settings {
 
                             }
                             
-                            UserManager.getCurrentUser().setDistrict(newAddress);
+                            UserManager.getCurrentUser().setAddress(newAddress);
                             
                             UserManager.writeToUserInformationFile();
                             
