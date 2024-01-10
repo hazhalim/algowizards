@@ -54,7 +54,7 @@ public class SignUpGUI extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(102, 102, 0));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setText("-------=SIGN UP TO PRIZEWIZARD=-------");
+        jLabel1.setText("-------=Testing testing teeest=-------");
 
         jLabel2.setText("PERSONAL INFORMATION");
 
@@ -92,14 +92,6 @@ public class SignUpGUI extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addComponent(jSeparator1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(123, 123, 123)
-                        .addComponent(jLabel4))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(123, 123, 123)
                         .addComponent(jLabel6))
@@ -122,8 +114,16 @@ public class SignUpGUI extends javax.swing.JFrame {
                             .addComponent(jLabel10)
                             .addComponent(jTextField7)
                             .addComponent(jLabel11)
-                            .addComponent(jComboBox2, 0, 165, Short.MAX_VALUE))))
-                .addContainerGap(43, Short.MAX_VALUE))
+                            .addComponent(jComboBox2, 0, 165, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(76, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
