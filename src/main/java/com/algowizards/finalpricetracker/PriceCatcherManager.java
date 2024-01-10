@@ -18,6 +18,7 @@ public class PriceCatcherManager
     private static List<PriceCatcher> averagePriceCatcherList = new ArrayList<>();
     private static List<PriceCatcher> cheapestSellerAveragePriceCatcherList = new ArrayList<>();
     private static List<PriceCatcher> priceTrendAveragePriceCatcherList = new ArrayList<>();
+    private static double totalPriceAtBestPremises = 0.0;
 
     // Constructors
 
@@ -50,6 +51,13 @@ public class PriceCatcherManager
 
     }
 
+    public static double getTotalPriceAtBestPremises()
+    {
+
+        return totalPriceAtBestPremises;
+
+    }
+
     // Setter methods
     static void setPriceCatcherList(List<PriceCatcher> newPriceCatcherList)
     {
@@ -76,6 +84,13 @@ public class PriceCatcherManager
     {
 
         PriceCatcherManager.priceTrendAveragePriceCatcherList = priceTrendAveragePriceCatcherList;
+
+    }
+
+    public static void setTotalPriceAtBestPremises(double totalPriceAtBestPremises)
+    {
+
+        PriceCatcherManager.totalPriceAtBestPremises = totalPriceAtBestPremises;
 
     }
 
@@ -478,6 +493,53 @@ public class PriceCatcherManager
 
     }
 
+    // For a given list of products, return a sublist containing all the products that are sold by a given premise
+    static List<Product> getAllProductsSoldByPremise(Premise premise, List<Product> givenProductList)
+    {
+
+        List<Product> productsSoldByPremiseList = new ArrayList<>();
+
+        for (Product product : givenProductList)
+        {
+
+            if (isSellingProduct(product, premise))
+            {
+
+                productsSoldByPremiseList.add(product);
+
+            }
+
+        }
+
+        return productsSoldByPremiseList;
+
+    }
+
+    static double getAveragePriceOfProductAtPremise(Product product, Premise premise)
+    {
+
+        double totalPrice = 0.0;
+        double count = 0;
+        int productCode = product.getItemCode();
+        int premiseCode = premise.getPremiseCode();
+
+        for (PriceCatcher priceCatcher : priceCatcherList)
+        {
+
+            if ((priceCatcher.getPremiseCode() == premiseCode) && (priceCatcher.getItemCode() == productCode))
+            {
+
+                totalPrice += priceCatcher.getItemPrice();
+                count++;
+
+            }
+
+        }
+
+        return (totalPrice / count);
+
+    }
+
     static List<Premise> getAllPremisesSellingProduct(Product product)
     {
 
@@ -525,11 +587,28 @@ public class PriceCatcherManager
         // 2. Declare set of all possible premises spanning all products in shopping cart
         Set<Premise> setOfAllPossiblePremises = new HashSet<>();
 
+        // 3. Initialise premise scorelist
+        DataStructure.List2D<Integer> premiseScoreList = new DataStructure.List2D<>(new ArrayList<>());
+
         while (!temporaryShoppingCart.isEmpty())
         {
 
-            // 3. Initialise premise scorelist
-            DataStructure.List2D<Integer> premiseScoreList = new DataStructure.List2D<>(new ArrayList<>());
+            // Edge case: if there's only one product left after removing the products (from a previous iteration of this while loop)
+            if (temporaryShoppingCart.size() == 1)
+            {
+
+                Premise currentlyBestPremise = getCheapestPremise(temporaryShoppingCart.get(0));
+                bestPremises.add(currentlyBestPremise);
+
+                // Display the premise and the products that the user should buy under this premise
+                displayProductsAtCurrentlyBestPremise(temporaryShoppingCart, currentlyBestPremise);
+
+                premiseScoreList.getList2D().clear();
+                temporaryShoppingCart.clear();
+
+                break;
+
+            }
 
             System.out.println("PriceWizard is getting possibilities of premises...");
 
@@ -582,7 +661,7 @@ public class PriceCatcherManager
                     if (isSellingProduct(product, currentPremise))
                     {
 
-                        currentPremiseRow.set(1, currentPremiseRow.get(1) + 1); // the exception noted this line
+                        currentPremiseRow.set(1, currentPremiseRow.get(1) + 1);
 
                         if (isCheapest(product, currentPremise, 5))
                         {
@@ -636,8 +715,13 @@ public class PriceCatcherManager
 
             bestPremises.add(currentlyBestPremise);
 
-            // 10. Remove products that are sold by this premise
+            System.out.println("PriceWizard is finalising results...");
+
+            // 10. Display the current best premise, display the products that you should Remove products that are sold by this premise
             Iterator<Product> iterator = temporaryShoppingCart.iterator();
+
+            // Display the premise and the products that the user should buy under this premise
+            displayProductsAtCurrentlyBestPremise(temporaryShoppingCart, currentlyBestPremise);
 
             while (iterator.hasNext())
             {
@@ -653,35 +737,53 @@ public class PriceCatcherManager
 
             }
 
-            // 10. a. Edge case: if there's only one product left after removing the products
-            if (temporaryShoppingCart.size() == 1)
-            {
-
-                System.out.println("PriceWizard is finalising results...");
-
-                bestPremises.add(getCheapestPremise(temporaryShoppingCart.get(0)));
-
-                premiseScoreList.getList2D().clear();
-                temporaryShoppingCart.clear();
-
-                break;
-
-            }
-
-            System.out.println("PriceWizard is preparing to process more calculations...");
-
-            // 11. Clear premiseScoreList for a new loop (this loop will not end until all products have been accounted for)
+            // 10. Clear premiseScoreList for a new loop (this loop will not end until all products have been accounted for)
             premiseScoreList.getList2D().clear();
 
         }
 
         // 12. Display the products from the original shopping cart with the prices from the premise it came from
-        for (int i = 0; i < bestPremises.size(); i++)
+//        for (int i = 0; i < bestPremises.size(); i++)
+//        {
+//
+//            System.out.println((i + 1) + ". " + bestPremises.get(i).getPremiseName());
+//            System.out.println("Premise Type: " + bestPremises.get(i).getPremiseType());
+//            System.out.println("Premise Address: " + bestPremises.get(i).getPremiseAddress() + "\n");
+//
+//        }
+
+        System.out.printf("Total price for all products: RM %.2f\n\n", totalPriceAtBestPremises);
+
+        totalPriceAtBestPremises = 0.0;
+
+    }
+
+    static void displayProductsAtCurrentlyBestPremise(List<Product> temporaryShoppingCart, Premise currentlyBestPremise)
+    {
+
+        System.out.println(currentlyBestPremise.getPremiseName());
+        System.out.println("Premise Type: " + currentlyBestPremise.getPremiseType());
+        System.out.println("Premise Address: " + currentlyBestPremise.getPremiseAddress());
+
+        System.out.println("\nProducts to purchase at this premise:\n");
+
+        List<Product> productsSoldByCurrentPremiseList = getAllProductsSoldByPremise(currentlyBestPremise, temporaryShoppingCart);
+
+        for (int i = 0; i < productsSoldByCurrentPremiseList.size(); i++)
         {
 
-            System.out.println((i + 1) + ". " + bestPremises.get(i).getPremiseName());
-            System.out.println("Premise Type: " + bestPremises.get(i).getPremiseType());
-            System.out.println("Premise Address: " + bestPremises.get(i).getPremiseAddress() + "\n");
+            Product currentProduct = productsSoldByCurrentPremiseList.get(i);
+
+            double averagePriceOfProductAtPremise = getAveragePriceOfProductAtPremise(currentProduct, currentlyBestPremise);
+            String currentProductUnit = currentProduct.getUnit();
+            int currentProductQuantity = currentProduct.getQuantity();
+            double currentTotalProductPrice = (averagePriceOfProductAtPremise * currentProductQuantity);
+
+            System.out.println((i + 1) + ". " + currentProduct.getItemName());
+            System.out.println("Quantity: " + currentProductQuantity);
+            System.out.printf("Price of Product: RM %.2f / %s x %d = RM %.2f\n\n", averagePriceOfProductAtPremise, currentProductUnit, currentProductQuantity, currentTotalProductPrice);
+
+            totalPriceAtBestPremises += currentTotalProductPrice;
 
         }
 
