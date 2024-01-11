@@ -11,7 +11,7 @@ public class ForgotPassword
 
         Scanner keyboard = new Scanner(System.in);
 
-        System.out.println("\n-----= Reset PriceWizard Account Password =-----\n");
+        System.out.println(FontColor.ansiBlue + "\n-----= Reset PriceWizard Account Password =-----\n" + FontColor.ansiReset);
 
         System.out.print("> Enter the username of your account: ");
         String username = keyboard.nextLine();
@@ -29,7 +29,7 @@ public class ForgotPassword
                 userFound = true;
 
                 System.out.println("\nTo verify your identity, please answer the security question you selected when you first signed up for your PriceWizard account.\n");
-                System.out.println("Question: \"" + user.getSecurityQuestion() + "\"\n");
+                System.out.println("Question: \"" + FontColor.ansiYellow + user.getSecurityQuestion() + FontColor.ansiReset + "\"\n");
 
                 System.out.print("> Enter your answer to the question: ");
 

@@ -76,7 +76,8 @@ public class Outputter
             
             DISPLAY = new Display(TERMINAL, false);
             
-        } catch (IOException exception) {
+        } catch (IOException exception)
+        {
             
             throw new RuntimeException("Error initializing terminal", exception);
             
@@ -97,11 +98,11 @@ public class Outputter
             System.out.println("Choose an option from the menu below: \n");
 
             System.out.println("1. Reimport Data into PriceWizard");
-            System.out.println(FontColor.ansiYellow + "2. Browse Product by Categories" + FontColor.ansiReset);
+            System.out.println("2. Browse Product by Categories");
             System.out.println("3. Search for a Product");
-            System.out.println(FontColor.ansiYellow + "4. View Shopping Cart" + FontColor.ansiReset);
+            System.out.println("4. View Shopping Cart");
             System.out.println("5. Account Settings");
-            System.out.println(FontColor.ansiYellow + "6. Sign Out of PriceWizard Account" + FontColor.ansiReset);
+            System.out.println("6. Sign Out of PriceWizard Account");
 
             System.out.print("\n> Enter your choice (1/2/3/4/5/6): ");
 
@@ -181,7 +182,7 @@ public class Outputter
                     categorisedProductMapping = ProductManager.getCategorisedProductMapping(categorisedProductList);
 
                     System.out.println("-------------------------------------------");
-                    System.out.println("\n Browse products in " + chosenGroupString + " >> " + chosenCategoryString + ":\n");
+                    System.out.println(FontColor.ansiBlue + "\n Browse products in " + chosenGroupString + " >> " + chosenCategoryString + ":\n" + FontColor.ansiReset);
 
                     for (Integer currentKey : categorisedProductMapping.getKeys())
                     {
@@ -234,8 +235,8 @@ public class Outputter
                 case 6:
                 {
 
-                    System.out.println("Thank you for using PriceWizard!\n");
-                    System.out.println("Signing out of your account...\n");
+                    System.out.println(FontColor.ansiGreen + "Thank you for using PriceWizard!\n");
+                    System.out.println("Signing out of your account...\n" + FontColor.ansiReset);
 
                     UserManager.getCurrentUser().getShoppingCartList().clear();
                     UserManager.setCurrentUser(null);
@@ -265,7 +266,7 @@ public class Outputter
         while (productMenuChoice != 6)
         {
 
-            System.out.println("-----= Product: " + chosenProduct.getItemName() + " " + chosenProduct.getUnit() + " =-----\n");
+            System.out.println(FontColor.ansiBlue + "-----= Product: " + chosenProduct.getItemName() + " " + chosenProduct.getUnit() + " =-----\n" + FontColor.ansiReset);
 
             System.out.println(chosenProduct.getItemGroup() + " >> " + chosenProduct.getItemCategory() + " >> " + chosenProduct.getItemName() + " " +  chosenProduct.getUnit() + "\n");
             System.out.println("Actions:\n");
@@ -355,11 +356,11 @@ public class Outputter
                         UserManager.getCurrentUser().writeToShoppingCart();
 
                         System.out.println("\n1 quantity of " + chosenProduct.getItemName() + " " + chosenProduct.getUnit() + " was just added to your shopping cart!\n");
-                        System.out.println("Current Quantities of this Product in Shopping Cart: " + chosenProduct.getQuantity() + "\n");
+                        System.out.println(FontColor.ansiBlue + "Current Quantities of this Product in Shopping Cart: " + chosenProduct.getQuantity() + "\n" + FontColor.ansiBlue);
 
                     } else if (Integer.parseInt(quantityString) == 0) {
 
-                        System.out.println("\nNo quantities of this product were added to the shopping cart.");
+                        System.out.println(FontColor.ansiBlue + "\nNo quantities of this product were added to the shopping cart." + FontColor.ansiReset);
 
                     } else if (Integer.parseInt(quantityString) < 0) {
 
@@ -450,7 +451,7 @@ public class Outputter
     static void viewProductDetails(Product product)
     {
 
-        System.out.println("-----= Details of " + product.getItemName() + " =-----\n");
+        System.out.println(FontColor.ansiYellow + "-----= Details of " + product.getItemName() + " =-----\n" + FontColor.ansiReset);
 
         System.out.println("Product Name: " + product.getItemName());
         System.out.println("Unit: " + product.getUnit());
@@ -468,7 +469,7 @@ public class Outputter
         String previousProductCategory = product.getItemCategory();
         int previousProductCode = product.getItemCode();
 
-        System.out.println("-----= Modifying Details of " + product.getItemName() + " =-----\n");
+        System.out.println(FontColor.ansiYellow + "-----= Modifying Details of " + product.getItemName() + " =-----\n" + FontColor.ansiReset);
 
         System.out.println("Modifying:\n");
 
@@ -504,7 +505,7 @@ public class Outputter
         System.out.println();
 
         System.out.println("----------------------------------------------");
-        System.out.println("-----= Summary of Changes to " + previousProductName + " =-----\n");
+        System.out.println(FontColor.ansiBlue + "-----= Summary of Changes to " + previousProductName + " =-----\n" + FontColor.ansiReset);
 
         displayProductSummaryChanges(previousProductName, product.getItemName(), "Product Name");
         displayProductSummaryChanges(previousProductUnit, product.getUnit(), "Product Unit");
@@ -540,7 +541,7 @@ public class Outputter
         if (index == -1)
         {
 
-            System.out.println("ERROR: There was an error saving the modified details of the product. Your changes have not been saved.\n");
+            System.out.println(FontColor.ansiRedBold + "ERROR: There was an error saving the modified details of the product. Your changes have not been saved.\n" + FontColor.ansiReset);
 
         }
 
@@ -569,7 +570,7 @@ public class Outputter
 
             boolean foundProduct = false;
 
-            System.out.println("-----= Search for a Product =-----\n");
+            System.out.println(FontColor.ansiBlue + "-----= Search for a Product =-----\n" + FontColor.ansiReset);
 
             keyboard.nextLine(); // Consume the newline character above
 
@@ -650,7 +651,7 @@ public class Outputter
             if (UserManager.getCurrentUser().getShoppingCartList().isEmpty())
             {
 
-                System.out.println(FontColor.ansiYellow + "You currently have no products in your shopping cart. Please add a product to your shopping cart first.\n" + FontColor.ansiReset);
+                System.out.println(FontColor.ansiRedBold + "You currently have no products in your shopping cart. Please add a product to your shopping cart first.\n" + FontColor.ansiReset);
 
                 break;
 
@@ -665,12 +666,12 @@ public class Outputter
 
             }
 
-            System.out.println("-----= Shopping Cart =-----\n\n");
+            System.out.println(FontColor.ansiBlue + "-----= Shopping Cart =-----\n\n" + FontColor.ansiReset);
 
             for (int i = 0; i < UserManager.getCurrentUser().getShoppingCartList().size(); i++)
             {
 
-                System.out.println(FontColor.ansiYellow + (i + 1) + ". " + shoppingCartMapping.get(i + 1).getItemName() + " " + shoppingCartMapping.get(i + 1).getUnit() + FontColor.ansiReset);
+                System.out.println(FontColor.ansiGreenBold + (i + 1) + ". " + shoppingCartMapping.get(i + 1).getItemName() + " " + shoppingCartMapping.get(i + 1).getUnit() + FontColor.ansiReset);
                 System.out.println("Quantity: " + shoppingCartMapping.get(i + 1).getQuantity());
                 PriceCatcherManager.topCheapestSeller(shoppingCartMapping.get(i + 1));
 
@@ -695,7 +696,7 @@ public class Outputter
                 case 1:
                 {
 
-                    System.out.println("-----= Select a Product in Shopping Cart =-----\n");
+                    System.out.println(FontColor.ansiBlue + "-----= Select a Product in Shopping Cart =-----\n" + FontColor.ansiReset);
 
                     PriceCatcherManager.setWorstCaseScenarioTotalPrice(0.0);
                     PriceCatcherManager.getWorstCaseScenarioPremisesVisitedSet().clear();
@@ -722,7 +723,7 @@ public class Outputter
                 case 2:
                 {
 
-                    System.out.println("-----= Remove a Product from the Shopping Cart =-----\n");
+                    System.out.println(FontColor.ansiBlue + "-----= Remove a Product from the Shopping Cart =-----\n" + FontColor.ansiReset);
 
                     PriceCatcherManager.setWorstCaseScenarioTotalPrice(0.0);
                     PriceCatcherManager.getWorstCaseScenarioPremisesVisitedSet().clear();

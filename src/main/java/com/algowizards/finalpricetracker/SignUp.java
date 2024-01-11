@@ -7,7 +7,7 @@ package com.algowizards.finalpricetracker;
 import com.opencsv.exceptions.CsvException;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Scanner;
 
 public class SignUp
 {
@@ -41,7 +41,7 @@ public class SignUp
 
                 if (user.getUsername().equals(username)) {
 
-                    System.out.println("This username already exists on PriceWizard. Please choose a different one.\n");
+                    System.out.println(FontColor.ansiYellowBold + "This username already exists on PriceWizard. Please choose a different one.\n" + FontColor.ansiReset);
 
                     return;
 
@@ -174,7 +174,7 @@ public class SignUp
         System.out.println("\nNext, enter the answer to the security question you chose previously:");
         System.out.println("The answer you enter is very important. Do not forget your answer to prevent losing access to your account.\n");
 
-        System.out.println("Your chosen security question: \"" + chosenSecurityQuestionString + "\"\n");
+        System.out.println("Your chosen security question: " + FontColor.ansiYellowBold + "\"" + chosenSecurityQuestionString + "\"\n" + FontColor.ansiReset);
 
         System.out.print("> Enter your answer to the chosen security question: ");
         keyboard.nextLine();
@@ -188,13 +188,13 @@ public class SignUp
 
         }
 
-        System.out.println("\nYour answer to the security question is \"" + securityAnswer + "\". Please remember to remember or jot down your answer somewhere safe in a physical location.\n");
+        System.out.println(FontColor.ansiYellow + "\nYour answer to the security question is \"" + securityAnswer + "\". Please remember to remember or jot down your answer somewhere safe in a physical location.\n" + FontColor.ansiReset);
 
         UserManager.getUserList().add(new User(username, password, firstName, lastName, contactInfo, address, chosenStateString, chosenDistrictString, chosenSecurityQuestionString, securityAnswer));
 
         UserManager.writeToUserInformationFile();
 
-        System.out.println("Your PriceWizard account has been successfully registered!\n");
+        System.out.println(FontColor.ansiGreen + "Your PriceWizard account has been successfully registered!\n" + FontColor.ansiReset);
 
     }
 
@@ -204,7 +204,7 @@ public class SignUp
         if (value.isBlank() || value == null)
         {
 
-            System.out.println("The account's " + description + " cannot be left blank or be invalid. Please try again.\n");
+            System.out.println(FontColor.ansiRedBold + "The account's " + description + " cannot be left blank or be invalid. Please try again.\n" + FontColor.ansiReset);
 
             return true;
 

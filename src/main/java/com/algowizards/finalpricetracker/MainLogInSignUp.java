@@ -21,7 +21,7 @@ public class MainLogInSignUp
 
         int loginMenuChoice = 0;
 
-        System.out.println("-----= Welcome to PriceWizard! =-----\n");
+        System.out.println(FontColor.ansiBlue + "-----= Welcome to PriceWizard! =-----\n" + FontColor.ansiReset);
         System.out.println("Track the prices of your favourite items and necessities with ease!\n");
 
         FileManager.importAndPopulateData(); // We MUST import the data first for the state and district selection in SignUp class to function properly
@@ -29,7 +29,7 @@ public class MainLogInSignUp
         while (loginMenuChoice != 4)
         {
 
-            System.out.println("-----= PriceWizard Login Menu =-----\n");
+            System.out.println(FontColor.ansiGreen + "-----= PriceWizard Login Menu =-----\n" + FontColor.ansiReset);
 
             System.out.println("1. Log In to PriceWizard");
             System.out.println("2. Sign Up for a PriceWizard Account");
