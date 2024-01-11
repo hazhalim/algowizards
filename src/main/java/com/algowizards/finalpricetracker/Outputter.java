@@ -93,15 +93,15 @@ public class Outputter
         while (mainMenuChoice != 6)
         {
 
-            System.out.println(Settings.ansiYellow + "\n-----= Main Menu =-----\n" + Settings.ansiReset);
+            System.out.println(FontColor.ansiYellow + "\n-----= Main Menu =-----\n" + FontColor.ansiReset);
             System.out.println("Choose an option from the menu below: \n");
 
             System.out.println("1. Reimport Data into PriceWizard");
-            System.out.println(Settings.ansiYellow + "2. Browse Product by Categories" + Settings.ansiReset);
+            System.out.println(FontColor.ansiYellow + "2. Browse Product by Categories" + FontColor.ansiReset);
             System.out.println("3. Search for a Product");
-            System.out.println(Settings.ansiYellow + "4. View Shopping Cart" + Settings.ansiReset);
+            System.out.println(FontColor.ansiYellow + "4. View Shopping Cart" + FontColor.ansiReset);
             System.out.println("5. Account Settings");
-            System.out.println(Settings.ansiYellow + "6. Sign Out of PriceWizard Account" + Settings.ansiReset);
+            System.out.println(FontColor.ansiYellow + "6. Sign Out of PriceWizard Account" + FontColor.ansiReset);
 
             System.out.print("\n> Enter your choice (1/2/3/4/5/6): ");
 
@@ -139,7 +139,7 @@ public class Outputter
 
                     }
 
-                    System.out.println(Settings.ansiYellow + "-----= Browse Product by Categories =-----\n" + Settings.ansiReset);
+                    System.out.println(FontColor.ansiYellow + "-----= Browse Product by Categories =-----\n" + FontColor.ansiReset);
                     System.out.println("Choose a category:\n");
 
                     for (Integer currentKey : productGroupMapping.getKeys())
@@ -650,7 +650,7 @@ public class Outputter
             if (UserManager.getCurrentUser().getShoppingCartList().isEmpty())
             {
 
-                System.out.println(Settings.ansiYellow + "You currently have no products in your shopping cart. Please add a product to your shopping cart first.\n" + Settings.ansiReset);
+                System.out.println(FontColor.ansiYellow + "You currently have no products in your shopping cart. Please add a product to your shopping cart first.\n" + FontColor.ansiReset);
 
                 break;
 
@@ -670,7 +670,7 @@ public class Outputter
             for (int i = 0; i < UserManager.getCurrentUser().getShoppingCartList().size(); i++)
             {
 
-                System.out.println(Settings.ansiYellow + (i + 1) + ". " + shoppingCartMapping.get(i + 1).getItemName() + " " + shoppingCartMapping.get(i + 1).getUnit() + Settings.ansiReset);
+                System.out.println(FontColor.ansiYellow + (i + 1) + ". " + shoppingCartMapping.get(i + 1).getItemName() + " " + shoppingCartMapping.get(i + 1).getUnit() + FontColor.ansiReset);
                 System.out.println("Quantity: " + shoppingCartMapping.get(i + 1).getQuantity());
                 PriceCatcherManager.topCheapestSeller(shoppingCartMapping.get(i + 1));
 

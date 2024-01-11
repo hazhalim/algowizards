@@ -45,7 +45,7 @@ public class FileManager
 
         } catch (FileNotFoundException exception) {
 
-            throw new FileNotFoundException("The file " + fileName + "was not found.");
+            throw new FileNotFoundException(FontColor.ansiYellow + "The file " + fileName + "was not found.");
 
         } catch (IOException exception) {
 

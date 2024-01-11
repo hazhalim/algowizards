@@ -20,8 +20,8 @@ import java.io.IOException;
 public class Settings {
 
     static Scanner keyboard = new Scanner(System.in);
-    public static final String ansiReset = "\u001B[0m";
-    public static final String ansiYellow = "\u001B[33m";
+    /*public static final String ansiReset = "\u001B[0m";
+    public static final String ansiYellow = "\u001B[33m";*/
 
     static int settingsMenuChoice = 0;
 
@@ -29,10 +29,7 @@ public class Settings {
 
         while (settingsMenuChoice != 5) {
 
-//            JLabel intro = new Jlabel ("\n-----= PriceWizard Account Settings =-----\n", JLabel.CENTER);
-//            intro.setForeground(Color.CYAN);
-//            System.out.println(intro);
-            System.out.println(ansiYellow + "\n-----= PriceWizard Account Settings =-----\n" + ansiReset);
+            System.out.println(FontColor.ansiYellowBold + "\n-----= PriceWizard Account Settings =-----\n" + FontColor.ansiReset);
 
             UserManager.readFromUserInformationFile();
             
@@ -58,7 +55,7 @@ public class Settings {
                 case 1: {
 
                     System.out.println("To verify your identity, please answer the security question you selected when you first signed up for your PriceWizard account.\n");
-                    System.out.println("Question: \"" + UserManager.getCurrentUser().getSecurityQuestion() + "\"\n");
+                    System.out.println(FontColor.ansiYellow + "Question: \"" + UserManager.getCurrentUser().getSecurityQuestion() + "\"\n" + FontColor.ansiReset);
 
                     System.out.print("> Enter your answer to the question: ");
 
@@ -69,16 +66,16 @@ public class Settings {
 //                UserManager.readFromUserInformationFile(); // Load the list of users into the program
                     if (!UserManager.getCurrentUser().getSecurityAnswer().equals(securityAnswer)) {
 
-                        System.out.println("Sorry, your answer to the security question is incorrect. PriceWizard is unable to verify your identity at this time.\n");
+                        System.out.println(FontColor.ansiRedBold + "Sorry, your answer to the security question is incorrect. PriceWizard is unable to verify your identity at this time.\n" + FontColor.ansiReset);
 
                     } else {
 
-                        System.out.print("\nYour answer is correct, and your identity is verified! Enter your new account username, please: ");
+                        System.out.print(FontColor.ansiGreenBold + "\nYour answer is correct, and your identity is verified!" + FontColor.ansiReset + "Enter your new account username, please: ");
                         String newUsername = keyboard.nextLine();
 
                         File existingCartFile = new File(UserManager.getCurrentUser().getCartPath());
 
-                        System.out.println("\nYour account username has been successfully changed from \"" + UserManager.getCurrentUser().getUsername() + "\" to \"" + newUsername + "\"!\n");
+                        System.out.println(FontColor.ansiGreen + "\nYour account username has been successfully changed from \"" + UserManager.getCurrentUser().getUsername() + "\" to \"" + newUsername + "\"!\n" + FontColor.ansiReset);
 
                         UserManager.getCurrentUser().setUsername(newUsername);
 
@@ -110,7 +107,7 @@ public class Settings {
 
                     System.out.println("To verify your identity, please answer the security question you selected when you first signed up for your PriceWizard account.\n");
 
-                    System.out.println("Question: \"" + UserManager.getCurrentUser().getSecurityQuestion() + "\"\n");
+                    System.out.println(FontColor.ansiYellow + "Question: \"" + UserManager.getCurrentUser().getSecurityQuestion() + "\"\n" + FontColor.ansiReset);
 
                     System.out.print("> Enter your answer to the question: ");
 
@@ -121,14 +118,14 @@ public class Settings {
 //                    UserManager.readFromUserInformationFile(); // Load the list of users into the program
                     if (!UserManager.getCurrentUser().getSecurityAnswer().equals(securityAnswer)) {
 
-                        System.out.println("Sorry, your answer to the security question is incorrect. PriceWizard is unable to verify your identity at this time.\n");
+                        System.out.println(FontColor.ansiRedBold + "Sorry, your answer to the security question is incorrect. PriceWizard is unable to verify your identity at this time.\n" + FontColor.ansiReset);
 
                     } else {
 
-                        System.out.print("\nYour answer is correct, and your identity is verified! Enter your new account password, please: ");
+                        System.out.print(FontColor.ansiGreenBold + "\nYour answer is correct, and your identity is verified!" + FontColor.ansiReset + "Enter your new account password, please: ");
                         String newPassword = keyboard.nextLine();
 
-                        System.out.println("\nYour account password has been successfully changed from \"" + UserManager.getCurrentUser().getPassword() + "\" to \"" + newPassword + "\"!\n");
+                        System.out.println(FontColor.ansiGreen + "\nYour account password has been successfully changed from \"" + UserManager.getCurrentUser().getPassword() + "\" to \"" + newPassword + "\"!\n" + FontColor.ansiReset);
 
                         UserManager.getCurrentUser().setPassword(newPassword);
 
@@ -156,7 +153,7 @@ public class Settings {
                         case 1: {
                             System.out.println("To verify your identity, please answer the security question you selected when you first signed up for your PriceWizard account.\n");
 
-                            System.out.println("Question: \"" + UserManager.getCurrentUser().getSecurityQuestion() + "\"\n");
+                            System.out.println("Question: \"" + FontColor.ansiYellow + UserManager.getCurrentUser().getSecurityQuestion() + "\"\n" + FontColor.ansiReset);
 
                             System.out.print("> Enter your answer to the question: ");
 
@@ -166,14 +163,14 @@ public class Settings {
 
                             if (!UserManager.getCurrentUser().getSecurityAnswer().equals(securityAnswer)) {
 
-                                System.out.println("Sorry, your answer to the security question is incorrect. PriceWizard is unable to verify your identity at this time.\n");
+                                System.out.println(FontColor.ansiRedBold + "Sorry, your answer to the security question is incorrect. PriceWizard is unable to verify your identity at this time.\n" + FontColor.ansiReset);
 
                             } else {
 
-                                System.out.print("\nYour answer is correct, and your identity is verified! Enter your new First Name, please: ");
+                                System.out.print(FontColor.ansiGreenBold + "\nYour answer is correct, and your identity is verified! Enter your new First Name, please: " + FontColor.ansiReset);
                                 String newFirstName = keyboard.nextLine();
 
-                                System.out.println("\nYour First Name has been successfully changed from \"" + UserManager.getCurrentUser().getFirstName() + "\" to \"" + newFirstName + "\"!\n");
+                                System.out.println(FontColor.ansiGreen + "\nYour First Name has been successfully changed from \"" + UserManager.getCurrentUser().getFirstName() + "\" to \"" + newFirstName + "\"!\n" + FontColor.ansiReset);
 
                                 UserManager.getCurrentUser().setFirstName(newFirstName);
 
@@ -189,7 +186,7 @@ public class Settings {
 
                             System.out.println("To verify your identity, please answer the security question you selected when you first signed up for your PriceWizard account.\n");
 
-                            System.out.println("Question: \"" + UserManager.getCurrentUser().getSecurityQuestion() + "\"\n");
+                            System.out.println(FontColor.ansiYellow + "Question: \"" + UserManager.getCurrentUser().getSecurityQuestion() + "\"\n" + FontColor.ansiReset);
 
                             System.out.print("> Enter your answer to the question: ");
 
@@ -199,14 +196,14 @@ public class Settings {
 
                             if (!UserManager.getCurrentUser().getSecurityAnswer().equals(securityAnswer)) {
 
-                                System.out.println("Sorry, your answer to the security question is incorrect. PriceWizard is unable to verify your identity at this time.\n");
+                                System.out.println(FontColor.ansiRedBold + "Sorry, your answer to the security question is incorrect. PriceWizard is unable to verify your identity at this time.\n" + FontColor.ansiReset);
 
                             } else {
 
-                                System.out.print("\nYour answer is correct, and your identity is verified! Enter your new Last Name, please: ");
+                                System.out.print(FontColor.ansiGreenBold + "\nYour answer is correct, and your identity is verified! Enter your new Last Name, please: " + FontColor.ansiReset);
                                 String newLastName = keyboard.nextLine();
 
-                                System.out.println("\nYour Last Name has been successfully changed from \"" + UserManager.getCurrentUser().getPassword() + "\" to \"" + newLastName + "\"!\n");
+                                System.out.println(FontColor.ansiGreen + "\nYour Last Name has been successfully changed from \"" + UserManager.getCurrentUser().getPassword() + "\" to \"" + newLastName + "\"!\n" + FontColor.ansiReset);
 
                                 UserManager.getCurrentUser().setLastName(newLastName);
 
@@ -277,7 +274,7 @@ public class Settings {
                             int newChosenDistrict = keyboard.nextInt();
                             String newChosenDistrictString = mapOfDistricts.getValueByKey(newChosenDistrict); // <--- the user's home district
 
-                            System.out.println("\nYou've chosen the district of: " + newChosenDistrictString + ", " + UserManager.getCurrentUser().getState() + "\n");
+                            System.out.println("\nYou've chosen the district of: " + FontColor.ansiGreen + newChosenDistrictString + ", " + UserManager.getCurrentUser().getState() + FontColor.ansiReset + "\n");
 
                             UserManager.getCurrentUser().setDistrict(newChosenDistrictString);
                             UserManager.writeToUserInformationFile();
@@ -306,7 +303,7 @@ public class Settings {
                             int newChosenState = keyboard.nextInt();
                             String newChosenStateString = mapOfStates.getValueByKey(newChosenState); // <--- the user's home state
 
-                            System.out.println("\nYou've chosen the state of: " + newChosenStateString + "\n");
+                            System.out.println("\nYou've chosen the state of: " + FontColor.ansiGreen + newChosenStateString + FontColor.ansiReset + "\n");
 
                             UserManager.getCurrentUser().setState(newChosenStateString);
                             UserManager.writeToUserInformationFile();
@@ -330,7 +327,7 @@ public class Settings {
 
                 default: {
 
-                    System.out.println("Sorry, the choice inputted was not between 1 to 3. Please try again.");
+                    System.out.println(FontColor.ansiRedBold + "Sorry, the choice inputted was not between 1 to 3. Please try again." + FontColor.ansiReset);
 
                     break;
 
