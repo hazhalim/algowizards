@@ -16,6 +16,7 @@ import java.util.HashMap;
 public class PremiseManager
 {
 
+    static DataStructure.List2D<String> lookupPremise = null;
     // Instance variables
     private static List<Premise> premiseList = new ArrayList<>();
     private static Map<Integer, Premise> premiseMap = new HashMap<>();

@@ -22,13 +22,12 @@ import com.opencsv.exceptions.CsvException;
 public class FileManager
 {
     
-    static List<List<String>> readCSVFileInto2DList(String fileName) throws FileNotFoundException, IOException, CsvException // fileName is the relative path to a .csv file
+    static List<List<String>> readCSVFileInto2DList(String fileName) throws IOException, CsvException // fileName is the relative path to a .csv file
     {
 
-        try {
-
-            FileReader fileReader = new FileReader(fileName);
-            CSVReader csvReader = new CSVReaderBuilder(fileReader).withSkipLines(1).build();
+        try (FileReader fileReader = new FileReader(fileName);
+             CSVReader csvReader = new CSVReaderBuilder(fileReader).withSkipLines(1).build())
+        {
 
             List<String[]> intermediateData = csvReader.readAll();
 
@@ -59,7 +58,7 @@ public class FileManager
 
     }
 
-    static List<List<String>> readCSVFileInto2DList(String fileName, boolean noHeaders) throws FileNotFoundException, IOException, CsvException // fileName is the relative path to a .csv file
+    static List<List<String>> readCSVFileInto2DList(String fileName, boolean noHeaders) throws IOException, CsvException // fileName is the relative path to a .csv file
     {
         if (noHeaders)
         {
@@ -101,10 +100,9 @@ public class FileManager
 
         } else {
 
-            try {
-
-                FileReader fileReader = new FileReader(fileName);
-                CSVReader csvReader = new CSVReaderBuilder(fileReader).withSkipLines(1).build();
+            try (FileReader fileReader = new FileReader(fileName);
+                 CSVReader csvReader = new CSVReaderBuilder(fileReader).withSkipLines(1).build())
+            {
 
                 List<String[]> intermediateData = csvReader.readAll();
 
@@ -140,9 +138,8 @@ public class FileManager
     static void write2DListIntoCSVFile(String fileName, List<String[]> list) throws IOException
     {
 
-        try (FileWriter fileWriter = new FileWriter(UserManager.getCurrentUser().getCartPath());
+        try (FileWriter fileWriter = new FileWriter(fileName);
              CSVWriter csvWriter = new CSVWriter(fileWriter))
-
         {
 
             csvWriter.writeAll(list);
@@ -154,11 +151,33 @@ public class FileManager
     static void writeUserListIntoCSVFile(String fileName, List<String[]> userList) throws IOException
     {
 
-        try (FileWriter fileWriter = new FileWriter(UserManager.getUserInformationFileName());
+        try (FileWriter fileWriter = new FileWriter(fileName);
              CSVWriter csvWriter = new CSVWriter(fileWriter))
         {
 
             csvWriter.writeAll(userList);
+
+        }
+
+    }
+
+    static void writeProductListIntoCSVFile(String fileName, List<String[]> productList) throws IOException
+    {
+
+        try (FileWriter fileWriter = new FileWriter("lookup_item.csv");
+             CSVWriter csvWriter = new CSVWriter(fileWriter))
+        {
+
+            String[] header = {"item_code", "item", "unit", "item_group", "item_category"};
+
+            csvWriter.writeNext(header);
+
+            for (String[] row : productList)
+            {
+
+                csvWriter.writeNext(row);
+
+            }
 
         }
 
@@ -172,30 +191,45 @@ public class FileManager
         System.out.println("0%: Hang on tight, PriceWizard is importing data from CSV files into the program...");
 
         // Import data by creating 2D lists from the CSV files, passing into an object of DataStructure.List2D<String> class...
-        Outputter.lookupItem = new DataStructure.List2D<>(readCSVFileInto2DList("lookup_item.csv"));
-        Outputter.lookupPremise = new DataStructure.List2D<>(readCSVFileInto2DList("lookup_premise.csv"));
-        Outputter.priceCatcher = new DataStructure.List2D<>(readCSVFileInto2DList("pricecatcher_2023-08.csv"));
+        ProductManager.lookupItem = new DataStructure.List2D<>(readCSVFileInto2DList("lookup_item.csv"));
+        PremiseManager.lookupPremise = new DataStructure.List2D<>(readCSVFileInto2DList("lookup_premise.csv"));
+        PriceCatcherManager.priceCatcher = new DataStructure.List2D<>(readCSVFileInto2DList("pricecatcher_2023-08.csv"));
 
         // All data has been loaded into the program, no more .csv files are being read
 
         System.out.println("25%: Populating the list and map of products...");
 
         // Populating list of products and map of products...
-        ProductManager.generateListOfProducts(Outputter.lookupItem);
-        ProductManager.generateMapOfProducts(Outputter.lookupItem);
+        ProductManager.generateListOfProducts(ProductManager.lookupItem);
+        ProductManager.generateMapOfProducts();
 
         System.out.println("50%: Populating the list and map of premises...");
 
         // Populating list and map of premises...
-        PremiseManager.generateListOfPremises(Outputter.lookupPremise);
-        PremiseManager.generateMapOfPremises(Outputter.lookupPremise);
+        PremiseManager.generateListOfPremises(PremiseManager.lookupPremise);
+        PremiseManager.generateMapOfPremises(PremiseManager.lookupPremise);
 
         System.out.println("75%: Populating the list of price points...");
 
         // Populating list of price catchers (price points of an item at a premise on a given date)...
-        PriceCatcherManager.generateListOfPriceCatchers(Outputter.priceCatcher);
+        PriceCatcherManager.generateListOfPriceCatchers(PriceCatcherManager.priceCatcher);
 
         System.out.println("100% (Complete): Success! All data (products, premises, and price points) has been successfully imported into PriceWizard!\n");
+
+    }
+
+    static void readProductsIntoProgram() throws IOException, CsvException
+    {
+
+        ProductManager.lookupItem.getList2D().clear();
+
+        ProductManager.lookupItem = new DataStructure.List2D<>(readCSVFileInto2DList("lookup_item.csv"));
+
+        ProductManager.getProductList().clear();
+        ProductManager.getProductMap().clear();
+
+        ProductManager.generateListOfProducts(ProductManager.lookupItem);
+        ProductManager.generateMapOfProducts();
 
     }
 

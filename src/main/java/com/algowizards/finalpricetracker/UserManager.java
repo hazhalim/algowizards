@@ -237,8 +237,12 @@ public class UserManager
 
     }
 
+
+
     public static void readFromUserInformationFile()
     {
+
+        String previousCurrentUsername = (currentUser != null) ? (currentUser.getUsername()) : (null);
 
         userList.clear();
 
@@ -252,6 +256,20 @@ public class UserManager
             {
 
                 userList.add(new User(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]));
+
+            }
+
+            for (User user : userList)
+            {
+
+                if (user.getUsername().equals(previousCurrentUsername))
+                {
+
+                    UserManager.setCurrentUser(user);
+
+                    break;
+
+                }
 
             }
 

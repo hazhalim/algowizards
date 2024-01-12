@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 public class PriceCatcherManager
 {
+    static DataStructure.List2D<String> priceCatcher = null;
     // Instance variables
     private static List<PriceCatcher> priceCatcherList = new ArrayList<>();
     private static List<PriceCatcher> averagePriceCatcherList = new ArrayList<>();
@@ -254,7 +255,7 @@ public class PriceCatcherManager
 
         cheapestSellerAveragePriceCatcherList.sort(priceComparator);
 
-        System.out.println("-----= Cheapest Sellers of " + product.getItemName() + " " +  product.getUnit() + " =-----\n");
+        System.out.println(Settings.ansiYellow + "-----= Cheapest Sellers of " + product.getItemName() + " " +  product.getUnit() + " =-----\n");
 
         System.out.println("District: " + UserManager.getCurrentUser().getDistrict() + ", " + UserManager.getCurrentUser().getState() + "\n");
 
@@ -294,7 +295,7 @@ public class PriceCatcherManager
 
         priceTrendAveragePriceCatcherList.sort(dayComparator);
 
-        System.out.println("-----= Price Trend of " + product.getItemName() + " " +  product.getUnit() + " =-----\n");
+        System.out.println(Settings.ansiYellow + "-----= Price Trend of " + product.getItemName() + " " +  product.getUnit() + " =-----\n");
 
         System.out.println("District: " + UserManager.getCurrentUser().getDistrict() + ", " + UserManager.getCurrentUser().getState() + "\n");
 
@@ -396,7 +397,7 @@ public class PriceCatcherManager
         if (cheapestSellerAveragePriceCatcherList.isEmpty())
         {
 
-            System.out.println("Cheapest premise selling this product: data is not available");
+            System.out.println("\tCheapest premise selling this product: data is not available");
 
         } else {
 
@@ -405,10 +406,10 @@ public class PriceCatcherManager
 
             double totalPrice = cheapestPriceCatcher.getItemPrice() * ((double) product.getQuantity());
 
-            System.out.println("Cheapest premise selling this product: " + cheapestPremise.getPremiseName());
-            System.out.println("Premise type: " + cheapestPremise.getPremiseType());
-            System.out.printf("Address: %s\n\n", cheapestPremise.getPremiseAddress());
-            System.out.printf("Total price of this product at this premise: (RM %.2f / %s) x %d = RM %.2f\n", cheapestPriceCatcher.getItemPrice(), product.getUnit(), product.getQuantity(), totalPrice);
+            System.out.println("\tCheapest premise selling this product: " + cheapestPremise.getPremiseName());
+            System.out.println("\tPremise type: " + cheapestPremise.getPremiseType());
+            System.out.printf("\tAddress: %s\n\n", cheapestPremise.getPremiseAddress());
+            System.out.printf("\tTotal price of this product at this premise: (RM %.2f / %s) x %d = RM %.2f\n\n", cheapestPriceCatcher.getItemPrice(), product.getUnit(), product.getQuantity(), totalPrice);
 
             worstCaseScenarioTotalPrice += totalPrice;
             worstCaseScenarioPremisesVisitedSet.add(cheapestPremise);
@@ -797,7 +798,7 @@ public class PriceCatcherManager
         System.out.printf("Total price for all products: RM %.2f\n\n", totalPriceAtBestPremises);
 
         // 13. Compare the scenario where lower total prices are prioritised and PriceWizard's recommendation
-        System.out.println("-----= Premise Visits and Total Price Comparisons =----\n");
+        System.out.println(Settings.ansiYellow + "-----= Premise Visits and Total Price Comparisons =----\n");
 
         System.out.println("1. Premise Visits\n");
 
@@ -843,15 +844,15 @@ public class PriceCatcherManager
         if (bestPremisesList.size() <= 1)
         {
 
-            System.out.println("-----= Best Premises to Buy Products in Shopping Cart From =-----\n");
+            System.out.println(Settings.ansiYellow + "\n-----= Best Premises to Buy Products in Shopping Cart From =-----\n");
 
         }
 
-        System.out.println((bestPremisesList.indexOf(currentlyBestPremise) + 1) + ". " + currentlyBestPremise.getPremiseName());
-        System.out.println("Premise Type: " + currentlyBestPremise.getPremiseType());
-        System.out.println("Premise Address: " + currentlyBestPremise.getPremiseAddress());
+        System.out.println(Settings.ansiYellow + (bestPremisesList.indexOf(currentlyBestPremise) + 1) + ". " + currentlyBestPremise.getPremiseName());
+        System.out.println("\n\tPremise Type: " + currentlyBestPremise.getPremiseType());
+        System.out.println("\tPremise Address: " + currentlyBestPremise.getPremiseAddress());
 
-        System.out.println("\nProduct(s) to purchase at this premise:\n");
+        System.out.println("\n\tProduct(s) to purchase at this premise:\n");
 
         List<Product> productsSoldByCurrentPremiseList = getAllProductsSoldByPremise(currentlyBestPremise, temporaryShoppingCart);
 
@@ -865,9 +866,9 @@ public class PriceCatcherManager
             int currentProductQuantity = currentProduct.getQuantity();
             double currentTotalProductPrice = (averagePriceOfProductAtPremise * currentProductQuantity);
 
-            System.out.println((i + 1) + ". " + currentProduct.getItemName());
-            System.out.println("Quantity: " + currentProductQuantity);
-            System.out.printf("Price of Product: (RM %.2f / %s) x %d = RM %.2f\n\n", averagePriceOfProductAtPremise, currentProductUnit, currentProductQuantity, currentTotalProductPrice);
+            System.out.println(Settings.ansiYellow + "\t\t" + (i + 1) + ". " + currentProduct.getItemName() + " " + currentProductUnit);
+            System.out.println("\n\t\t\tQuantity: " + currentProductQuantity);
+            System.out.printf("\t\t\tPrice of Product: (RM %.2f / %s) x %d = RM %.2f\n\n", averagePriceOfProductAtPremise, currentProductUnit, currentProductQuantity, currentTotalProductPrice);
 
             totalPriceAtBestPremises += currentTotalProductPrice;
 

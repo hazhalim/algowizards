@@ -14,12 +14,15 @@ public class ProductManager
 {
 
     static Scanner keyboard = new Scanner(System.in);
+    // Pre-manager 2D lists of String
+    static DataStructure.List2D<String> lookupItem = null;
 
     // Instance variables
     private static List<Product> productList = new ArrayList<>();
     private static int productListSize = productList.size();
     private static Map<Integer, Product> productMap = new HashMap<>();
     private static int productMapSize = productMap.size();
+    private static final String LOOKUP_ITEM_FILE_NAME = "lookup_item.csv";
 
     // Constructors
 
@@ -50,6 +53,13 @@ public class ProductManager
     {
 
         return productMapSize;
+
+    }
+
+    static String getLookupItemFileName()
+    {
+
+        return LOOKUP_ITEM_FILE_NAME;
 
     }
 
@@ -172,12 +182,14 @@ public class ProductManager
     static void generateListOfProducts(DataStructure.List2D<String> lookupItem)
     {
 
+        productList.clear();
+
         for (List<String> row : lookupItem.getList2D())
         {
 
             Product product = new Product(Integer.parseInt(row.get(0)), row.get(1), row.get(2), row.get(3), row.get(4));
 
-            addProductToList(product);
+            productList.add(product);
 
         }
 
@@ -208,15 +220,15 @@ public class ProductManager
     }
 
     // Generates mapping of products
-    static void generateMapOfProducts(DataStructure.List2D<String> lookupItem)
+    static void generateMapOfProducts()
     {
 
-        for (List<String> row : lookupItem.getList2D())
+        productMap.clear();
+
+        for (Product product : productList)
         {
 
-            Product product = new Product(Integer.parseInt(row.get(0)), row.get(1), row.get(2), row.get(3), row.get(4));
-
-            addProductToMap(product);
+            productMap.put(product.getItemCode(), product);
 
         }
 
@@ -372,6 +384,38 @@ public class ProductManager
                         String.valueOf(product.getQuantity())
 
                 };
+
+    }
+
+    static String[] toArray(Product product, boolean noQuantity)
+    {
+
+        return new String[]
+                {
+
+                        String.valueOf(product.getItemCode()),
+                        product.getItemName(),
+                        product.getUnit(),
+                        product.getItemGroup(),
+                        product.getItemCategory()
+
+                };
+
+    }
+
+    static List<String[]> toListStringArray()
+    {
+
+        List<String[]> stringArray = new ArrayList<>();
+
+        for (Product product : productList)
+        {
+
+            stringArray.add(toArray(product, true));
+
+        }
+
+        return stringArray;
 
     }
 

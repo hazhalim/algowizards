@@ -1,10 +1,6 @@
 package com.algowizards.finalpricetracker;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-
-import java.util.List;
+import java.util.*;
 
 import com.opencsv.exceptions.CsvException;
 import org.jline.terminal.*;
@@ -35,11 +31,6 @@ public class Outputter
     static char searchMenuChoice = 'Y';
     static int shoppingCartMenuChoice = 0;
     static boolean needsUpdate = false;
-
-    // Pre-manager 2D lists of String
-    static DataStructure.List2D<String> lookupItem = null;
-    static DataStructure.List2D<String> lookupPremise = null;
-    static DataStructure.List2D<String> priceCatcher = null;
 
     // List of products and map of products
     static DataStructure.List1D<Product> listOfProducts = null;
@@ -127,17 +118,10 @@ public class Outputter
 
                     // 2. Browse Product by Categories
 
-                    int groupNumber = 1;
+                    FileManager.readProductsIntoProgram();
 
-                    if (true) // check if the product group list and group mapping are null (never been generated before) or needs an update
-                    {
-
-                        productGroupList = ProductManager.getProductGroupList();
-                        productGroupMapping = ProductManager.getProductGroupMapping(productGroupList);
-
-                        needsUpdate = false;
-
-                    }
+                    productGroupList = ProductManager.getProductGroupList();
+                    productGroupMapping = ProductManager.getProductGroupMapping(productGroupList);
 
                     System.out.println(Settings.ansiYellow + "-----= Browse Product by Categories =-----\n" + Settings.ansiReset);
                     System.out.println("Choose a category:\n");
@@ -156,7 +140,7 @@ public class Outputter
 
                     System.out.println("\nYou've chosen: " + chosenGroupString + "\n");
 
-                    // subcategory
+                    // Getting list and mapping of subcategories based on selected item group/main category
                     productCategoryList = ProductManager.getProductCategoryList(chosenGroupString);
                     productCategoryMapping = ProductManager.getProductCategoryMapping(productCategoryList);
 
@@ -176,7 +160,7 @@ public class Outputter
 
                     System.out.println("\nYou've chosen: " + chosenCategoryString + "\n");
 
-                    // getting categorised product
+                    // Getting list and mapping of products with matching subcategories
                     categorisedProductList = ProductManager.getCategorisedProductList(chosenCategoryString);
                     categorisedProductMapping = ProductManager.getCategorisedProductMapping(categorisedProductList);
 
@@ -259,13 +243,12 @@ public class Outputter
 
     }
 
-    static void productMenu(Product chosenProduct) throws IOException
-    {
+    static void productMenu(Product chosenProduct) throws IOException, CsvException {
 
         while (productMenuChoice != 6)
         {
 
-            System.out.println("-----= Product: " + chosenProduct.getItemName() + " " + chosenProduct.getUnit() + " =-----\n");
+            System.out.println(Settings.ansiYellow + "-----= Product: " + chosenProduct.getItemName() + " " + chosenProduct.getUnit() + " =-----\n");
 
             System.out.println(chosenProduct.getItemGroup() + " >> " + chosenProduct.getItemCategory() + " >> " + chosenProduct.getItemName() + " " +  chosenProduct.getUnit() + "\n");
             System.out.println("Actions:\n");
@@ -450,7 +433,7 @@ public class Outputter
     static void viewProductDetails(Product product)
     {
 
-        System.out.println("-----= Details of " + product.getItemName() + " =-----\n");
+        System.out.println(Settings.ansiYellow + "-----= Details of " + product.getItemName() + " =-----\n");
 
         System.out.println("Product Name: " + product.getItemName());
         System.out.println("Unit: " + product.getUnit());
@@ -459,90 +442,38 @@ public class Outputter
 
     }
 
-    static void modifyProductDetails(Product product)
+    static void modifyProductDetails(Product product) throws IOException, CsvException
     {
 
         String previousProductName = product.getItemName();
         String previousProductUnit = product.getUnit();
         String previousProductGroup = product.getItemGroup();
         String previousProductCategory = product.getItemCategory();
-        int previousProductCode = product.getItemCode();
+//        int previousProductIndex = ProductManager.getProductList().indexOf(product);
 
-        System.out.println("-----= Modifying Details of " + product.getItemName() + " =-----\n");
+        System.out.println(Settings.ansiYellow + "-----= Modifying Details of " + product.getItemName() + " =-----\n");
 
         System.out.println("Modifying:\n");
 
-        System.out.println("Existing Product Name: " + product.getItemName());
-        System.out.print("> New Product Name: ");
-        keyboard.nextLine();
-        String newProductName = keyboard.nextLine();
-        product.setItemName(newProductName);
-        System.out.println();
+        keyboard.nextLine(); // Consume the nextline character above
 
-        System.out.println("Existing Product Unit: " + product.getUnit());
-        System.out.print("> New Product Unit: ");
-        String newProductUnit = keyboard.nextLine();
-        product.setUnit(newProductUnit);
-        System.out.println();
+        product.setItemName(modifyDetailResult("Product Name", previousProductName));
+        product.setUnit(modifyDetailResult("Product Unit", previousProductUnit));
+        product.setItemGroup(modifyDetailResult("Product Category", previousProductGroup));
+        product.setItemCategory(modifyDetailResult("Product Subcategory", previousProductCategory));
 
-        System.out.println("Existing Product Category: " + product.getItemGroup());
-        System.out.print("> New Product Category: ");
-        String newProductGroup = keyboard.nextLine();
-        product.setItemGroup(newProductGroup);
-        System.out.println();
+//        ProductManager.getProductList().set(previousProductIndex, product);
 
-        System.out.println("Existing Product Subcategory: " + product.getItemCategory());
-        System.out.print("> New Product Subcategory: ");
-        String newProductCategory = keyboard.nextLine();
-        product.setItemCategory(newProductCategory);
-        System.out.println();
-
-        System.out.println("Existing Product Code: " + product.getItemCode());
-        System.out.print("> New Product Code: ");
-        int newProductCode = keyboard.nextInt();
-        product.setItemCode(newProductCode);
-        System.out.println();
-
-        System.out.println("----------------------------------------------");
-        System.out.println("-----= Summary of Changes to " + previousProductName + " =-----\n");
+        System.out.println(Settings.ansiYellow + "----------------------------------------------");
+        System.out.println(Settings.ansiYellow + "-----= Summary of Changes to " + previousProductName + " =-----\n");
 
         displayProductSummaryChanges(previousProductName, product.getItemName(), "Product Name");
         displayProductSummaryChanges(previousProductUnit, product.getUnit(), "Product Unit");
         displayProductSummaryChanges(previousProductGroup, product.getItemGroup(), "Product Category");
         displayProductSummaryChanges(previousProductCategory, product.getItemCategory(), "Product Subcategory");
-        displayProductSummaryChanges(Integer.toString(previousProductCode), Integer.toString(product.getItemCode()), "Product Code");
 
-        int index = -1;
-
-        for (int i = 0; i < ProductManager.getProductList().size(); i++)
-        {
-
-            if (listOfProducts.getList1DValue(i).getItemCode() == previousProductCode)
-            {
-
-                index = i;
-
-                listOfProducts.setList1DValue(i, product);
-
-                mapOfProducts.removeEntry(previousProductCode);
-                mapOfProducts.addEntry(product.getItemCode(), product);
-
-                needsUpdate = true;
-
-                System.out.println("Your modifications to the product details have been successfully saved.\n");
-
-                break;
-
-            }
-
-        }
-
-        if (index == -1)
-        {
-
-            System.out.println("ERROR: There was an error saving the modified details of the product. Your changes have not been saved.\n");
-
-        }
+        FileManager.writeProductListIntoCSVFile(ProductManager.getLookupItemFileName(), new ArrayList<>(ProductManager.toListStringArray()));
+        FileManager.readProductsIntoProgram();
 
     }
 
@@ -562,14 +493,14 @@ public class Outputter
 
     }
 
-    static void searchMenu() throws IOException
+    static void searchMenu() throws IOException, CsvException
     {
 
         while (searchMenuChoice != 'N') {
 
             boolean foundProduct = false;
 
-            System.out.println("-----= Search for a Product =-----\n");
+            System.out.println(Settings.ansiYellow + "-----= Search for a Product =-----\n");
 
             keyboard.nextLine(); // Consume the newline character above
 
@@ -665,17 +596,22 @@ public class Outputter
 
             }
 
-            System.out.println("-----= Shopping Cart =-----\n\n");
+            System.out.println(Settings.ansiYellow + "-----= Shopping Cart =-----\n\n");
 
             for (int i = 0; i < UserManager.getCurrentUser().getShoppingCartList().size(); i++)
             {
 
                 System.out.println(Settings.ansiYellow + (i + 1) + ". " + shoppingCartMapping.get(i + 1).getItemName() + " " + shoppingCartMapping.get(i + 1).getUnit() + Settings.ansiReset);
-                System.out.println("Quantity: " + shoppingCartMapping.get(i + 1).getQuantity());
+                System.out.println("\n\tQuantity: " + shoppingCartMapping.get(i + 1).getQuantity());
                 PriceCatcherManager.topCheapestSeller(shoppingCartMapping.get(i + 1));
 
-                System.out.println("Maximum number of premise visits to purchase all products: " + PriceCatcherManager.getWorstCaseScenarioPremisesVisitedSet().size());
-                System.out.printf("Minimum total price of purchasing all products: RM %.2f\n\n", PriceCatcherManager.getWorstCaseScenarioTotalPrice());
+                if (i == (UserManager.getCurrentUser().getShoppingCartList().size() - 1))
+                {
+
+                    System.out.println("Maximum number of premise visits: " + PriceCatcherManager.getWorstCaseScenarioPremisesVisitedSet().size());
+                    System.out.printf("Minimum total price of purchasing all products: RM %.2f\n\n", PriceCatcherManager.getWorstCaseScenarioTotalPrice());
+
+                }
 
             }
 
@@ -695,7 +631,7 @@ public class Outputter
                 case 1:
                 {
 
-                    System.out.println("-----= Select a Product in Shopping Cart =-----\n");
+                    System.out.println(Settings.ansiYellow + "-----= Select a Product in Shopping Cart =-----\n");
 
                     PriceCatcherManager.setWorstCaseScenarioTotalPrice(0.0);
                     PriceCatcherManager.getWorstCaseScenarioPremisesVisitedSet().clear();
@@ -722,7 +658,7 @@ public class Outputter
                 case 2:
                 {
 
-                    System.out.println("-----= Remove a Product from the Shopping Cart =-----\n");
+                    System.out.println(Settings.ansiYellow + "-----= Remove a Product from the Shopping Cart =-----\n");
 
                     PriceCatcherManager.setWorstCaseScenarioTotalPrice(0.0);
                     PriceCatcherManager.getWorstCaseScenarioPremisesVisitedSet().clear();
@@ -801,7 +737,30 @@ public class Outputter
         shoppingCartMenuChoice = 0;
 
     }
-    
+
+    static String modifyDetailResult(String detailName, String previousValue)
+    {
+
+        System.out.println("Existing " + detailName + ": " + previousValue);
+        System.out.print("> New " + detailName + ": ");
+
+        String newValue = keyboard.nextLine();
+
+        System.out.println();
+
+        if (!newValue.isEmpty())
+        {
+
+            return newValue;
+
+        } else {
+
+            return previousValue;
+
+        }
+
+    }
+
     static void display2DList(List<List<String>> list) // Method that can display a 2D list
     {
         
