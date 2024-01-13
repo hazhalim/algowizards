@@ -98,6 +98,8 @@ public class Outputter
 
             mainMenuChoice = keyboard.nextInt();
 
+            keyboard.nextLine();
+
             System.out.println();
 
             switch(mainMenuChoice)
@@ -496,75 +498,77 @@ public class Outputter
     static void searchMenu() throws IOException, CsvException
     {
 
-        while (searchMenuChoice != 'N') {
+        SimilaritySearch.main(null);
 
-            boolean foundProduct = false;
-
-            System.out.println(Settings.ansiYellow + "-----= Search for a Product =-----\n");
-
-            keyboard.nextLine(); // Consume the newline character above
-
-            System.out.print("> Enter the name of the product you want to search for: ");
-            String productKey = keyboard.nextLine();
-
-            System.out.print("\n> Enter the unit of the product (e.g. 1kg, leave blank if unit is unknown): ");
-            String unitKey = keyboard.nextLine();
-
-            List<Product> searchProductList = ProductManager.searchProduct(productKey, unitKey);
-
-            if (!searchProductList.isEmpty()) {
-
-                Map<Integer, Integer> searchProductMapping = new HashMap<>();
-
-                System.out.println("\nSearch Results:\n");
-
-                for (int i = 0; i < searchProductList.size(); i++) {
-
-                    System.out.println((i + 1) + ". " + searchProductList.get(i).getItemName() + " " + searchProductList.get(i).getUnit());
-
-                    searchProductMapping.put((i + 1), searchProductList.get(i).getItemCode());
-
-                }
-
-                System.out.print("\n> Select a product: ");
-                int productChoice = keyboard.nextInt();
-
-                System.out.println("\nYou've chosen: " + ProductManager.getProductByKey(searchProductMapping.get(productChoice)).getItemName() + " " + ProductManager.getProductByKey(searchProductMapping.get(productChoice)).getUnit() + "\n");
-
-                foundProduct = true;
-
-                productMenu(ProductManager.getProductByKey(searchProductMapping.get(productChoice)));
-
-            } else {
-
-                System.out.print("\n> Sorry, PriceWizard cannot find products with name you specified. Type 'Y' to try again: ");
-
-                searchMenuChoice = keyboard.next().charAt(0);
-
-                if (searchMenuChoice != 'Y')
-                {
-
-                    System.out.println("Exiting to main menu...");
-
-                    searchMenuChoice = 'N';
-
-                }
-
-            }
-
-            if (foundProduct)
-            {
-
-                searchMenuChoice = 'N';
-
-            }
-
-            System.out.println();
-
-        }
-
-        // Reset the value of searchMenuChoice
-        searchMenuChoice = 'Y';
+//        while (searchMenuChoice != 'N') {
+//
+//            boolean foundProduct = false;
+//
+//            System.out.println(Settings.ansiYellow + "-----= Search for a Product =-----\n");
+//
+//            keyboard.nextLine(); // Consume the newline character above
+//
+//            System.out.print("> Enter the name of the product you want to search for: ");
+//            String productKey = keyboard.nextLine();
+//
+//            System.out.print("\n> Enter the unit of the product (e.g. 1kg, leave blank if unit is unknown): ");
+//            String unitKey = keyboard.nextLine();
+//
+//            List<Product> searchProductList = ProductManager.searchProduct(productKey, unitKey);
+//
+//            if (!searchProductList.isEmpty()) {
+//
+//                Map<Integer, Integer> searchProductMapping = new HashMap<>();
+//
+//                System.out.println("\nSearch Results:\n");
+//
+//                for (int i = 0; i < searchProductList.size(); i++) {
+//
+//                    System.out.println((i + 1) + ". " + searchProductList.get(i).getItemName() + " " + searchProductList.get(i).getUnit());
+//
+//                    searchProductMapping.put((i + 1), searchProductList.get(i).getItemCode());
+//
+//                }
+//
+//                System.out.print("\n> Select a product: ");
+//                int productChoice = keyboard.nextInt();
+//
+//                System.out.println("\nYou've chosen: " + ProductManager.getProductByKey(searchProductMapping.get(productChoice)).getItemName() + " " + ProductManager.getProductByKey(searchProductMapping.get(productChoice)).getUnit() + "\n");
+//
+//                foundProduct = true;
+//
+//                productMenu(ProductManager.getProductByKey(searchProductMapping.get(productChoice)));
+//
+//            } else {
+//
+//                System.out.print("\n> Sorry, PriceWizard cannot find products with name you specified. Type 'Y' to try again: ");
+//
+//                searchMenuChoice = keyboard.next().charAt(0);
+//
+//                if (searchMenuChoice != 'Y')
+//                {
+//
+//                    System.out.println("Exiting to main menu...");
+//
+//                    searchMenuChoice = 'N';
+//
+//                }
+//
+//            }
+//
+//            if (foundProduct)
+//            {
+//
+//                searchMenuChoice = 'N';
+//
+//            }
+//
+//            System.out.println();
+//
+//        }
+//
+//        // Reset the value of searchMenuChoice
+//        searchMenuChoice = 'Y';
 
     }
 
