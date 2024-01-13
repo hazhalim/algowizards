@@ -164,7 +164,7 @@ public class FileManager
     static void writeProductListIntoCSVFile(String fileName, List<String[]> productList) throws IOException
     {
 
-        try (FileWriter fileWriter = new FileWriter("lookup_item.csv");
+        try (FileWriter fileWriter = new FileWriter(fileName);
              CSVWriter csvWriter = new CSVWriter(fileWriter))
         {
 
@@ -223,7 +223,7 @@ public class FileManager
 
         ProductManager.lookupItem.getList2D().clear();
 
-        ProductManager.lookupItem = new DataStructure.List2D<>(readCSVFileInto2DList("lookup_item.csv"));
+        ProductManager.lookupItem = new DataStructure.List2D<>(readCSVFileInto2DList(ProductManager.getLookupItemFileName()));
 
         ProductManager.getProductList().clear();
         ProductManager.getProductMap().clear();
