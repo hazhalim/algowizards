@@ -44,7 +44,7 @@ public class FileManager
 
         } catch (FileNotFoundException exception) {
 
-            throw new FileNotFoundException("The file " + fileName + "was not found.");
+            throw new FileNotFoundException(FontColor.ansiRed + "The file " + fileName + "was not found." + FontColor.ansiReset);
 
         } catch (IOException exception) {
 
@@ -186,7 +186,7 @@ public class FileManager
     static void importAndPopulateData() throws IOException, CsvException
     {
 
-        System.out.println("-----= Importing Data into PriceWizard =-----\n");
+        System.out.println(FontColor.ansiBlue + "-----= Importing Data into PriceWizard =-----\n" + FontColor.ansiReset);
 
         System.out.println("0%: Hang on tight, PriceWizard is importing data from CSV files into the program...");
 
@@ -214,7 +214,7 @@ public class FileManager
         // Populating list of price catchers (price points of an item at a premise on a given date)...
         PriceCatcherManager.generateListOfPriceCatchers(PriceCatcherManager.priceCatcher);
 
-        System.out.println("100% (Complete): Success! All data (products, premises, and price points) has been successfully imported into PriceWizard!\n");
+        System.out.println(FontColor.ansiGreenBold + "100% (Complete): Success! All data (products, premises, and price points) has been successfully imported into PriceWizard!\n" + FontColor.ansiReset);
 
     }
 

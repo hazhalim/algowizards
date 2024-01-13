@@ -13,7 +13,7 @@ public class LogIn
 
         Scanner keyboard = new Scanner(System.in);
 
-        System.out.println("\n-----= Log In to PriceWizard Account =-----\n");
+        System.out.println(FontColor.ansiBlue + "\n-----= Log In to PriceWizard Account =-----\n" + FontColor.ansiReset);
 
         System.out.print("> Enter your username: ");
         String username = keyboard.nextLine();
@@ -46,7 +46,7 @@ public class LogIn
         if (!userFound)
         {
 
-            System.out.println("Invalid username or password. Please try again.");
+            System.out.println(FontColor.ansiRedBold + "Invalid username or password. Please try again.\n" + FontColor.ansiReset);
 
         } else {
 
