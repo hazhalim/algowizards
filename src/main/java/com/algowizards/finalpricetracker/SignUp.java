@@ -23,7 +23,7 @@ public class SignUp
 
         Scanner keyboard = new Scanner(System.in);
 
-        System.out.println("\n-----= Sign Up for a PriceWizard Account =-----\n");
+        System.out.println(FontColor.ansiBlue + "\n-----= Sign Up for a PriceWizard Account =-----\n" + FontColor.ansiReset);
         System.out.println("New Account Details:\n");
 
         // New account's username
