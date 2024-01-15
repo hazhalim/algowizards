@@ -23,8 +23,9 @@ public class PriceCatcherManager
     private static List<Premise> bestPremisesList = new ArrayList<>();
     private static Set<Premise> worstCaseScenarioPremisesVisitedSet = new HashSet<>();
     private static double worstCaseScenarioTotalPrice = 0.0;
+    private static final String PRICECATCHER_DATABASE_FILE_NAME = "datafiles/pricecatcher_2023-08.csv";
 
-    // Constructors
+    // Constructors (none)
 
     // Getter and setter methods
     static List<PriceCatcher> getPriceCatcherList()
@@ -80,6 +81,13 @@ public class PriceCatcherManager
     {
 
         return worstCaseScenarioTotalPrice;
+
+    }
+
+    static String getPriceCatcherDatabaseFileName()
+    {
+
+        return PRICECATCHER_DATABASE_FILE_NAME;
 
     }
 
