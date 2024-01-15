@@ -55,11 +55,11 @@ public class Outputter
             System.out.println("Choose an option from the menu below: \n");
 
             System.out.println("1. Reimport Data into PriceWizard");
-            System.out.println(Settings.ansiYellow + "2. Browse Product by Categories" + Settings.ansiReset);
+            System.out.println(FontColor.ansiYellow + "2. Browse Product by Categories" + FontColor.ansiReset);
             System.out.println("3. Search for a Product");
-            System.out.println(Settings.ansiYellow + "4. View Shopping Cart" + Settings.ansiReset);
+            System.out.println(FontColor.ansiYellow + "4. View Shopping Cart" + FontColor.ansiReset);
             System.out.println("5. Account Settings");
-            System.out.println(Settings.ansiYellow + "6. Sign Out of PriceWizard Account" + Settings.ansiReset);
+            System.out.println(FontColor.ansiYellow + "6. Sign Out of PriceWizard Account" + FontColor.ansiReset);
 
             System.out.print("\n> Enter your choice (1/2/3/4/5/6): ");
 
