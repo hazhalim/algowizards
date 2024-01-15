@@ -3,8 +3,6 @@ package com.algowizards.finalpricetracker;
 import java.util.*;
 
 import com.opencsv.exceptions.CsvException;
-import org.jline.terminal.*;
-import org.jline.utils.Display;
 
 import java.io.IOException;
 
