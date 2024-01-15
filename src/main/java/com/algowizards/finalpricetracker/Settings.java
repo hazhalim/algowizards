@@ -20,8 +20,6 @@ public class Settings
 
     // Instance variables
     static Scanner keyboard = new Scanner(System.in);
-    public static final String ansiReset = "\u001B[0m";
-    public static final String ansiYellow = "\u001B[33m";
 
     static int settingsMenuChoice = 0;
 
@@ -36,7 +34,7 @@ public class Settings
 //            intro.setForeground(Color.CYAN);
 //            System.out.println(intro);
 
-            System.out.println(ansiYellow + "\n-----= PriceWizard Account Settings =-----\n" + ansiReset);
+            System.out.println(FontColor.ansiYellow + "\n-----= PriceWizard Account Settings =-----\n" + FontColor.ansiReset);
 
             UserManager.readFromUserInformationFile();
             

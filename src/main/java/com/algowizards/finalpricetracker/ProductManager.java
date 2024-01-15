@@ -213,7 +213,7 @@ public class ProductManager
 
         } else {
 
-            System.out.println("You currently have no items in your cart...");
+            System.out.println(FontColor.ansiRed + "You currently have no items in your cart..." + FontColor.ansiReset);
 
         }
 
