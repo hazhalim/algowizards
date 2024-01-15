@@ -12,7 +12,8 @@ public class UserManager
 
     // Instance variables
     private static final String USER_INFORMATION_FILE_NAME = "UserInformation.csv";
-    private static final String securityQuestionListFileName = "SecurityQuestionList.csv";
+    private static final String SECURITY_QUESTION_LIST_FILE_NAME = "SecurityQuestionList.csv";
+    private static final String SECURITY_QUESTION_DATABASE_FILE_NAME = "datafiles/SecurityQuestionList.csv";
     private static List<User> userList = new ArrayList<>();
     private static int userListSize;
 
@@ -90,6 +91,13 @@ public class UserManager
 
     }
 
+    static String getSecurityQuestionDatabaseFileName()
+    {
+
+        return SECURITY_QUESTION_DATABASE_FILE_NAME;
+
+    }
+
     // Setter methods
     static void setUserList(List<User> newUserList)
     {
@@ -154,7 +162,7 @@ public class UserManager
     static void setSecurityQuestionList() throws IOException, CsvException
     {
 
-        FileReader fileReader = new FileReader(securityQuestionListFileName);
+        FileReader fileReader = new FileReader(SECURITY_QUESTION_LIST_FILE_NAME);
         CSVReader csvReader = new CSVReaderBuilder(fileReader).build();
 
         List<String[]> intermediateData = csvReader.readAll();

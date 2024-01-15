@@ -10,7 +10,7 @@ public class SimilaritySearch
 
     // Instance variables
     private static List<String> productNameList = new ArrayList<>();
-    private static int SIMILARITY_TOLERANCE = 10;
+    private static int SIMILARITY_TOLERANCE = 8;
     private static Scanner keyboard = new Scanner(System.in);
     private static char searchMenuChoice = 'Y';
     private static boolean isFirstTimeOpening = true;
@@ -55,6 +55,19 @@ public class SimilaritySearch
             System.out.println();
 
             System.out.print("> Enter the name of the product you want to search for: ");
+
+            if(isFirstTimeOpening)
+            {
+
+                isFirstTimeOpening = false;
+
+
+            } else {
+
+                keyboard.nextLine();
+
+            }
+
             String productKey = keyboard.nextLine();
 
             System.out.println();
@@ -62,10 +75,9 @@ public class SimilaritySearch
             System.out.print("> Enter the unit of the product (e.g. 1kg, leave blank if unit is unknown): ");
             String unitKey = keyboard.nextLine();
 
-
-
             if (unitKey.isEmpty())
             {
+
 
                 similarProductList = getSimilarProductList(productKey, ProductManager.getProductList());
 
@@ -143,12 +155,26 @@ public class SimilaritySearch
 
             String currentProductName = product.getItemName();
 
-            if (calculateLevenshteinDistance(currentProductName.toLowerCase(), productKey.toLowerCase()) <= SIMILARITY_TOLERANCE)
+            if (similarProductList.size() < 10)
             {
 
-                similarProductList.add(product);
+                if (currentProductName.toLowerCase().contains(productKey.toLowerCase().substring(0, Math.min(productKey.length(), SIMILARITY_TOLERANCE))))
+                {
+
+                    similarProductList.add(product);
+
+                } else if ((currentProductName.toLowerCase().endsWith(productKey.toLowerCase().substring(0, Math.min(productKey.length(), SIMILARITY_TOLERANCE))))) {
+
+                    similarProductList.add(product);
+
+                } else if (getSimilarityDistance(currentProductName.toLowerCase(), productKey.toLowerCase()) <= SIMILARITY_TOLERANCE) {
+
+                    similarProductList.add(product);
+
+                }
 
             }
+//
 
         }
 
@@ -159,6 +185,8 @@ public class SimilaritySearch
     private static List<Product> getSimilarProductList(String productKey, String unitKey, List<Product> productList)
     {
 
+        String finalProductKey = productKey + " " + unitKey;
+
         List<Product> similarProductList = new ArrayList<>();
 
         for (Product product : productList)
@@ -167,10 +195,23 @@ public class SimilaritySearch
             String currentProductName = product.getItemName();
             String currentProductUnit = product.getUnit();
 
-            if (getSimilarityDistance(currentProductName.toLowerCase() + " " + currentProductUnit.toLowerCase(), productKey.toLowerCase() + " " + unitKey.toLowerCase()) <= SIMILARITY_TOLERANCE)
+            if (similarProductList.size() < 10)
             {
 
-                similarProductList.add(product);
+                if (currentProductName.toLowerCase().contains(finalProductKey.toLowerCase().substring(0, Math.min(finalProductKey.length(), SIMILARITY_TOLERANCE))))
+                {
+
+                    similarProductList.add(product);
+
+                } else if ((currentProductName.toLowerCase().endsWith(finalProductKey.toLowerCase().substring(0, Math.min(finalProductKey.length(), SIMILARITY_TOLERANCE))))) {
+
+                    similarProductList.add(product);
+
+                } else if (getSimilarityDistance(currentProductName.toLowerCase(), finalProductKey.toLowerCase()) <= SIMILARITY_TOLERANCE) {
+
+                    similarProductList.add(product);
+
+                }
 
             }
 
@@ -217,19 +258,12 @@ public class SimilaritySearch
             for (int j = 1; j < similarityValuesMatrix[0].length; j++)
             {
 
-                if (firstString.charAt(i - 1) == secondString.charAt(j - 1))
-                {
+                int cost = (firstString.charAt(i - 1) == secondString.charAt(j - 1)) ? 0 : 1;
 
-                    similarityValuesMatrix[i][j] = similarityValuesMatrix[i - 1][j - 1];
-
-                } else {
-
-                    similarityValuesMatrix[i][j] = minimum(
-                            similarityValuesMatrix[i][j - 1],
-                            similarityValuesMatrix[i - 1][j],
-                            similarityValuesMatrix[i - 1][j - 1]) + 1;
-
-                }
+                similarityValuesMatrix[i][j] = minimum(
+                        similarityValuesMatrix[i][j - 1],
+                        similarityValuesMatrix[i - 1][j],
+                        similarityValuesMatrix[i - 1][j - 1]) + cost;
 
             }
 
@@ -288,3 +322,10 @@ public class SimilaritySearch
     }
 
 }
+
+//if (((calculateLevenshteinDistance(currentProductName.toLowerCase(), productKey.toLowerCase()) <= SIMILARITY_TOLERANCE) || (currentProductName.toLowerCase().contains(productKey.toLowerCase().substring(0, Math.min(productKey.length(), SIMILARITY_TOLERANCE))))) && (similarProductList.size() < 10))
+////            {
+////
+////                similarProductList.add(product);
+////
+////            }

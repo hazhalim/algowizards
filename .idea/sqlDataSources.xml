@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="98c840b0-74b9-48f9-8fa7-ccad395cffd7" name="DDL Mapping">
+      <data-sources db="a3616552-39e9-4fde-b340-7fa420e9a8c0" ddl="b4e70564-571b-4ca4-8b1f-533d43f4995b" />
+      <scope>
+        <node kind="schema" qname="PriceWizard" />
+      </scope>
+    </mapping>
+  </component>
+</project>

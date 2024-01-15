@@ -20,9 +20,9 @@ public class PremiseManager
     // Instance variables
     private static List<Premise> premiseList = new ArrayList<>();
     private static Map<Integer, Premise> premiseMap = new HashMap<>();
+    private static final String LOOKUP_PREMISE_DATABASE_FILE_NAME = "datafiles/lookup_premise.csv";
 
-    // Constructors
-
+    // Constructors (none)
 
     // Getter and setter methods
     // Getter methods
@@ -37,6 +37,13 @@ public class PremiseManager
     {
 
         return premiseMap;
+
+    }
+
+    static String getLookupPremiseDatabaseFileName()
+    {
+
+        return LOOKUP_PREMISE_DATABASE_FILE_NAME;
 
     }
 
