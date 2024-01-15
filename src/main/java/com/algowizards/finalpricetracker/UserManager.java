@@ -13,7 +13,6 @@ public class UserManager
     // Instance variables
     private static final String USER_INFORMATION_FILE_NAME = "UserInformation.csv";
     private static final String SECURITY_QUESTION_LIST_FILE_NAME = "SecurityQuestionList.csv";
-    private static final String SECURITY_QUESTION_DATABASE_FILE_NAME = "datafiles/SecurityQuestionList.csv";
     private static List<User> userList = new ArrayList<>();
     private static int userListSize;
 
@@ -88,13 +87,6 @@ public class UserManager
     {
 
         return currentUser;
-
-    }
-
-    static String getSecurityQuestionDatabaseFileName()
-    {
-
-        return SECURITY_QUESTION_DATABASE_FILE_NAME;
 
     }
 
@@ -195,58 +187,6 @@ public class UserManager
     }
 
     // Other methods
-//    public static void writeToFile()
-//    {
-//
-//        try
-//        {
-//
-//            FileWriter fw = new FileWriter(USER_INFORMATION_FILE_NAME,true);
-//            PrintWriter pw = new PrintWriter(fw);
-//
-//            for (User user : userList)
-//            {
-//
-//                pw.println(user.toCsvString());
-//
-//            }
-//
-//            fw.close();
-//            pw.close();
-//
-//        } catch (IOException exception) {
-//
-//            exception.printStackTrace();
-//
-//        }
-//
-//    }
-    
-    // this method is actually copy from above je, but i add the "user object" 
-    //and remove the for loop WHICH WAS THE MAIN CAUSE DIA JADI DUPLICATED, SEBAB U WROTE "for each user, write it to file"
-    //ha centu la lebih kurang
-    public static void writeToFile(User user) {
-
-        try {
-
-            FileWriter fw = new FileWriter(USER_INFORMATION_FILE_NAME,true);
-            PrintWriter pw = new PrintWriter(fw);
-
-            pw.println(user.toCsvString());
-
-            fw.close();
-            pw.close();
-
-        } catch (IOException exception) {
-
-            exception.printStackTrace();
-
-        }
-
-    }
-
-
-
     public static void readFromUserInformationFile()
     {
 

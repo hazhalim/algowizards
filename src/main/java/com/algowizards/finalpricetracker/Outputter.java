@@ -3,8 +3,6 @@ package com.algowizards.finalpricetracker;
 import java.util.*;
 
 import com.opencsv.exceptions.CsvException;
-import org.jline.terminal.*;
-import org.jline.utils.Display;
 
 import java.io.IOException;
 
@@ -21,27 +19,11 @@ public class Outputter
 {
     
     // Instance variables
-    private Terminal TERMINAL;
-    private Display DISPLAY;
-
     static Scanner keyboard = new Scanner(System.in);
 
     static int mainMenuChoice = 0;
     static int productMenuChoice = 0;
-    static char searchMenuChoice = 'Y';
     static int shoppingCartMenuChoice = 0;
-    static boolean needsUpdate = false;
-
-    // List of products and map of products
-    static DataStructure.List1D<Product> listOfProducts = null;
-    static DataStructure.Mapping<Integer, Product> mapOfProducts = null;
-
-    // List of premises and map of premises
-    static DataStructure.List1D<Premise> listOfPremises = null;
-    static DataStructure.Mapping<Integer, Premise> mapOfPremises = null;
-
-    // List of price catchers
-    static DataStructure.List1D<PriceCatcher> listOfPriceCatchers = null;
 
     // Data structures used in browse product by categories
     // Group data structures
@@ -56,25 +38,8 @@ public class Outputter
     static DataStructure.List1D<Product> categorisedProductList = null;
     static DataStructure.Mapping<Integer, Integer> categorisedProductMapping = null;
 
-    // Constructors
-    public Outputter()
-    {
-        
-        try
-        {
-            
-            TERMINAL = TerminalBuilder.builder().system(true).build();
-            
-            DISPLAY = new Display(TERMINAL, false);
-            
-        } catch (IOException exception) {
-            
-            throw new RuntimeException("Error initializing terminal", exception);
-            
-        }
-        
-    }
-    
+    // Constructors (none)
+
     // Getter and setter methods
 
     // Other methods
@@ -250,7 +215,7 @@ public class Outputter
         while (productMenuChoice != 6)
         {
 
-            System.out.println(Settings.ansiYellow + "-----= Product: " + chosenProduct.getItemName() + " " + chosenProduct.getUnit() + " =-----\n");
+            System.out.println(Settings.ansiYellow + "-----= Product: " + chosenProduct.getItemName() + " " + chosenProduct.getUnit() + " =-----\n" + Settings.ansiReset);
 
             System.out.println(chosenProduct.getItemGroup() + " >> " + chosenProduct.getItemCategory() + " >> " + chosenProduct.getItemName() + " " +  chosenProduct.getUnit() + "\n");
             System.out.println("Actions:\n");
@@ -435,7 +400,7 @@ public class Outputter
     static void viewProductDetails(Product product)
     {
 
-        System.out.println(Settings.ansiYellow + "-----= Details of " + product.getItemName() + " =-----\n");
+        System.out.println(Settings.ansiYellow + "-----= Details of " + product.getItemName() + " =-----\n" + Settings.ansiReset);
 
         System.out.println("Product Name: " + product.getItemName());
         System.out.println("Unit: " + product.getUnit());
@@ -451,9 +416,7 @@ public class Outputter
         String previousProductUnit = product.getUnit();
         String previousProductGroup = product.getItemGroup();
         String previousProductCategory = product.getItemCategory();
-//        int previousProductIndex = ProductManager.getProductList().indexOf(product);
-
-        System.out.println(Settings.ansiYellow + "-----= Modifying Details of " + product.getItemName() + " =-----\n");
+        System.out.println(Settings.ansiYellow + "-----= Modifying Details of " + product.getItemName() + " =-----\n" + Settings.ansiReset);
 
         System.out.println("Modifying:\n");
 
@@ -464,10 +427,8 @@ public class Outputter
         product.setItemGroup(modifyDetailResult("Product Category", previousProductGroup));
         product.setItemCategory(modifyDetailResult("Product Subcategory", previousProductCategory));
 
-//        ProductManager.getProductList().set(previousProductIndex, product);
-
-        System.out.println(Settings.ansiYellow + "----------------------------------------------");
-        System.out.println(Settings.ansiYellow + "-----= Summary of Changes to " + previousProductName + " =-----\n");
+        System.out.println(Settings.ansiYellow + "----------------------------------------------" + Settings.ansiReset);
+        System.out.println(Settings.ansiYellow + "-----= Summary of Changes to " + previousProductName + " =-----\n" + Settings.ansiReset);
 
         displayProductSummaryChanges(previousProductName, product.getItemName(), "Product Name");
         displayProductSummaryChanges(previousProductUnit, product.getUnit(), "Product Unit");
@@ -500,76 +461,6 @@ public class Outputter
 
         SimilaritySearch.main(null);
 
-//        while (searchMenuChoice != 'N') {
-//
-//            boolean foundProduct = false;
-//
-//            System.out.println(Settings.ansiYellow + "-----= Search for a Product =-----\n");
-//
-//            keyboard.nextLine(); // Consume the newline character above
-//
-//            System.out.print("> Enter the name of the product you want to search for: ");
-//            String productKey = keyboard.nextLine();
-//
-//            System.out.print("\n> Enter the unit of the product (e.g. 1kg, leave blank if unit is unknown): ");
-//            String unitKey = keyboard.nextLine();
-//
-//            List<Product> searchProductList = ProductManager.searchProduct(productKey, unitKey);
-//
-//            if (!searchProductList.isEmpty()) {
-//
-//                Map<Integer, Integer> searchProductMapping = new HashMap<>();
-//
-//                System.out.println("\nSearch Results:\n");
-//
-//                for (int i = 0; i < searchProductList.size(); i++) {
-//
-//                    System.out.println((i + 1) + ". " + searchProductList.get(i).getItemName() + " " + searchProductList.get(i).getUnit());
-//
-//                    searchProductMapping.put((i + 1), searchProductList.get(i).getItemCode());
-//
-//                }
-//
-//                System.out.print("\n> Select a product: ");
-//                int productChoice = keyboard.nextInt();
-//
-//                System.out.println("\nYou've chosen: " + ProductManager.getProductByKey(searchProductMapping.get(productChoice)).getItemName() + " " + ProductManager.getProductByKey(searchProductMapping.get(productChoice)).getUnit() + "\n");
-//
-//                foundProduct = true;
-//
-//                productMenu(ProductManager.getProductByKey(searchProductMapping.get(productChoice)));
-//
-//            } else {
-//
-//                System.out.print("\n> Sorry, PriceWizard cannot find products with name you specified. Type 'Y' to try again: ");
-//
-//                searchMenuChoice = keyboard.next().charAt(0);
-//
-//                if (searchMenuChoice != 'Y')
-//                {
-//
-//                    System.out.println("Exiting to main menu...");
-//
-//                    searchMenuChoice = 'N';
-//
-//                }
-//
-//            }
-//
-//            if (foundProduct)
-//            {
-//
-//                searchMenuChoice = 'N';
-//
-//            }
-//
-//            System.out.println();
-//
-//        }
-//
-//        // Reset the value of searchMenuChoice
-//        searchMenuChoice = 'Y';
-
     }
 
     static void viewShoppingCart() throws IOException, CsvException
@@ -600,7 +491,7 @@ public class Outputter
 
             }
 
-            System.out.println(Settings.ansiYellow + "-----= Shopping Cart =-----\n\n");
+            System.out.println(Settings.ansiYellow + "-----= Shopping Cart =-----\n\n" + Settings.ansiReset);
 
             for (int i = 0; i < UserManager.getCurrentUser().getShoppingCartList().size(); i++)
             {
@@ -635,7 +526,7 @@ public class Outputter
                 case 1:
                 {
 
-                    System.out.println(Settings.ansiYellow + "-----= Select a Product in Shopping Cart =-----\n");
+                    System.out.println(Settings.ansiYellow + "-----= Select a Product in Shopping Cart =-----\n" + Settings.ansiReset);
 
                     PriceCatcherManager.setWorstCaseScenarioTotalPrice(0.0);
                     PriceCatcherManager.getWorstCaseScenarioPremisesVisitedSet().clear();
@@ -662,7 +553,7 @@ public class Outputter
                 case 2:
                 {
 
-                    System.out.println(Settings.ansiYellow + "-----= Remove a Product from the Shopping Cart =-----\n");
+                    System.out.println(Settings.ansiYellow + "-----= Remove a Product from the Shopping Cart =-----\n" + Settings.ansiReset);
 
                     PriceCatcherManager.setWorstCaseScenarioTotalPrice(0.0);
                     PriceCatcherManager.getWorstCaseScenarioPremisesVisitedSet().clear();
@@ -765,75 +656,4 @@ public class Outputter
 
     }
 
-    static void display2DList(List<List<String>> list) // Method that can display a 2D list
-    {
-        
-        System.out.println("Viewing list:");
-        
-        for (int i = 0; i < list.size(); i++)
-        {
-            
-            for (int j = 0; j < list.get(0).size(); j++)
-            {
-                
-                if (j != 1)
-                {
-                    
-                    System.out.printf("%-30s", list.get(i).get(j));
-                    
-                } else if (j == 3) {
-                    
-                    System.out.printf("%-40s", list.get(i).get(j));
-                    
-                } else { // for j == 1
-                    
-                    System.out.printf("%-100s", list.get(i).get(j));
-                    
-                }
-                
-            }
-            
-            System.out.println();
-        
-        }
-        
-    }
-    
-    void clearScreen() // To clear the console screen
-    {
-        
-        try
-        {
-            
-            DISPLAY.clear();
-            
-        } catch (RuntimeException exception) {
-            
-            exception.printStackTrace();
-            
-        }
-        
-    }
-    
-    void close() // To close the terminal, must be placed at the very end of the main method of Main class
-    {
-        
-        if (TERMINAL != null)
-        {
-            
-            try
-            {
-                
-                TERMINAL.close();
-                
-            } catch (IOException exception) {
-                
-                exception.printStackTrace();
-                
-            }
-            
-        }
-        
-    }
-    
 }

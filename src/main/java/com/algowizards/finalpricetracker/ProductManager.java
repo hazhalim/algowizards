@@ -23,7 +23,6 @@ public class ProductManager
     private static Map<Integer, Product> productMap = new HashMap<>();
     private static int productMapSize = productMap.size();
     private static final String LOOKUP_ITEM_FILE_NAME = "lookup_item.csv";
-    private static final String LOOKUP_ITEM_DATABASE_FILE_NAME = "datafiles/lookup_item.csv";
 
     // Constructors
 
@@ -64,12 +63,6 @@ public class ProductManager
 
     }
 
-    static String getLookupItemDatabaseFileName()
-    {
-
-        return LOOKUP_ITEM_DATABASE_FILE_NAME;
-
-    }
     // Setter methods
     static void setProductList(List<Product> newProductList)
     {

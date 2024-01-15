@@ -273,47 +273,6 @@ public class SimilaritySearch
 
     }
 
-    private static int calculateLevenshteinDistance(String firstString, String secondString)
-    {
-
-        int[][] distanceMatrix = new int[firstString.length() + 1][secondString.length() + 1];
-
-        for (int i = 0; i <= firstString.length(); i++)
-        {
-
-            distanceMatrix[i][0] = i;
-
-        }
-
-        for (int j = 0; j <= secondString.length(); j++)
-        {
-
-            distanceMatrix[0][j] = j;
-
-        }
-
-        for (int i = 1; i <= firstString.length(); i++)
-        {
-
-            for (int j = 1; j <= secondString.length(); j++)
-            {
-
-                int cost = (firstString.charAt(i - 1) == secondString.charAt(j - 1)) ? 0 : 1;
-
-                distanceMatrix[i][j] = minimum(
-                        distanceMatrix[i - 1][j] + 1,
-                        distanceMatrix[i][j - 1] + 1,
-                        distanceMatrix[i - 1][j - 1] + cost
-                );
-
-            }
-
-        }
-
-        return distanceMatrix[firstString.length()][secondString.length()];
-
-    }
-
     private static int minimum(int a, int b, int c)
     {
 
@@ -322,10 +281,3 @@ public class SimilaritySearch
     }
 
 }
-
-//if (((calculateLevenshteinDistance(currentProductName.toLowerCase(), productKey.toLowerCase()) <= SIMILARITY_TOLERANCE) || (currentProductName.toLowerCase().contains(productKey.toLowerCase().substring(0, Math.min(productKey.length(), SIMILARITY_TOLERANCE))))) && (similarProductList.size() < 10))
-////            {
-////
-////                similarProductList.add(product);
-////
-////            }

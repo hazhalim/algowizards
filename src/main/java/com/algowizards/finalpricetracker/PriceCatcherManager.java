@@ -23,7 +23,6 @@ public class PriceCatcherManager
     private static List<Premise> bestPremisesList = new ArrayList<>();
     private static Set<Premise> worstCaseScenarioPremisesVisitedSet = new HashSet<>();
     private static double worstCaseScenarioTotalPrice = 0.0;
-    private static final String PRICECATCHER_DATABASE_FILE_NAME = "datafiles/pricecatcher_2023-08.csv";
 
     // Constructors (none)
 
@@ -81,13 +80,6 @@ public class PriceCatcherManager
     {
 
         return worstCaseScenarioTotalPrice;
-
-    }
-
-    static String getPriceCatcherDatabaseFileName()
-    {
-
-        return PRICECATCHER_DATABASE_FILE_NAME;
 
     }
 
@@ -174,7 +166,7 @@ public class PriceCatcherManager
 
             }
 
-        } else { // Add more types of sort later...
+        } else {
 
             // Nothing is sorted, the unchanged price catcher list is returned (for now)
             return priceCatcherList;
@@ -183,7 +175,6 @@ public class PriceCatcherManager
 
     }
 
-    // Implemented from DataInitialisation class
     // Generates list of price catchers (price of an item at a premise at a given date)
     static void generateListOfPriceCatchers(DataStructure.List2D<String> priceCtch)
     {
@@ -263,7 +254,7 @@ public class PriceCatcherManager
 
         cheapestSellerAveragePriceCatcherList.sort(priceComparator);
 
-        System.out.println(Settings.ansiYellow + "-----= Cheapest Sellers of " + product.getItemName() + " " +  product.getUnit() + " =-----\n");
+        System.out.println(Settings.ansiYellow + "-----= Cheapest Sellers of " + product.getItemName() + " " +  product.getUnit() + " =-----\n" + Settings.ansiReset);
 
         System.out.println("District: " + UserManager.getCurrentUser().getDistrict() + ", " + UserManager.getCurrentUser().getState() + "\n");
 
@@ -303,7 +294,7 @@ public class PriceCatcherManager
 
         priceTrendAveragePriceCatcherList.sort(dayComparator);
 
-        System.out.println(Settings.ansiYellow + "-----= Price Trend of " + product.getItemName() + " " +  product.getUnit() + " =-----\n");
+        System.out.println(Settings.ansiYellow + "-----= Price Trend of " + product.getItemName() + " " +  product.getUnit() + " =-----\n" + Settings.ansiReset);
 
         System.out.println("District: " + UserManager.getCurrentUser().getDistrict() + ", " + UserManager.getCurrentUser().getState() + "\n");
 
@@ -670,8 +661,6 @@ public class PriceCatcherManager
 
             }
 
-//            System.out.println("PriceWizard is getting possibilities of premises...");
-
             // premiseScoreList's structure: (explaining each column)
             // Premise Code | # of Products of Cart this Premise Sells | # of Products of Cart this Premise is Cheapest
             // 1011         | 6                                        |      3
@@ -707,8 +696,6 @@ public class PriceCatcherManager
 
             }
 
-//            System.out.println("PriceWizard is calculating premise metrics...");
-
             // 5. Determine the "sells" and "cheapest" values for each premise
             for (List<Integer> currentPremiseRow : premiseScoreList.getList2D())
             {
@@ -736,14 +723,10 @@ public class PriceCatcherManager
 
             }
 
-//            System.out.println("PriceWizard is sorting data...");
-
             // 6. Sort the premise scorelist by decreasing sells
             Comparator<List<Integer>> sellsComparator = Comparator.comparingInt(list -> list.get(1));
 
             premiseScoreList.getList2D().sort(sellsComparator.reversed());
-
-//            System.out.println("PriceWizard is processing data...");
 
             // 7. Create a sublist from premises tying with the highest sells value
             List<List<Integer>> tyingSellsList = new ArrayList<>();
@@ -760,22 +743,15 @@ public class PriceCatcherManager
 
             }
 
-//            System.out.println("PriceWizard is sorting data...");
-
             // 8. Sort the tying sublist by decreasing cheapest
-
             Comparator<List<Integer>> cheapestComparator = Comparator.comparingInt(list -> list.get(2));
 
             tyingSellsList.sort(cheapestComparator.reversed());
-
-//            System.out.println("PriceWizard is determining premises...");
 
             // 9. The first index of the tying sells is now the best premise to buy the products in the cart
             Premise currentlyBestPremise = PremiseManager.getPremiseByKey(tyingSellsList.get(0).get(0));
 
             bestPremisesList.add(currentlyBestPremise);
-
-//            System.out.println("PriceWizard is finalising results...\n");
 
             // 10. Display the current best premise, display the products that you should Remove products that are sold by this premise
             Iterator<Product> iterator = temporaryShoppingCart.iterator();
@@ -806,7 +782,7 @@ public class PriceCatcherManager
         System.out.printf("Total price for all products: RM %.2f\n\n", totalPriceAtBestPremises);
 
         // 13. Compare the scenario where lower total prices are prioritised and PriceWizard's recommendation
-        System.out.println(Settings.ansiYellow + "-----= Premise Visits and Total Price Comparisons =----\n");
+        System.out.println(FontColor.ansiYellow + "-----= Premise Visits and Total Price Comparisons =----\n" + FontColor.ansiReset);
 
         System.out.println("1. Premise Visits\n");
 
@@ -852,11 +828,11 @@ public class PriceCatcherManager
         if (bestPremisesList.size() <= 1)
         {
 
-            System.out.println(Settings.ansiYellow + "\n-----= Best Premises to Buy Products in Shopping Cart From =-----\n");
+            System.out.println(FontColor.ansiYellow + "\n-----= Best Premises to Buy Products in Shopping Cart From =-----\n" + FontColor.ansiReset);
 
         }
 
-        System.out.println(Settings.ansiYellow + (bestPremisesList.indexOf(currentlyBestPremise) + 1) + ". " + currentlyBestPremise.getPremiseName());
+        System.out.println(Settings.ansiYellow + (bestPremisesList.indexOf(currentlyBestPremise) + 1) + ". " + currentlyBestPremise.getPremiseName() + Settings.ansiReset);
         System.out.println("\n\tPremise Type: " + currentlyBestPremise.getPremiseType());
         System.out.println("\tPremise Address: " + currentlyBestPremise.getPremiseAddress());
 
@@ -874,7 +850,7 @@ public class PriceCatcherManager
             int currentProductQuantity = currentProduct.getQuantity();
             double currentTotalProductPrice = (averagePriceOfProductAtPremise * currentProductQuantity);
 
-            System.out.println(Settings.ansiYellow + "\t\t" + (i + 1) + ". " + currentProduct.getItemName() + " " + currentProductUnit);
+            System.out.println(Settings.ansiYellow + "\t\t" + (i + 1) + ". " + currentProduct.getItemName() + " " + currentProductUnit + Settings.ansiReset);
             System.out.println("\n\t\t\tQuantity: " + currentProductQuantity);
             System.out.printf("\t\t\tPrice of Product: (RM %.2f / %s) x %d = RM %.2f\n\n", averagePriceOfProductAtPremise, currentProductUnit, currentProductQuantity, currentTotalProductPrice);
 
@@ -885,75 +861,3 @@ public class PriceCatcherManager
     }
 
 }
-
-//static DataStructure.List1D<PriceCatcher> averagedPriceCatchers(Product product)
-//{
-//
-//    DataStructure.List1D<PriceCatcher> priceCatcherPremiseOnly = new DataStructure.List1D<>(new ArrayList<>());
-//
-//    for (PriceCatcher priceCatcher : priceCatcherList)
-//    {
-//
-//        if (priceCatcher.getItemCode() == product.getItemCode())
-//        {
-//
-//            priceCatcherItemOnly.getList1D().add(priceCatcher);
-//            setOfPremises.add(priceCatcher.getPremiseCode());
-//
-//        }
-//
-//    }
-//
-//    generateListOfCheapestSellerAveragePriceCatchers(priceCatcherItemOnly, setOfPremises, product);
-//
-//    Comparator<PriceCatcher> priceComparator = Comparator.comparingDouble(PriceCatcher::getItemPrice);
-//
-//    cheapestSellerAveragePriceCatcherList.sort(priceComparator);
-//
-//    System.out.println("-----= Cheapest Sellers of " + product.getItemName() + " " +  product.getUnit() + " =-----\n");
-//
-//    System.out.println("District: " + UserManager.getCurrentUser().getDistrict() + ", " + UserManager.getCurrentUser().getState() + "\n");
-//
-//    for (int i = 0; i < Math.min(5, cheapestSellerAveragePriceCatcherList.size()); i++)
-//    {
-//
-//        System.out.printf("%d. %s\n", (i + 1), PremiseManager.getPremiseByKey(cheapestSellerAveragePriceCatcherList.get(i).getPremiseCode()).getPremiseName());
-//        System.out.printf("Price: RM %.2f\n", cheapestSellerAveragePriceCatcherList.get(i).getItemPrice());
-//        System.out.printf("Address: %s\n\n", PremiseManager.getPremiseByKey(cheapestSellerAveragePriceCatcherList.get(i).getPremiseCode()).getPremiseAddress());
-//
-//    }
-//
-//}
-//
-//static void viewTopFiveCheapestSellers(Product product) {
-//    List<PriceCatcher> priceCatcherItemOnly = priceCatcherList.stream().filter(pc -> pc.getItemCode() == product.getItemCode()).toList();
-//
-//    // Group PriceCatcher objects by premise code
-//    Map<Integer, List<PriceCatcher>> groupedByPremise = priceCatcherItemOnly.stream().collect(Collectors.groupingBy(PriceCatcher::getPremiseCode));
-//
-//    // Calculate average price for each premise
-//
-//    Map<Integer, Double> averagePricesByPremise = new HashMap<>();
-//
-//    for (Map.Entry<Integer, List<PriceCatcher>> entry : groupedByPremise.entrySet()) {
-//        List<PriceCatcher> premisePriceCatchers = entry.getValue();
-//        double totalPrice = premisePriceCatchers.stream().mapToDouble(PriceCatcher::getItemPrice).sum();
-//        double averagePrice = (totalPrice / premisePriceCatchers.size());
-//        averagePricesByPremise.put(entry.getKey(), averagePrice);
-//    }
-//
-//    // Sort premises by average price in ascending order
-//    List<Integer> sortedPremises = averagePricesByPremise.entrySet().stream()
-//            .sorted(Map.Entry.comparingByValue())
-//            .map(Map.Entry::getKey)
-//            .toList();
-//
-//    // View the top five cheapest sellers
-//    System.out.println("Top Five Cheapest Sellers for " + product.getItemCode());
-//    int topCount = Math.min(5, sortedPremises.size());
-//    for (int i = 0; i < topCount; i++) {
-//        Integer premiseCode = sortedPremises.get(i);
-//        double averagePrice = averagePricesByPremise.get(premiseCode);
-//        System.out.println("Premise: " + PremiseManager.getPremiseByKey(premiseCode).getPremiseName() + ", Average Price: " + averagePrice);
-//    }
-//}
