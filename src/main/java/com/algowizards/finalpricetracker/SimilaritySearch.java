@@ -50,7 +50,7 @@ public class SimilaritySearch
             boolean foundProduct = false;
             List<Product> similarProductList = new ArrayList<>();
 
-            System.out.println(Settings.ansiYellow + "-----= Search for a Product =-----" + Settings.ansiReset);
+            System.out.println(FontColor.ansiYellow + "-----= Search for a Product =-----" + FontColor.ansiReset);
 
             System.out.println();
 
