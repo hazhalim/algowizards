@@ -30,7 +30,7 @@ public class LogIn
             if ((user.getUsername().equals(username)) && (user.getPassword().equals(password)))
             {
 
-                System.out.println("\nYour login is successful, welcome, " + user.getFirstName() + " " + user.getLastName() + "!");
+                System.out.println(FontColor.ansiGreenBold + "\nYour login is successful, welcome, " + user.getFirstName() + " " + user.getLastName() + "!" + FontColor.ansiReset);
                 userFound = true;
 
                 UserManager.setCurrentUser(user);

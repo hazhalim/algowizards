@@ -23,7 +23,6 @@ public class PriceCatcherManager
     private static List<Premise> bestPremisesList = new ArrayList<>();
     private static Set<Premise> worstCaseScenarioPremisesVisitedSet = new HashSet<>();
     private static double worstCaseScenarioTotalPrice = 0.0;
-
     // Constructors (none)
 
     // Getter and setter methods
@@ -254,7 +253,7 @@ public class PriceCatcherManager
 
         cheapestSellerAveragePriceCatcherList.sort(priceComparator);
 
-        System.out.println(Settings.ansiYellow + "-----= Cheapest Sellers of " + product.getItemName() + " " +  product.getUnit() + " =-----\n" + Settings.ansiReset);
+        System.out.println(FontColor.ansiYellow + "-----= Cheapest Sellers of " + product.getItemName() + " " +  product.getUnit() + " =-----\n" + FontColor.ansiReset);
 
         System.out.println("District: " + UserManager.getCurrentUser().getDistrict() + ", " + UserManager.getCurrentUser().getState() + "\n");
 
@@ -294,9 +293,9 @@ public class PriceCatcherManager
 
         priceTrendAveragePriceCatcherList.sort(dayComparator);
 
-        System.out.println(Settings.ansiYellow + "-----= Price Trend of " + product.getItemName() + " " +  product.getUnit() + " =-----\n" + Settings.ansiReset);
+        System.out.println(FontColor.ansiYellow + "-----= Price Trend of " + product.getItemName() + " " +  product.getUnit() + " =-----\n" + FontColor.ansiReset);
 
-        System.out.println("District: " + UserManager.getCurrentUser().getDistrict() + ", " + UserManager.getCurrentUser().getState() + "\n");
+        System.out.println("District: " + FontColor.ansiBlue + UserManager.getCurrentUser().getDistrict() + ", " + UserManager.getCurrentUser().getState() + FontColor.ansiReset + "\n");
 
         System.out.println("Day     | Price (RM)");
         System.out.println("---------------------------");
@@ -630,7 +629,7 @@ public class PriceCatcherManager
     static void determineBestPremises()
     {
 
-        System.out.println("\nHang on tight, PriceWizard is starting to calculate details... this may take a while based on the amount of products in the cart.");
+        System.out.println(FontColor.ansiRed + "\nHang on tight, PriceWizard is starting to calculate details... this may take a while based on the amount of products in the cart." + FontColor.ansiReset);
 
         // 1. Initialise temporary, separate copy of user's shopping cart
         List<Product> temporaryShoppingCart = new ArrayList<>(UserManager.getCurrentUser().getShoppingCartList());
@@ -779,7 +778,9 @@ public class PriceCatcherManager
         }
 
         // 12. Display the total price for all products when purchased at the best premises
+        System.out.println(FontColor.ansiYellow);
         System.out.printf("Total price for all products: RM %.2f\n\n", totalPriceAtBestPremises);
+        System.out.println(FontColor.ansiReset);
 
         // 13. Compare the scenario where lower total prices are prioritised and PriceWizard's recommendation
         System.out.println(FontColor.ansiYellow + "-----= Premise Visits and Total Price Comparisons =----\n" + FontColor.ansiReset);
@@ -832,7 +833,7 @@ public class PriceCatcherManager
 
         }
 
-        System.out.println(Settings.ansiYellow + (bestPremisesList.indexOf(currentlyBestPremise) + 1) + ". " + currentlyBestPremise.getPremiseName() + Settings.ansiReset);
+        System.out.println(FontColor.ansiYellow + (bestPremisesList.indexOf(currentlyBestPremise) + 1) + ". " + currentlyBestPremise.getPremiseName() + FontColor.ansiReset);
         System.out.println("\n\tPremise Type: " + currentlyBestPremise.getPremiseType());
         System.out.println("\tPremise Address: " + currentlyBestPremise.getPremiseAddress());
 
@@ -850,7 +851,7 @@ public class PriceCatcherManager
             int currentProductQuantity = currentProduct.getQuantity();
             double currentTotalProductPrice = (averagePriceOfProductAtPremise * currentProductQuantity);
 
-            System.out.println(Settings.ansiYellow + "\t\t" + (i + 1) + ". " + currentProduct.getItemName() + " " + currentProductUnit + Settings.ansiReset);
+            System.out.println(FontColor.ansiYellow + "\t\t" + (i + 1) + ". " + currentProduct.getItemName() + " " + currentProductUnit + FontColor.ansiReset);
             System.out.println("\n\t\t\tQuantity: " + currentProductQuantity);
             System.out.printf("\t\t\tPrice of Product: (RM %.2f / %s) x %d = RM %.2f\n\n", averagePriceOfProductAtPremise, currentProductUnit, currentProductQuantity, currentTotalProductPrice);
 
